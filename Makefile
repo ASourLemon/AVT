@@ -1,12 +1,33 @@
-DIRS:= $(shell ls | egrep -v '^(CVS)$$')
+SDIR=source
+IDIR=include
+ODIR=obj
+LDIR=
+BDIR=bin
+LIBS= -lGL -lglut -lGLU -lGLEW -lX11
 
-#---------------------------------------------------------------------------------
-all: 
-	@for i in $(DIRS); do if test -e $$i/Makefile ; then $(MAKE) -C $$i || { exit 1;} fi; done;
-#---------------------------------------------------------------------------------
+CC=g++
+CFLAGS= -g -Wall -ansi -I$(IDIR)
+
+_DEPS = cube.h		##ADD .h's here
+_OBJ = frogger.o 	##ADD .o's here
 
 
-#---------------------------------------------------------------------------------
+DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
+OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+
+build: frogger
+
+$(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+	
+$(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+frogger: $(OBJ)
+	$(CC) -o $(BDIR)/$@ $^ $(CFLAGS) $(LIBS)
+
+run: build
+	./$(BDIR)/frogger
+
 clean:
-#---------------------------------------------------------------------------------
-	@for i in $(DIRS); do if test -e $$i/Makefile ; then $(MAKE) -C $$i clean || { exit 1;} fi; done;
+	rm -f $(ODIR)/*.o *~ $(SDIR)/*~ $(IDIR)/*~ $(BDIR)/*
