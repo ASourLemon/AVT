@@ -8,8 +8,8 @@ LIBS= -lGL -lglut -lGLU -lGLEW -lX11
 CC=g++
 CFLAGS= -g -Wall -ansi -I$(IDIR)
 
-_DEPS = cube.h		##ADD .h's here
-_OBJ = frogger.o 	##ADD .o's here
+_DEPS = cube.h vsMathLib.h vsShaderLib.h	##ADD .h's here
+_OBJ = frogger.o vsMathLib.o vsShaderLib.o	##ADD .o's here
 
 
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))

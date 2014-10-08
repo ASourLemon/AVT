@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////
 //
 // 
-// (c) 2014 by João Madeiras Pereira
+// (c) 2014 by Joï¿½o Madeiras Pereira
 //
 ///////////////////////////////////////////////////////////////////////
 
@@ -13,6 +13,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
+#include "../include/vsMathLib.h"
 #include "../include/cube.h"
 
 #define CAPTION "Exercise 1"
@@ -27,7 +28,17 @@ unsigned int FrameCount = 0;
 
 GLuint VaoId, VboId[4];
 GLuint VertexShaderId, FragmentShaderId, ProgramId;
-GLint UniformId;
+GLint UniformId, ProjectionID, ModelID, ViewID;
+
+// Mouse Tracking Variables
+int startX, startY, tracking = 0;
+// Camera Spherical Coordinates
+float alpha = 39.0f, beta = 51.0f;
+float r = 10.0f;
+// Camera Position
+float camX, camY, camZ;
+
+VSMathLib* core = VSMathLib::getInstance();
 
 /////////////////////////////////////////////////////////////////////// ERRORS
 
@@ -51,8 +62,7 @@ void checkOpenGLError(std::string error)
 	}
 }
 
-static char*
-readShaderSource(const char* shaderFile)
+static char* readShaderSource(const char* shaderFile)
 {
 	FILE* fp = fopen(shaderFile, "r");
 
@@ -119,9 +129,12 @@ void createShaderProgram()
 
 	glBindAttribLocation(ProgramId, VERTEX_COORD_ATTRIB, "in_Position");
 	
-	glLinkProgram(ProgramId);
-	UniformId = glGetUniformLocation(ProgramId, "Matrix");
 
+	glLinkProgram(ProgramId);
+
+	ProjectionID = glGetUniformLocation(ProgramId, "P");
+	ViewID = glGetUniformLocation(ProgramId, "V");
+	ModelID = glGetUniformLocation(ProgramId, "M");
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
 
@@ -198,14 +211,7 @@ void destroyBufferObjects()
 
 /////////////////////////////////////////////////////////////////////// SCENE
 
-typedef GLfloat Matrix[16];
-
-const Matrix I = {
-	1.0f,  0.0f,  0.0f,  0.0f,
-	0.0f,  1.0f,  0.0f,  0.0f,
-	0.0f,  0.0f,  1.0f,  0.0f,
-	0.0f,  0.0f,  0.0f,  1.0f
-}; // Row Major (GLSL is Column Major)
+typedef float Matrix[16];
 
 const Matrix M = {
 	1.0f,  0.0f,  0.0f, -1.0f,
@@ -219,10 +225,22 @@ void renderScene()
 	glBindVertexArray(VaoId);
 	glUseProgram(ProgramId);
 
-	glUniformMatrix4fv(UniformId, 1, GL_TRUE, I);
+	core->loadMatrix(core->MODEL, (float*) &M);	//FIXME: OH NOES D:
+	core->loadIdentity(core->PROJECTION);
+	core->loadIdentity(core->VIEW);
+
+	float* proj_mat = core->get(core->PROJECTION);
+	float* view_mat = core->get(core->VIEW);
+	float* model_mat = core->get(core->MODEL);
+
+	glUniformMatrix4fv(ProjectionID, 1, GL_FALSE, proj_mat);
+	glUniformMatrix4fv(ViewID, 1, GL_FALSE, view_mat);
+	glUniformMatrix4fv(ModelID, 1, GL_TRUE, model_mat);
+
 	glDrawElements(GL_TRIANGLES, faceCount*3, GL_UNSIGNED_INT, (GLvoid*)0);
 
-	glUniformMatrix4fv(UniformId, 1, GL_TRUE, M);
+	core->loadIdentity(core->MODEL);
+	glUniformMatrix4fv(ModelID, 1, GL_TRUE, model_mat);
 	glDrawElements(GL_TRIANGLES, faceCount*3, GL_UNSIGNED_INT, (GLvoid*)0);
 
 	glUseProgram(0);
@@ -328,11 +346,81 @@ void setupGLUT(int argc, char* argv[])
 	}
 }
 
+void processMouseButtons(int button, int state, int xx, int yy)
+{
+	// start tracking the mouse
+	if (state == GLUT_DOWN)  {
+		startX = xx;
+		startY = yy;
+		if (button == GLUT_LEFT_BUTTON)
+			tracking = 1;
+		else if (button == GLUT_RIGHT_BUTTON)
+			tracking = 2;
+	}
+
+	//stop tracking the mouse
+	else if (state == GLUT_UP) {
+		if (tracking == 1) {
+			alpha -= (xx - startX);
+			beta += (yy - startY);
+		}
+		else if (tracking == 2) {
+			r += (yy - startY) * 0.01f;
+			if (r < 0.1f)
+				r = 0.1f;
+		}
+		tracking = 0;
+	}
+}
+
+void processMouseMotion(int xx, int yy)
+{
+
+	int deltaX, deltaY;
+	float alphaAux, betaAux;
+	float rAux;
+
+	deltaX =  - xx + startX;
+	deltaY =    yy - startY;
+
+	// left mouse button: move camera
+	if (tracking == 1) {
+
+
+		alphaAux = alpha + deltaX;
+		betaAux = beta + deltaY;
+
+		if (betaAux > 85.0f)
+			betaAux = 85.0f;
+		else if (betaAux < -85.0f)
+			betaAux = -85.0f;
+		rAux = r;
+	}
+	// right mouse button: zoom
+	else if (tracking == 2) {
+
+		alphaAux = alpha;
+		betaAux = beta;
+		rAux = r + (deltaY * 0.01f);
+		if (rAux < 0.1f)
+			rAux = 0.1f;
+	}
+
+	camX = rAux * sin(alphaAux * 3.14f / 180.0f) * cos(betaAux * 3.14f / 180.0f);
+	camZ = rAux * cos(alphaAux * 3.14f / 180.0f) * cos(betaAux * 3.14f / 180.0f);
+	camY = rAux *   						       sin(betaAux * 3.14f / 180.0f);
+
+//  uncomment this if not using an idle func
+//	glutPostRedisplay();
+}
+
 void init(int argc, char* argv[])
 {
 	setupGLUT(argc, argv);
 	setupGLEW();
 	setupOpenGL();
+	glutMouseFunc(processMouseButtons);
+	glutMotionFunc(processMouseMotion);
 	createShaderProgram();
 	createBufferObjects();
 	setupCallbacks();
