@@ -8,7 +8,7 @@ http://www.lighthouse3d.com/very-simple-libs
 
 ----------------------------------------------------*/
 
-#include "vsMathLib.h"
+#include "../include/vsMathLib.h"
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>

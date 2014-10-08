@@ -36,7 +36,7 @@ int startX, startY, tracking = 0;
 float alpha = 39.0f, beta = 51.0f;
 float r = 10.0f;
 // Camera Position
-float camX, camY, camZ;
+float camX = 5.0, camY = 10.0, camZ = 5.0;
 
 VSMathLib* core = VSMathLib::getInstance();
 
@@ -214,20 +214,24 @@ void destroyBufferObjects()
 typedef float Matrix[16];
 
 const Matrix M = {
-	1.0f,  0.0f,  0.0f, -1.0f,
-	0.0f,  1.0f,  0.0f, -1.0f,
-	0.0f,  0.0f,  1.0f,  0.0f,
+	1.0f,  0.0f,  0.0f,  3.0f,
+	0.0f,  1.0f,  0.0f,  3.0f,
+	0.0f,  0.0f,  1.0f,  3.0f,
 	0.0f,  0.0f,  0.0f,  1.0f
 }; // Row Major (GLSL is Column Major)
 
 void renderScene()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	core->loadIdentity(VSMathLib::VIEW);
+	core->loadIdentity(VSMathLib::MODEL);
+
 	glBindVertexArray(VaoId);
 	glUseProgram(ProgramId);
 
-	core->loadMatrix(core->MODEL, (float*) &M);	//FIXME: OH NOES D:
-	core->loadIdentity(core->PROJECTION);
-	core->loadIdentity(core->VIEW);
+	core->lookAt(camX,camY,camZ , 0.0,0.0,0.0, 0,1,0);
+	core->loadIdentity(VSMathLib::MODEL);
 
 	float* proj_mat = core->get(core->PROJECTION);
 	float* view_mat = core->get(core->VIEW);
@@ -239,9 +243,10 @@ void renderScene()
 
 	glDrawElements(GL_TRIANGLES, faceCount*3, GL_UNSIGNED_INT, (GLvoid*)0);
 
-	core->loadIdentity(core->MODEL);
+	core->loadMatrix(core->MODEL, (float*) &M);
 	glUniformMatrix4fv(ModelID, 1, GL_TRUE, model_mat);
 	glDrawElements(GL_TRIANGLES, faceCount*3, GL_UNSIGNED_INT, (GLvoid*)0);
+
 
 	glUseProgram(0);
 	glBindVertexArray(0);
@@ -272,9 +277,18 @@ void idle()
 
 void reshape(int w, int h)
 {
-	WinX = w;
-	WinY = h;
-	glViewport(0, 0, WinX, WinY);
+	float ratio;
+	// Prevent a divide by zero, when window is too short
+	// (you cant make a window of zero width).
+	if(h == 0)
+		h = 1;
+
+	// Set the viewport to be the entire window
+    glViewport(0, 0, w, h);
+
+	ratio = (1.0f * w) / h;
+	core->loadIdentity(VSMathLib::PROJECTION);
+	core->perspective(90.0f, ratio, 0.5f, 10.0f);
 }
 
 void timer(int value)
@@ -375,7 +389,6 @@ void processMouseButtons(int button, int state, int xx, int yy)
 
 void processMouseMotion(int xx, int yy)
 {
-
 	int deltaX, deltaY;
 	float alphaAux, betaAux;
 	float rAux;
@@ -396,6 +409,7 @@ void processMouseMotion(int xx, int yy)
 			betaAux = -85.0f;
 		rAux = r;
 	}
+
 	// right mouse button: zoom
 	else if (tracking == 2) {
 
@@ -414,11 +428,40 @@ void processMouseMotion(int xx, int yy)
 //	glutPostRedisplay();
 }
 
+void processKeys(unsigned char key, int xx, int yy)
+{
+	switch(key) {
+
+		case 27:
+
+			glutLeaveMainLoop();
+			break;
+		case 'c': printf("Camera Spherical Coordinates (%f, %f, %f)\n", alpha, beta, r);
+			break;
+		case 'm': glEnable(GL_MULTISAMPLE); break;
+		case 'n': glDisable(GL_MULTISAMPLE); break;
+		case 'a':{
+			camX++;
+			break;
+		}
+		case 'd':{
+			camX--;
+			break;
+		}
+	}
+
+//  uncomment this if not using an idle func
+//	glutPostRedisplay();
+}
+
+
 void init(int argc, char* argv[])
 {
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	setupGLUT(argc, argv);
 	setupGLEW();
 	setupOpenGL();
+	glutKeyboardFunc(processKeys);
 	glutMouseFunc(processMouseButtons);
 	glutMotionFunc(processMouseMotion);
 	createShaderProgram();
