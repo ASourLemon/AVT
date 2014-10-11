@@ -1,14 +1,17 @@
-
 #version 330 core
 
-in vec4 in_Position;
-uniform mat4 M;
-uniform mat4 V;
-uniform mat4 P;
+layout (std140) uniform Matrices {
+	mat4 m_pvm;
+	mat4 m_viewModel;
+	mat3 m_normal;
+};
+in vec4 in_position;
+in vec4 texCoord;
+
 out vec4 color;
 
 void main()
 {
-	color = in_Position;
-	gl_Position = P * V * M * in_Position;
+	color = in_position * 2000;
+	gl_Position = m_pvm * in_position;
 }

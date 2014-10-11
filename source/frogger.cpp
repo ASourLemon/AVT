@@ -15,6 +15,8 @@
 
 #include "../include/vsMathLib.h"
 #include "../include/cube.h"
+#include "../include/vsShaderLib.h"
+#include "../include/vsResSurfRevLib.h"
 
 #define CAPTION "Exercise 1"
 
@@ -22,9 +24,9 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-#define VERTEX_COORD_ATTRIB 0
-#define NORMAL_ATTRIB 1
-#define TEXTURE_COORD_ATTRIB 2
+#define VERTEX_COORD_ATTRIB_ORIGINAL 0
+#define NORMAL_ATTRIB_ORIGINAL 1
+#define TEXTURE_COORD_ATTRIB_ORIGINAL 2
 
 GLuint VaoId, VboId[4];
 GLuint VertexShaderId, FragmentShaderId, ProgramId;
@@ -36,11 +38,18 @@ int startX, startY, tracking = 0;
 float alpha = 39.0f, beta = 51.0f;
 float r = 10.0f;
 // Camera Position
-float camX = 5.0, camY = 10.0, camZ = 5.0;
+float camX = 5.0, camY = 5.0, camZ = 5.0;
 
-VSMathLib* core = VSMathLib::getInstance();
+VSMathLib* core;
+VSResSurfRevLib mySurfRev;
 
+VSShaderLib shader, shaderF;
+
+
+///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// ERRORS
+///////////////////////////////////////////////////////////////////////
+
 
 bool isOpenGLError() {
 	bool isError = false;
@@ -61,6 +70,12 @@ void checkOpenGLError(std::string error)
 		exit(EXIT_FAILURE);
 	}
 }
+
+
+///////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////// SHADERS
+///////////////////////////////////////////////////////////////////////
+
 
 static char* readShaderSource(const char* shaderFile)
 {
@@ -127,7 +142,7 @@ void createShaderProgram()
 	}
 
 
-	glBindAttribLocation(ProgramId, VERTEX_COORD_ATTRIB, "in_Position");
+	glBindAttribLocation(ProgramId, VERTEX_COORD_ATTRIB_ORIGINAL, "in_position");
 	
 
 	glLinkProgram(ProgramId);
@@ -151,7 +166,10 @@ void destroyShaderProgram()
 	checkOpenGLError("ERROR: Could not destroy shaders.");
 }
 
+
+///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// VAOs & VBOs
+///////////////////////////////////////////////////////////////////////
 
 
 void createBufferObjects()
@@ -164,20 +182,20 @@ void createBufferObjects()
 //vertex coordinates buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(VERTEX_COORD_ATTRIB);
-	glVertexAttribPointer(VERTEX_COORD_ATTRIB, 4, GL_FLOAT, 0, 0, 0);
+	glEnableVertexAttribArray(VERTEX_COORD_ATTRIB_ORIGINAL);
+	glVertexAttribPointer(VERTEX_COORD_ATTRIB_ORIGINAL, 4, GL_FLOAT, 0, 0, 0);
 
 //normals buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VboId[2]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(NORMAL_ATTRIB);
-	glVertexAttribPointer(NORMAL_ATTRIB, 3, GL_FLOAT, 0, 0, 0);
+	glEnableVertexAttribArray(NORMAL_ATTRIB_ORIGINAL);
+	glVertexAttribPointer(NORMAL_ATTRIB_ORIGINAL, 3, GL_FLOAT, 0, 0, 0);
 
 	//texture coordinates buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VboId[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(TEXTURE_COORD_ATTRIB);
-	glVertexAttribPointer(TEXTURE_COORD_ATTRIB, 2, GL_FLOAT, 0, 0, 0);
+	glEnableVertexAttribArray(TEXTURE_COORD_ATTRIB_ORIGINAL);
+	glVertexAttribPointer(TEXTURE_COORD_ATTRIB_ORIGINAL, 2, GL_FLOAT, 0, 0, 0);
 
 	//index buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[3]);
@@ -195,9 +213,9 @@ void createBufferObjects()
 
 void destroyBufferObjects()
 {
-	glDisableVertexAttribArray(VERTEX_COORD_ATTRIB);
-	glDisableVertexAttribArray(NORMAL_ATTRIB);
-	glDisableVertexAttribArray(TEXTURE_COORD_ATTRIB);
+	glDisableVertexAttribArray(VERTEX_COORD_ATTRIB_ORIGINAL);
+	glDisableVertexAttribArray(NORMAL_ATTRIB_ORIGINAL);
+	glDisableVertexAttribArray(TEXTURE_COORD_ATTRIB_ORIGINAL);
 
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -209,7 +227,11 @@ void destroyBufferObjects()
 	checkOpenGLError("ERROR: Could not destroy VAOs and VBOs.");
 }
 
+
+///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// SCENE
+///////////////////////////////////////////////////////////////////////
+
 
 typedef float Matrix[16];
 
@@ -254,7 +276,46 @@ void renderScene()
 	checkOpenGLError("ERROR: Could not draw scene.");
 }
 
+void newrenderScene(void) {
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	core->loadIdentity(VSMathLib::VIEW);
+	core->loadIdentity(VSMathLib::MODEL);
+	// set camera
+	core->lookAt(camX, camY, camZ, 0,0,0, 0,1,0);
+
+	/*
+	// transform light to camera space and send it to GLSL
+	float res[4];
+	core->multMatrixPoint(VSMathLib::VIEW, lightDir, res);
+	core->normalize(res);
+	shader.setBlockUniform("Lights", "l_dir", res);
+
+	core->multMatrixPoint(VSMathLib::VIEW, lightPos, res);
+	shader.setBlockUniform("Lights", "l_pos", res);
+
+	core->multMatrixPoint(VSMathLib::VIEW, spotDir, res);
+	shader.setBlockUniform("Lights", "l_spotDir", res);*/
+
+	// use our shader
+	glUseProgram(shader.getProgramIndex());
+
+
+	//core->pushMatrix(VSMathLib::MODEL);
+	//core->translate(i*2.0f, 0.0f, j*2.0f);
+	mySurfRev.render();
+	//core->popMatrix(VSMathLib::MODEL);
+
+	//swap buffers
+	glutSwapBuffers();
+}
+
+
+///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// CALLBACKS
+///////////////////////////////////////////////////////////////////////
+
 
 void cleanup()
 {
@@ -266,7 +327,8 @@ void display()
 {
 	++FrameCount;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	renderScene();
+	newrenderScene();
+	//renderScene();
 	glutSwapBuffers();
 }
 
@@ -288,7 +350,7 @@ void reshape(int w, int h)
 
 	ratio = (1.0f * w) / h;
 	core->loadIdentity(VSMathLib::PROJECTION);
-	core->perspective(90.0f, ratio, 0.5f, 10.0f);
+	core->perspective(90.0f, ratio, 0.5f, 20.0f);
 }
 
 void timer(int value)
@@ -300,64 +362,6 @@ void timer(int value)
 	glutSetWindowTitle(s.c_str());
     FrameCount = 0;
     glutTimerFunc(1000, timer, 0);
-}
-
-/////////////////////////////////////////////////////////////////////// SETUP
-
-void setupCallbacks() 
-{
-	glutCloseFunc(cleanup);
-	glutDisplayFunc(display);
-	glutIdleFunc(idle);
-	glutReshapeFunc(reshape);
-	glutTimerFunc(0,timer,0);
-}
-
-void setupOpenGL() {
-	std::cerr << "CONTEXT: OpenGL v" << glGetString(GL_VERSION) << std::endl;
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	glDepthMask(GL_TRUE);
-	glDepthRange(0.0, 1.0);
-	glClearDepth(1.0);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
-}
-
-void setupGLEW() {
-	glewExperimental = GL_TRUE;
-	GLenum result = glewInit() ; 
-	if (result != GLEW_OK) { 
-		std::cerr << "ERROR glewInit: " << glewGetString(result) << std::endl;
-		exit(EXIT_FAILURE);
-	} 
-	GLenum err_code = glGetError();
-	printf ("Vendor: %s\n", glGetString (GL_VENDOR));
-	printf ("Renderer: %s\n", glGetString (GL_RENDERER));
-	printf ("Version: %s\n", glGetString (GL_VERSION));
-	printf ("GLSL: %s\n", glGetString (GL_SHADING_LANGUAGE_VERSION));
-
-}
-
-void setupGLUT(int argc, char* argv[])
-{
-	glutInit(&argc, argv);
-	
-	glutInitContextVersion(3, 3);
-	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
-	glutInitContextProfile(GLUT_CORE_PROFILE);
-
-	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-	
-	glutInitWindowSize(WinX, WinY);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-	WindowHandle = glutCreateWindow(CAPTION);
-	if(WindowHandle < 1) {
-		std::cerr << "ERROR: Could not create a new rendering window." << std::endl;
-		exit(EXIT_FAILURE);
-	}
 }
 
 void processMouseButtons(int button, int state, int xx, int yy)
@@ -455,17 +459,184 @@ void processKeys(unsigned char key, int xx, int yy)
 }
 
 
+///////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////// SETUP
+///////////////////////////////////////////////////////////////////////
+
+
+void setupCallbacks()
+{
+	glutCloseFunc(cleanup);
+	glutDisplayFunc(display);
+	glutIdleFunc(idle);
+	glutReshapeFunc(reshape);
+	glutTimerFunc(0,timer,0);
+	glutKeyboardFunc(processKeys);
+	glutMouseFunc(processMouseButtons);
+	glutMotionFunc(processMouseMotion);
+}
+
+void setupOpenGL() {
+	std::cerr << "CONTEXT: OpenGL v" << glGetString(GL_VERSION) << std::endl;
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glDepthMask(GL_TRUE);
+	glDepthRange(0.0, 1.0);
+	glClearDepth(1.0);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+}
+
+void setupGLEW() {
+	glewExperimental = GL_TRUE;
+	GLenum result = glewInit() ;
+	if (result != GLEW_OK) {
+		std::cerr << "ERROR glewInit: " << glewGetString(result) << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	GLenum err_code = glGetError();
+	printf ("Vendor: %s\n", glGetString (GL_VENDOR));
+	printf ("Renderer: %s\n", glGetString (GL_RENDERER));
+	printf ("Version: %s\n", glGetString (GL_VERSION));
+	printf ("GLSL: %s\n", glGetString (GL_SHADING_LANGUAGE_VERSION));
+
+}
+
+void setupGLUT(int argc, char* argv[])
+{
+	glutInit(&argc, argv);
+
+	glutInitContextVersion(3, 3);
+	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
+	glutInitContextProfile(GLUT_CORE_PROFILE);
+
+	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+
+	glutInitWindowSize(WinX, WinY);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	WindowHandle = glutCreateWindow(CAPTION);
+	if(WindowHandle < 1) {
+		std::cerr << "ERROR: Could not create a new rendering window." << std::endl;
+		exit(EXIT_FAILURE);
+	}
+}
+
+void setupCore(){
+
+	core = VSMathLib::getInstance();
+	core->setUniformBlockName("Matrices");
+	core->setUniformName(VSMathLib::PROJ_VIEW_MODEL, "m_pvm");
+	core->setUniformName(VSMathLib::NORMAL, "m_normal");
+	core->setUniformName(VSMathLib::VIEW_MODEL, "m_viewModel");
+
+}
+
+GLuint setupShaders() {
+
+	// Shader for fonts
+	shaderF.init();
+	shaderF.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/vShader.glsl");
+	shaderF.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/fShader.glsl");
+
+	// set semantics for the shader variables
+	shaderF.setProgramOutput(0,"outputF");
+	shaderF.setVertexAttribName(VSShaderLib::VERTEX_COORD_ATTRIB, "position");
+	shaderF.setVertexAttribName(VSShaderLib::TEXTURE_COORD_ATTRIB, "texCoord");
+
+	shaderF.prepareProgram();
+
+	// add sampler uniforms
+	shaderF.setUniform("texUnit", 0);
+
+	printf("InfoLog for Font Shader\n%s\n\n", shaderF.getAllInfoLogs().c_str());
+
+	// Shader for models
+	shader.init();
+
+
+#define _DIF			0
+#define _DIF_AMB		1
+#define _DIF_AMB_SPEC	2
+#define _PER_PIXEL		3
+#define _POINT			4
+#define _SPOT			5
+
+#define _LIGHT 5
+
+#if (_LIGHT == _DIF)
+	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdif.vert");
+	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/dirdif.frag");
+#elif (_LIGHT == _DIF_AMB)
+	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdifamb.vert");
+	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/dirdifamb.frag");
+#elif (_LIGHT == _DIF_AMB_SPEC)
+	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdifambspec.vert");
+	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/dirdifambspec.frag");
+#elif (_LIGHT == _PER_PIXEL)
+	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/pixeldirdifambspec.vert");
+	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/pixeldirdifambspec.frag");
+#elif (_LIGHT == _POINT)
+	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/pointlight.vert");
+	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/pointlight.frag");
+#else
+	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/vShader.glsl");	/*FIXME: oh dear, fix me when light added!!*/
+	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/fShader.glsl");
+#endif
+
+	// set semantics for the shader variables
+	shader.setProgramOutput(0,"outputF");
+	shader.setVertexAttribName(VSShaderLib::VERTEX_COORD_ATTRIB, "position");
+	shader.setVertexAttribName(VSShaderLib::NORMAL_ATTRIB, "normal");
+	shader.setVertexAttribName(VSShaderLib::TEXTURE_COORD_ATTRIB, "texCoord");
+	shader.prepareProgram();
+
+	shader.setUniform("texUnit", 0);
+	float f3 = 0.90f;
+	shader.setBlockUniform("Lights", "l_spotCutOff", &f3);
+
+
+	printf("InfoLog for Model Shader\n%s\n\n", shader.getAllInfoLogs().c_str());
+
+	return(shader.isProgramValid());
+}
+
+void setupSurfRev(){
+
+	mySurfRev.createSphere(2.0, 100);
+	mySurfRev.createCylinder(10, 1.0, 100);
+	mySurfRev.setMaterialBlockName("Materials");
+
+	float f[4] = {0.8f, 0.6f, 0.4f, 1.0f};
+	mySurfRev.setColor(VSResourceLib::DIFFUSE, f);
+	float f2[4] = {0.2f, 0.15f, 0.1f, 1.0f};
+	mySurfRev.setColor(VSResourceLib::AMBIENT, f2);
+
+	// some GL settings
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_MULTISAMPLE);
+
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
 void init(int argc, char* argv[])
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	setupGLUT(argc, argv);
 	setupGLEW();
 	setupOpenGL();
-	glutKeyboardFunc(processKeys);
-	glutMouseFunc(processMouseButtons);
-	glutMotionFunc(processMouseMotion);
-	createShaderProgram();
-	createBufferObjects();
+	setupCore();
+
+	//createShaderProgram();
+	if(!setupShaders()){
+
+	}
+	setupSurfRev();
+
+	//createBufferObjects();
+
 	setupCallbacks();
 }
 
