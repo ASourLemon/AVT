@@ -37,8 +37,14 @@
 
 #include <GL/glew.h>
 
-#include "../include/vsResourceLib.h"
+#include "vsResourceLib.h"
 
+extern float vertices[6*4*4];
+extern float normals[6*4*3];
+extern float texCoords[6*4*2];
+extern unsigned int faceIndex[36];
+extern int verticeCount;
+extern int faceCount;
 
 class VSResSurfRevLib : public VSResourceLib{
 
@@ -48,6 +54,7 @@ public:
 	~VSResSurfRevLib();
 
 	void create (float *p, int numP, int sides, int closed, float smoothCos);
+	void createCube(float side);
 	void createSphere(float radius, int divisions);
 	void createTorus(float innerRadius, float outerRadius, int rings, int sides);
 	void createCylinder(float height, float radius, int sides);

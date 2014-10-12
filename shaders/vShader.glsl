@@ -12,6 +12,6 @@ out vec4 color;
 
 void main()
 {
-	color = in_position * 2000;
+	color = in_position;
 	gl_Position = m_pvm * in_position;
 }

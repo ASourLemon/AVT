@@ -17,6 +17,8 @@
 #include "../include/cube.h"
 #include "../include/vsShaderLib.h"
 #include "../include/vsResSurfRevLib.h"
+#include "../include/game.h"
+#include "../include/riverlog.h"
 
 #define CAPTION "Exercise 1"
 
@@ -38,12 +40,13 @@ int startX, startY, tracking = 0;
 float alpha = 39.0f, beta = 51.0f;
 float r = 10.0f;
 // Camera Position
-float camX = 5.0, camY = 5.0, camZ = 5.0;
+float camX = 15.0, camY = 15.0, camZ = 15.0;
 
 VSMathLib* core;
 VSResSurfRevLib mySurfRev;
 
 VSShaderLib shader, shaderF;
+domain::Game game;
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -301,11 +304,7 @@ void newrenderScene(void) {
 	// use our shader
 	glUseProgram(shader.getProgramIndex());
 
-
-	//core->pushMatrix(VSMathLib::MODEL);
-	//core->translate(i*2.0f, 0.0f, j*2.0f);
-	mySurfRev.render();
-	//core->popMatrix(VSMathLib::MODEL);
+	game.draw(core);
 
 	//swap buffers
 	glutSwapBuffers();
@@ -350,7 +349,7 @@ void reshape(int w, int h)
 
 	ratio = (1.0f * w) / h;
 	core->loadIdentity(VSMathLib::PROJECTION);
-	core->perspective(90.0f, ratio, 0.5f, 20.0f);
+	core->perspective(90.0f, ratio, 0.5f, 100.0f);
 }
 
 void timer(int value)
@@ -604,14 +603,11 @@ GLuint setupShaders() {
 
 void setupSurfRev(){
 
-	mySurfRev.createSphere(2.0, 100);
-	mySurfRev.createCylinder(10, 1.0, 100);
-	mySurfRev.setMaterialBlockName("Materials");
+	//game.add_drawable(new domain::Riverlog(0,0,0,100));
 
-	float f[4] = {0.8f, 0.6f, 0.4f, 1.0f};
-	mySurfRev.setColor(VSResourceLib::DIFFUSE, f);
-	float f2[4] = {0.2f, 0.15f, 0.1f, 1.0f};
-	mySurfRev.setColor(VSResourceLib::AMBIENT, f2);
+	game.add_drawable(new domain::Map());
+
+
 
 	// some GL settings
 	glEnable(GL_DEPTH_TEST);

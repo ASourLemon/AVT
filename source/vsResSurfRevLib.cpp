@@ -230,6 +230,61 @@ VSResSurfRevLib::create (float *p, int numP, int sides, int closed, float smooth
 	computeVAO(numP, p, points, sides, smoothCos);
 }
 
+void
+VSResSurfRevLib::createCube(float side){
+
+	glGenVertexArrays(1, &mMyMesh.vao);
+	glBindVertexArray(mMyMesh.vao);
+
+	GLuint buffers[4];
+	glGenBuffers(4, buffers);
+
+//vertex coordinates buffer
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(VSShaderLib::VERTEX_COORD_ATTRIB);
+	glVertexAttribPointer(VSShaderLib::VERTEX_COORD_ATTRIB, 4, GL_FLOAT, 0, 0, 0);
+
+//normals buffer
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(VSShaderLib::NORMAL_ATTRIB);
+	glVertexAttribPointer(VSShaderLib::NORMAL_ATTRIB, 3, GL_FLOAT, 0, 0, 0);
+
+	//texture coordinates buffer
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(VSShaderLib::TEXTURE_COORD_ATTRIB);
+	glVertexAttribPointer(VSShaderLib::TEXTURE_COORD_ATTRIB, 2, GL_FLOAT, 0, 0, 0);
+
+	//index buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(faceIndex), faceIndex, GL_STATIC_DRAW);
+
+// unbind the VAO
+	glBindVertexArray(0);
+
+	mMyMesh.numIndexes = faceCount*3;
+
+	mMyMesh.type = GL_TRIANGLES;
+	mMyMesh.mat.ambient[0] = 0.2f;
+	mMyMesh.mat.ambient[1] = 0.2f;
+	mMyMesh.mat.ambient[2] = 0.2f;
+	mMyMesh.mat.ambient[3] = 1.0f;
+
+	mMyMesh.mat.diffuse[0] = 0.8f;
+	mMyMesh.mat.diffuse[1] = 0.8f;
+	mMyMesh.mat.diffuse[2] = 0.8f;
+	mMyMesh.mat.diffuse[3] = 1.0f;
+
+	mMyMesh.mat.specular[0] = 0.8f;
+	mMyMesh.mat.specular[1] = 0.8f;
+	mMyMesh.mat.specular[2] = 0.8f;
+	mMyMesh.mat.specular[3] = 1.0f;
+
+	mMyMesh.mat.shininess = 100.0f;
+}
+
 void 
 VSResSurfRevLib::computeVAO(int numP, float *p, float *points, int sides, float smoothCos) {
 	// Compute and store vertices
