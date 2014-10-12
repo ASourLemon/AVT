@@ -431,7 +431,6 @@ VSResSurfRevLib::computeVAO(int numP, float *p, float *points, int sides, float 
 	mMyMesh.mat.shininess = 100.0f;
 }
 
-
 void 
 VSResSurfRevLib::render () {
 
@@ -462,9 +461,6 @@ VSResSurfRevLib::render () {
 	}
 
 }
-
-
-
 
 void 
 VSResSurfRevLib::setColor(VSResourceLib::MaterialSemantics m, float *values) {

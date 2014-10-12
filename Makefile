@@ -25,7 +25,7 @@ $(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)
 
 frogger: $(OBJ)
 	$(CC) -o $(BDIR)/$@ $^ $(CFLAGS) $(LIBS)
-
+	
 run: build
 	./$(BDIR)/frogger
 

@@ -13,12 +13,11 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
-#include "../include/vsMathLib.h"
+#include "../include/game.h"
 #include "../include/cube.h"
+#include "../include/vsMathLib.h"
 #include "../include/vsShaderLib.h"
 #include "../include/vsResSurfRevLib.h"
-#include "../include/game.h"
-#include "../include/riverlog.h"
 
 #define CAPTION "Exercise 1"
 
@@ -40,13 +39,15 @@ int startX, startY, tracking = 0;
 float alpha = 39.0f, beta = 51.0f;
 float r = 10.0f;
 // Camera Position
-float camX = 15.0, camY = 15.0, camZ = 15.0;
+float camX = 0.0, camY = 15.0, camZ = 15.0;
 
 VSMathLib* core;
 VSResSurfRevLib mySurfRev;
 
 VSShaderLib shader, shaderF;
 domain::Game game;
+
+bool oldVersion;
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -108,8 +109,8 @@ void createShaderProgram()
 		GLenum       type;
 		GLchar*      source;
 	}  shaders[2] = {
-		{ "shaders/vShader.glsl", GL_VERTEX_SHADER, NULL },
-		{ "shaders/fShader.glsl", GL_FRAGMENT_SHADER, NULL }
+		{ "shaders/oldvShader.glsl", GL_VERTEX_SHADER, NULL },
+		{ "shaders/oldfShader.glsl", GL_FRAGMENT_SHADER, NULL }
 	};
 
 
@@ -326,8 +327,14 @@ void display()
 {
 	++FrameCount;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	newrenderScene();
-	//renderScene();
+	if(oldVersion){
+
+		renderScene();
+	}else{
+
+		newrenderScene();
+	}
+
 	glutSwapBuffers();
 }
 
@@ -477,7 +484,6 @@ void setupCallbacks()
 
 void setupOpenGL() {
 	std::cerr << "CONTEXT: OpenGL v" << glGetString(GL_VERSION) << std::endl;
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glDepthMask(GL_TRUE);
@@ -603,41 +609,42 @@ GLuint setupShaders() {
 
 void setupSurfRev(){
 
-	//game.add_drawable(new domain::Riverlog(0,0,0,100));
-
-	game.add_drawable(new domain::Map());
-
-
-
+	game.init();
 	// some GL settings
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_MULTISAMPLE);
 
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 void init(int argc, char* argv[])
 {
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	setupGLUT(argc, argv);
 	setupGLEW();
 	setupOpenGL();
 	setupCore();
 
-	//createShaderProgram();
-	if(!setupShaders()){
+	if(oldVersion){
+		createShaderProgram();
+		createBufferObjects();
+	}else {
 
+		if(!setupShaders()){
+
+		}
+		setupSurfRev();
 	}
-	setupSurfRev();
-
-	//createBufferObjects();
 
 	setupCallbacks();
 }
 
 int main(int argc, char* argv[])
 {
+	oldVersion = true;
+	//oldVersion = false;
+
+
 	init(argc, argv);
 	glutMainLoop();	
 	exit(EXIT_SUCCESS);

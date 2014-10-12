@@ -15,6 +15,7 @@ private:
 
 public:
 	Game();
+	void init();
 	void draw(VSMathLib* core);
 	void add_drawable(Drawable* d);
 };

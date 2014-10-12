@@ -23,11 +23,20 @@ Map::Map() {
 
 void Map::draw(VSMathLib* core){
 
-	//core->pushMatrix(VSMathLib::MODEL);
-	//core->rotate(90, 1,0,0);
-	//core->translate(_x, _y, _z);
+	for(int l = 0; l < MAP0_H; ++l){
+		for(int c = 0; c < MAP0_W; ++c){
+			if(map_0[l * MAP0_W + c] == WALL_CHAR){
+				core->pushMatrix(VSMathLib::MODEL);
+				core->translate(c, 0, l);
+				body.render();
+				core->popMatrix(VSMathLib::MODEL);
+			}
+		}
+	}
+
 	body.render();
-	//core->popMatrix(VSMathLib::MODEL);
+
+
 }
 
 } /* namespace domain */
