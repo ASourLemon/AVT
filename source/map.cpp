@@ -5,7 +5,7 @@ namespace domain {
 Map::Map() {
 
 	body.createCube(1.0f);
-	water.createSphere(0.75, 100);
+	water.createSphere(0.85, 100);
 
 	body.setMaterialBlockName("Materials");
 	float f[4] = {0.8f, 0.6f, 0.4f, 1.0f};
@@ -13,9 +13,23 @@ Map::Map() {
 	float f2[4] = {0.0f, 0.0f, 1.0f, 1.0f};
 	body.setColor(VSResourceLib::AMBIENT, f2);
 
+	deltaWater=0;
+	goingLeft = false;
+
 }
 
 void Map::draw(VSMathLib* core){
+
+	//FIXME: moviment - HAHAHA just remove me :p
+	if(!goingLeft && deltaWater < 1){
+		deltaWater += 0.05;
+	}else {
+		deltaWater -= 0.05;
+		goingLeft = true;
+		if(deltaWater < 0){
+			goingLeft = false;
+		}
+	}
 
 
 	////////////////////////////////////
@@ -89,7 +103,7 @@ void Map::draw(VSMathLib* core){
 	for(int l = 0.5; l < 5; l++){
 		for(int c = -1; c <= MAP0_W; c++){
 			core->pushMatrix(VSMathLib::MODEL);
-			core->translate(c, -1.0, l);
+			core->translate(c + deltaWater, -1.0, l );
 			water.render();
 			core->popMatrix(VSMathLib::MODEL);
 		}

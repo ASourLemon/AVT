@@ -31,6 +31,8 @@ class Map : public Drawable {
 private:
 	VSResSurfRevLib body;
 	VSResSurfRevLib water;
+	float deltaWater;
+	bool goingLeft;
 
 
 public:
