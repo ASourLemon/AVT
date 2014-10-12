@@ -11,12 +11,14 @@ namespace domain {
 	class Frog : public Drawable{
 
 	private:
+		float x, y, z;
 		VSResSurfRevLib body;
 		bool created;
 
 	public:
-		Frog();
+		Frog(float x, float y, float z);
 		void draw(VSMathLib* core);
+		void move(int d);
 
 	};
 

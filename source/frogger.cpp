@@ -14,6 +14,7 @@
 #include <GL/freeglut.h>
 
 #include "../include/game.h"
+#include "../include/drawable.h"
 #include "../include/cube.h"
 #include "../include/vsMathLib.h"
 #include "../include/vsShaderLib.h"
@@ -39,7 +40,7 @@ int startX, startY, tracking = 0;
 float alpha = 39.0f, beta = 51.0f;
 float r = 10.0f;
 // Camera Position
-float camX = 5.0, camY = 15.0, camZ = 15.0;
+float camX = 5.0, camY = 10.0, camZ = -2.0;
 // light direction
 float lightDir[4] = { 1.0f, 1.0f, 1.0f, 0.0f };
 float lightPos[4] = { 4.0f, 6.0f, 2.0f, 1.0f };
@@ -443,36 +444,31 @@ void processMouseMotion(int xx, int yy)
 
 void processKeys(unsigned char key, int xx, int yy)
 {
-	switch (key) {
 
-	case 27:
+	switch(key) {
 
-		glutLeaveMainLoop();
-		break;
-	case 'c': printf("Camera Spherical Coordinates (%f, %f, %f)\n", alpha, beta, r);
-		break;
-	case 'm': glEnable(GL_MULTISAMPLE); break;
-	case 'n': glDisable(GL_MULTISAMPLE); break;
-	case 'w':{
-		camX++;
-		break;
-	}
-	case 'a': {
-		camZ--;
-		break;
-	}
-	case 'd': {
-		camZ++;
-		break;
-	}
-	case 's':{
-		camX--;
-		break;
-	}
+		case 27:
+
+			glutLeaveMainLoop();
+			break;
+		case 'c': printf("Camera Spherical Coordinates (%f, %f, %f)\n", alpha, beta, r);
+			break;
+		case 'm': glEnable(GL_MULTISAMPLE); break;
+		case 'n': glDisable(GL_MULTISAMPLE); break;
+
+		case 'q': game.move_frog(0); break;
+
+		case 'a': game.move_frog(1); break;
+
+		case 'o': game.move_frog(2); break;
+
+		case 'p': game.move_frog(3); break;
 	}
 
-	//  uncomment this if not using an idle func
-	//	glutPostRedisplay();
+
+//  uncomment this if not using an idle func
+//	glutPostRedisplay();
+
 }
 
 

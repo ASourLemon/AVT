@@ -4,6 +4,13 @@
 #include "vsMathLib.h"
 #include "vsResSurfRevLib.h"
 
+#define FRONT 0
+#define BACK 1
+#define LEFT 2
+#define RIGHT 3
+#define UP 4
+#define DOWN 5
+
 namespace domain {
 
 class Drawable {
@@ -11,16 +18,8 @@ class Drawable {
 protected:
 	float _x, _y, _z;
 
-public:
 
-	enum Direction{
-			FRONT,
-			BACK,
-			LEFT,
-			RIGHT,
-			UP,
-			DOWN,
-	};
+public:
 
 	virtual void draw(VSMathLib* core) = 0;
 

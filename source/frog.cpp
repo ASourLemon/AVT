@@ -3,7 +3,10 @@
 namespace domain{
 
 
-	Frog::Frog(){
+	Frog::Frog(float x, float y, float z){
+		this->x = x;
+		this->y = y;
+		this->z = z;
 		created = false;
 		body.setMaterialBlockName("Materials");
 		float f[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
@@ -14,7 +17,10 @@ namespace domain{
 
 	void Frog::draw(VSMathLib* core){
 		core->pushMatrix(VSMathLib::MODEL);
+		core->translate(x, y, z);
+		core->rotate(180, 0,1,0);
 		core->scale(0.4, 0.4, 0.4);
+
 		body.render();
 		//corpo
 		core->pushMatrix(VSMathLib::MODEL);
@@ -25,7 +31,7 @@ namespace domain{
 		core->rotate(35.0, 1.0, 0.0, 0.0);
 		body.render();
 		core->popMatrix(VSMathLib::MODEL);
-		//cabeça
+		//cabeï¿½a
 		core->pushMatrix(VSMathLib::MODEL);
 		if (!created) {
 			body.createSphere(1.5, 9.0);
@@ -54,8 +60,32 @@ namespace domain{
 		core->popMatrix(VSMathLib::MODEL);
 
 		core->popMatrix(VSMathLib::MODEL);
+	}
 
+	void Frog::move(int d){
+		switch(d){
 
+		case(FRONT):{
+			this->z++;
+			break;
+		}
+
+		case(BACK):{
+			this->z--;
+			break;
+		}
+
+		case(LEFT):{
+			this->x++;
+			break;
+		}
+
+		case(RIGHT):{
+			this->x--;
+			break;
+		}
+
+		}
 	}
 
 }

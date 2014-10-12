@@ -9,9 +9,10 @@ namespace domain {
 
 	}
 
-	void Game::init(){
 
-		game_objects.push_back(new Frog());
+void Game::init(){
+	frog = new Frog(5.0, 0.0, 1.0);
+	game_objects.push_back(frog);
 
 		game_objects.push_back(new Map());
 
@@ -37,5 +38,10 @@ namespace domain {
 		game_objects.push_back(d);
 
 	}
+
+void Game::move_frog(int d){
+	frog->move(d);
+}
+
 
 }
