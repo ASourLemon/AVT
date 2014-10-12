@@ -10,6 +10,7 @@ private:
 	float x;
 	float y;
 	float z;
+	bool created = false;
 
 
 public:

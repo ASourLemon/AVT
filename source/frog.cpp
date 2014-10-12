@@ -18,28 +18,36 @@ namespace domain{
 				body.render();
 				//corpo
 				core->pushMatrix(VSMathLib::MODEL);
-				body.createSphere(2.2, FROG_DIVISIONS);
+				if (!created) {
+					body.createSphere(2.2, FROG_DIVISIONS);
+				}
 				core->scale(1.0, 0.8, 1.0);
 				core->rotate(35.0, 1.0, 0.0, 0.0);
 				body.render();
 				core->popMatrix(VSMathLib::MODEL);
 				//cabeça
 				core->pushMatrix(VSMathLib::MODEL);
-				body.createSphere(1.5, 9.0);
+				if (!created) {
+					body.createSphere(1.5, 9.0);
+				}
 				core->translate(0.0, 1.6, -1.8);
 				core->scale(0.8, 0.8, 1.0);
 				body.render();
 				core->popMatrix(VSMathLib::MODEL);
 				//olhos
 				core->pushMatrix(VSMathLib::MODEL);
-				body.createSphere(0.6, 9.0);
+				if (!created) {
+					body.createSphere(0.6, 9.0);
+				}
 				core->translate(0.4, 2.8, -1.5);
 				core->scale(0.7, 1.0, 0.7);
 				body.render();
 				core->popMatrix(VSMathLib::MODEL);
 				//olhos
 				core->pushMatrix(VSMathLib::MODEL);
-				body.createSphere(0.6, 9.0);
+				if (!created) {
+					body.createSphere(0.6, 9.0);
+				}
 				core->translate(-0.4, 2.8, -1.5);
 				core->scale(0.7, 1.0, 0.7);
 				body.render();

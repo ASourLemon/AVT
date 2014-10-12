@@ -7,7 +7,9 @@ namespace domain {
 
 	void Car::draw(VSMathLib* core){
 		
-		body.createCube(1.0f);
+		if (!created) {
+			body.createCube(1.0f);
+		}
 
 		body.setMaterialBlockName("Materials");
 		float f[4] = { 0.8f, 0.6f, 0.4f, 1.0f };
@@ -23,7 +25,9 @@ namespace domain {
 		core->popMatrix(VSMathLib::MODEL);
 
 
-		body.createCube(1.0f);
+		if (!created) {
+			body.createCube(1.0f);
+		}
 		body.setColor(VSResourceLib::AMBIENT, f2);
 
 
@@ -32,6 +36,8 @@ namespace domain {
 		core->scale(0.7, 0.7, 0.9);
 		body.render();
 		core->popMatrix(VSMathLib::MODEL);
+
+		created = true;
 	}
 
 } /* namespace domain */

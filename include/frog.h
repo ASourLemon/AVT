@@ -12,6 +12,7 @@ namespace domain {
 	
 		private:
 			VSResSurfRevLib body;
+			bool created;
 
 		public:
 			Frog();
