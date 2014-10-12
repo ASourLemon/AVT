@@ -578,7 +578,7 @@ GLuint setupShaders() {
 #define _POINT			4
 #define _SPOT			5
 
-#define _LIGHT 5
+#define _LIGHT 0
 
 #if (_LIGHT == _DIF)
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdif.vert");
