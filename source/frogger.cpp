@@ -41,9 +41,9 @@ float r = 10.0f;
 // Camera Position
 float camX = 5.0, camY = 15.0, camZ = 15.0;
 // light direction
-float lightDir[4] = {1.0f, 1.0f, 1.0f, 0.0f};
-float lightPos[4] = {4.0f, 6.0f, 2.0f, 1.0f};
-float spotDir[4]  = {-4.0f, -6.0f, -2.0f, 0.0f};
+float lightDir[4] = { 1.0f, 1.0f, 1.0f, 0.0f };
+float lightPos[4] = { 4.0f, 6.0f, 2.0f, 1.0f };
+float spotDir[4] = { -4.0f, -6.0f, -2.0f, 0.0f };
 
 VSMathLib* core;
 VSResSurfRevLib mySurfRev;
@@ -73,7 +73,7 @@ bool isOpenGLError() {
 
 void checkOpenGLError(std::string error)
 {
-	if(isOpenGLError()) {
+	if (isOpenGLError()) {
 		std::cerr << error << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -113,8 +113,8 @@ void createShaderProgram()
 		GLenum       type;
 		GLchar*      source;
 	}  shaders[2] = {
-		{ "shaders/oldvShader.glsl", GL_VERTEX_SHADER, NULL },
-		{ "shaders/oldfShader.glsl", GL_FRAGMENT_SHADER, NULL }
+			{ "shaders/oldvShader.glsl", GL_VERTEX_SHADER, NULL },
+			{ "shaders/oldfShader.glsl", GL_FRAGMENT_SHADER, NULL }
 	};
 
 
@@ -151,7 +151,7 @@ void createShaderProgram()
 
 
 	glBindAttribLocation(ProgramId, VERTEX_COORD_ATTRIB_ORIGINAL, "in_position");
-	
+
 
 	glLinkProgram(ProgramId);
 
@@ -188,13 +188,13 @@ void createBufferObjects()
 
 	glGenBuffers(4, VboId);
 
-//vertex coordinates buffer
+	//vertex coordinates buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(VERTEX_COORD_ATTRIB_ORIGINAL);
 	glVertexAttribPointer(VERTEX_COORD_ATTRIB_ORIGINAL, 4, GL_FLOAT, 0, 0, 0);
 
-//normals buffer
+	//normals buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VboId[2]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(NORMAL_ATTRIB_ORIGINAL);
@@ -210,7 +210,7 @@ void createBufferObjects()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[3]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(faceIndex), faceIndex, GL_STATIC_DRAW);
 
-// unbind the VAO
+	// unbind the VAO
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -245,10 +245,10 @@ void destroyBufferObjects()
 typedef float Matrix[16];
 
 const Matrix M = {
-	1.0f,  0.0f,  0.0f,  3.0f,
-	0.0f,  1.0f,  0.0f,  3.0f,
-	0.0f,  0.0f,  1.0f,  3.0f,
-	0.0f,  0.0f,  0.0f,  1.0f
+	1.0f, 0.0f, 0.0f, 3.0f,
+	0.0f, 1.0f, 0.0f, 3.0f,
+	0.0f, 0.0f, 1.0f, 3.0f,
+	0.0f, 0.0f, 0.0f, 1.0f
 }; // Row Major (GLSL is Column Major)
 
 void renderScene()
@@ -261,7 +261,7 @@ void renderScene()
 	glBindVertexArray(VaoId);
 	glUseProgram(ProgramId);
 
-	core->lookAt(camX,camY,camZ , 0.0,0.0,0.0, 0,1,0);
+	core->lookAt(camX, camY, camZ, 0.0, 0.0, 0.0, 0, 1, 0);
 	core->loadIdentity(VSMathLib::MODEL);
 
 	float* proj_mat = core->get(core->PROJECTION);
@@ -272,11 +272,11 @@ void renderScene()
 	glUniformMatrix4fv(ViewID, 1, GL_FALSE, view_mat);
 	glUniformMatrix4fv(ModelID, 1, GL_TRUE, model_mat);
 
-	glDrawElements(GL_TRIANGLES, faceCount*3, GL_UNSIGNED_INT, (GLvoid*)0);
+	glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, (GLvoid*)0);
 
-	core->loadMatrix(core->MODEL, (float*) &M);
+	core->loadMatrix(core->MODEL, (float*)&M);
 	glUniformMatrix4fv(ModelID, 1, GL_TRUE, model_mat);
-	glDrawElements(GL_TRIANGLES, faceCount*3, GL_UNSIGNED_INT, (GLvoid*)0);
+	glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, (GLvoid*)0);
 
 
 	glUseProgram(0);
@@ -292,7 +292,7 @@ void newrenderScene(void) {
 	core->loadIdentity(VSMathLib::VIEW);
 	core->loadIdentity(VSMathLib::MODEL);
 	// set camera
-	core->lookAt(camX, camY, camZ, 5,0,7, 0,1,0);
+	core->lookAt(camX, camY, camZ, 5, 0, 7, 0, 1, 0);
 
 
 	// transform light to camera space and send it to GLSL
@@ -332,9 +332,10 @@ void display()
 {
 	++FrameCount;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if(oldVersion){
+	if (oldVersion){
 		renderScene();
-	}else{
+	}
+	else{
 		newrenderScene();
 	}
 
@@ -350,11 +351,11 @@ void reshape(int w, int h)
 	float ratio;
 	// Prevent a divide by zero, when window is too short
 	// (you cant make a window of zero width).
-	if(h == 0)
+	if (h == 0)
 		h = 1;
 
 	// Set the viewport to be the entire window
-    glViewport(0, 0, w, h);
+	glViewport(0, 0, w, h);
 
 	ratio = (1.0f * w) / h;
 	core->loadIdentity(VSMathLib::PROJECTION);
@@ -368,8 +369,8 @@ void timer(int value)
 	std::string s = oss.str();
 	glutSetWindow(WindowHandle);
 	glutSetWindowTitle(s.c_str());
-    FrameCount = 0;
-    glutTimerFunc(1000, timer, 0);
+	FrameCount = 0;
+	glutTimerFunc(1000, timer, 0);
 }
 
 void processMouseButtons(int button, int state, int xx, int yy)
@@ -405,8 +406,8 @@ void processMouseMotion(int xx, int yy)
 	float alphaAux, betaAux;
 	float rAux;
 
-	deltaX =  - xx + startX;
-	deltaY =    yy - startY;
+	deltaX = -xx + startX;
+	deltaY = yy - startY;
 
 	// left mouse button: move camera
 	if (tracking == 1) {
@@ -436,42 +437,42 @@ void processMouseMotion(int xx, int yy)
 	camZ = rAux * cos(alphaAux * 3.14f / 180.0f) * cos(betaAux * 3.14f / 180.0f);
 	camY = rAux *   						       sin(betaAux * 3.14f / 180.0f);
 
-//  uncomment this if not using an idle func
-//	glutPostRedisplay();
+	//  uncomment this if not using an idle func
+	//	glutPostRedisplay();
 }
 
 void processKeys(unsigned char key, int xx, int yy)
 {
-	switch(key) {
+	switch (key) {
 
-		case 27:
+	case 27:
 
-			glutLeaveMainLoop();
-			break;
-		case 'c': printf("Camera Spherical Coordinates (%f, %f, %f)\n", alpha, beta, r);
-			break;
-		case 'm': glEnable(GL_MULTISAMPLE); break;
-		case 'n': glDisable(GL_MULTISAMPLE); break;
-		case 'w':{
-			camX++;
-			break;
-		}
-		case 'a': {
-			camZ--;
-			break;
-		}
-		case 'd': {
-			camZ++;
-			break;
-		}
-		case 's':{
-			camX--;
-			break;
-		}
+		glutLeaveMainLoop();
+		break;
+	case 'c': printf("Camera Spherical Coordinates (%f, %f, %f)\n", alpha, beta, r);
+		break;
+	case 'm': glEnable(GL_MULTISAMPLE); break;
+	case 'n': glDisable(GL_MULTISAMPLE); break;
+	case 'w':{
+		camX++;
+		break;
+	}
+	case 'a': {
+		camZ--;
+		break;
+	}
+	case 'd': {
+		camZ++;
+		break;
+	}
+	case 's':{
+		camX--;
+		break;
+	}
 	}
 
-//  uncomment this if not using an idle func
-//	glutPostRedisplay();
+	//  uncomment this if not using an idle func
+	//	glutPostRedisplay();
 }
 
 
@@ -486,7 +487,7 @@ void setupCallbacks()
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
-	glutTimerFunc(0,timer,0);
+	glutTimerFunc(0, timer, 0);
 	glutKeyboardFunc(processKeys);
 	glutMouseFunc(processMouseButtons);
 	glutMotionFunc(processMouseMotion);
@@ -506,16 +507,16 @@ void setupOpenGL() {
 
 void setupGLEW() {
 	glewExperimental = GL_TRUE;
-	GLenum result = glewInit() ;
+	GLenum result = glewInit();
 	if (result != GLEW_OK) {
 		std::cerr << "ERROR glewInit: " << glewGetString(result) << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	GLenum err_code = glGetError();
-	printf ("Vendor: %s\n", glGetString (GL_VENDOR));
-	printf ("Renderer: %s\n", glGetString (GL_RENDERER));
-	printf ("Version: %s\n", glGetString (GL_VERSION));
-	printf ("GLSL: %s\n", glGetString (GL_SHADING_LANGUAGE_VERSION));
+	printf("Vendor: %s\n", glGetString(GL_VENDOR));
+	printf("Renderer: %s\n", glGetString(GL_RENDERER));
+	printf("Version: %s\n", glGetString(GL_VERSION));
+	printf("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 }
 
@@ -527,12 +528,12 @@ void setupGLUT(int argc, char* argv[])
 	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 
-	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 
 	glutInitWindowSize(WinX, WinY);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	WindowHandle = glutCreateWindow(CAPTION);
-	if(WindowHandle < 1) {
+	if (WindowHandle < 1) {
 		std::cerr << "ERROR: Could not create a new rendering window." << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -556,7 +557,7 @@ GLuint setupShaders() {
 	shaderF.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/color.frag");
 
 	// set semantics for the shader variables
-	shaderF.setProgramOutput(0,"outputF");
+	shaderF.setProgramOutput(0, "outputF");
 	shaderF.setVertexAttribName(VSShaderLib::VERTEX_COORD_ATTRIB, "position");
 	shaderF.setVertexAttribName(VSShaderLib::TEXTURE_COORD_ATTRIB, "texCoord");
 
@@ -601,7 +602,7 @@ GLuint setupShaders() {
 #endif
 
 	// set semantics for the shader variables
-	shader.setProgramOutput(0,"outputF");
+	shader.setProgramOutput(0, "outputF");
 	shader.setVertexAttribName(VSShaderLib::VERTEX_COORD_ATTRIB, "position");
 	shader.setVertexAttribName(VSShaderLib::NORMAL_ATTRIB, "normal");
 	shader.setVertexAttribName(VSShaderLib::TEXTURE_COORD_ATTRIB, "texCoord");
@@ -637,12 +638,13 @@ void init(int argc, char* argv[])
 	setupOpenGL();
 	setupCore();
 
-	if(oldVersion){
+	if (oldVersion){
 		createShaderProgram();
 		createBufferObjects();
-	}else {
+	}
+	else {
 
-		if(!setupShaders()){
+		if (!setupShaders()){
 
 		}
 		setupSurfRev();
@@ -654,7 +656,7 @@ void init(int argc, char* argv[])
 int main(int argc, char* argv[])
 {
 	init(argc, argv);
-	glutMainLoop();	
+	glutMainLoop();
 	exit(EXIT_SUCCESS);
 }
 

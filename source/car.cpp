@@ -3,10 +3,11 @@
 namespace domain {
 
 	Car::Car(float x, float y, float z) : x(x), y(y), z(z) {
+		created = false;
 	}
 
 	void Car::draw(VSMathLib* core){
-		
+
 		if (!created) {
 			body.createCube(1.0f);
 		}
@@ -20,7 +21,7 @@ namespace domain {
 
 		core->pushMatrix(VSMathLib::MODEL);
 		core->translate(x, y, z);
-		core->scale(3.0, 1.0, 1.0);
+		core->scale(3.0f, 1.0f, 1.0f);
 		body.render();
 		core->popMatrix(VSMathLib::MODEL);
 
@@ -32,8 +33,8 @@ namespace domain {
 
 
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(x+3, y, z);
-		core->scale(0.7, 0.7, 0.9);
+		core->translate(x + 3.0f, y, z);
+		core->scale(0.7f, 0.7f, 0.9f);
 		body.render();
 		core->popMatrix(VSMathLib::MODEL);
 

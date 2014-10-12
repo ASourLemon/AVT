@@ -9,15 +9,15 @@
 namespace domain {
 
 	class Frog : public Drawable{
-	
-		private:
-			VSResSurfRevLib body;
-			bool created;
 
-		public:
-			Frog();
-			void draw(VSMathLib* core);
-	
+	private:
+		VSResSurfRevLib body;
+		bool created;
+
+	public:
+		Frog();
+		void draw(VSMathLib* core);
+
 	};
 
 }
