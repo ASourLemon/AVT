@@ -15,7 +15,7 @@
  *
  ---------------------------------------------------------------*/
 
-#include "vsLogLib.h"
+#include "../include/vsLogLib.h"
 
 
 VSLogLib::VSLogLib(): pStreamEnabled(false) {

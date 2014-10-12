@@ -47,7 +47,7 @@ VSResSurfRevLib mySurfRev;
 VSShaderLib shader, shaderF;
 domain::Game game;
 
-bool oldVersion;
+bool oldVersion = false;
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -328,14 +328,11 @@ void display()
 	++FrameCount;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if(oldVersion){
-
 		renderScene();
 	}else{
-
 		newrenderScene();
 	}
 
-	glutSwapBuffers();
 }
 
 void idle()
@@ -641,10 +638,6 @@ void init(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
-	oldVersion = true;
-	//oldVersion = false;
-
-
 	init(argc, argv);
 	glutMainLoop();	
 	exit(EXIT_SUCCESS);

@@ -27,7 +27,7 @@ void Map::draw(VSMathLib* core){
 		for(int c = 0; c < MAP0_W; ++c){
 			if(map_0[l * MAP0_W + c] == WALL_CHAR){
 				core->pushMatrix(VSMathLib::MODEL);
-				core->translate(c, 0, l);
+				core->translate(c, 0.0, (float) l);
 				body.render();
 				core->popMatrix(VSMathLib::MODEL);
 			}

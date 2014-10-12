@@ -30,7 +30,7 @@
 
 #include "../include/vsResSurfRevLib.h"
 
-#include "vsMathLib.h"
+#include "../include/vsMathLib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
