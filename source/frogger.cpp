@@ -30,7 +30,7 @@ unsigned int FrameCount = 0;
 #define TEXTURE_COORD_ATTRIB_ORIGINAL 2
 
 GLuint VaoId, VboId[4];
-GLuint VertexShaderId, FragmentShaderId, ProgramId;
+GLuint VertexShaderId, FragmentShaderId, ProgramId, ColorId;
 GLint UniformId, ProjectionID, ModelID, ViewID;
 
 // Mouse Tracking Variables
@@ -154,6 +154,7 @@ void createShaderProgram()
 	ProjectionID = glGetUniformLocation(ProgramId, "P");
 	ViewID = glGetUniformLocation(ProgramId, "V");
 	ModelID = glGetUniformLocation(ProgramId, "M");
+	ColorId = glGetUniformLocation(ProgramId, "in_color");
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
 
@@ -447,11 +448,19 @@ void processKeys(unsigned char key, int xx, int yy)
 			break;
 		case 'm': glEnable(GL_MULTISAMPLE); break;
 		case 'n': glDisable(GL_MULTISAMPLE); break;
-		case 'a':{
+		case 'w':{
 			camX++;
 			break;
 		}
-		case 'd':{
+		case 'a': {
+			camZ--;
+			break;
+		}
+		case 'd': {
+			camZ++;
+			break;
+		}
+		case 's':{
 			camX--;
 			break;
 		}
@@ -593,6 +602,8 @@ GLuint setupShaders() {
 	shader.setVertexAttribName(VSShaderLib::NORMAL_ATTRIB, "normal");
 	shader.setVertexAttribName(VSShaderLib::TEXTURE_COORD_ATTRIB, "texCoord");
 	shader.prepareProgram();
+
+
 
 	shader.setUniform("texUnit", 0);
 	float f3 = 0.90f;

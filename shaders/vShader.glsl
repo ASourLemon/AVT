@@ -7,11 +7,12 @@ layout (std140) uniform Matrices {
 };
 in vec4 in_position;
 in vec4 texCoord;
+in vec4 in_color;
 
 out vec4 color;
 
 void main()
 {
-	color = in_position;
+	color = in_color;
 	gl_Position = m_pvm * in_position;
 }

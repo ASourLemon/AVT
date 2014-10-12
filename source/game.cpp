@@ -1,4 +1,5 @@
 #include "../include/game.h"
+#include "../include/riverlog.h"
 #include "../include/car.h"
 
 namespace domain {
@@ -8,10 +9,13 @@ Game::Game() {
 }
 
 void Game::init(){
+
 	game_objects.push_back(new Map());
-	game_objects.push_back(new Car(3.0, 0.0, 7.0));
-	game_objects.push_back(new Car(3.0, 0.0, 5.0));
-	game_objects.push_back(new Car(3.0, 0.0, 9.0));
+	game_objects.push_back(new Car(1.0, 0.0, 6.0));
+	game_objects.push_back(new Car(5.0, 0.0, 4.0));
+
+	game_objects.push_back(new Riverlog(2.0, -1.0, 10.0, 50));
+	game_objects.push_back(new Riverlog(7.0, -1.0, 12.0, 50));
 }
 
 void Game::draw(VSMathLib* core){

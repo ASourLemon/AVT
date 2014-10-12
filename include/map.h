@@ -4,22 +4,22 @@
 #include "drawable.h"
 
 #define MAP0_W 10
-#define MAP0_H 15
+#define MAP0_H 16
 #define WALL_CHAR 'X'
 
 const char map_0[] =
 {		"XXXXXXXXXX"
-		"X        X"
-		"X        X"
-		"X        X"
-		"X        X"
-		"X        X"
-		"X        X"
-		"X        X"
-		"X        X"
-		"X        X"
-		"X        X"
-		"X        X"
+		"XXXXXXXXXX"
+		"XXXXXXXXXX"
+		"          "
+		"          "
+		"          "
+		"XXXXXXXXXX"
+		"          "
+		"          "
+		"          "
+		"XXXXXXXXXX"
+		"XXXXXXXXXX"
 		"XXXXXXXXXX"
 };
 
@@ -30,6 +30,7 @@ namespace domain {
 class Map : public Drawable {
 private:
 	VSResSurfRevLib body;
+	VSResSurfRevLib water;
 
 
 public:

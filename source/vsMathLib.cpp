@@ -467,6 +467,7 @@ VSMathLib::matrixToGL(MatrixTypes aType)
 		}
 	
 	}
+
 }
 
 void

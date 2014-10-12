@@ -26,8 +26,8 @@ Riverlog::Riverlog(float x, float y, float z, int quality) {
 void Riverlog::draw(VSMathLib* core){
 
 	core->pushMatrix(VSMathLib::MODEL);
-	core->rotate(90, 1,0,0);
 	core->translate(_x, _y, _z);
+	core->rotate(90, 0, 0, 1);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 

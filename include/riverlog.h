@@ -3,8 +3,8 @@
 
 #include "drawable.h"
 
-#define LOG_RADIOS 2.0f
-#define LOG_HEIGHT 10.0f
+#define LOG_RADIOS 0.5f
+#define LOG_HEIGHT 3.5f
 
 namespace domain {
 
