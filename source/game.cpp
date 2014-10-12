@@ -1,6 +1,7 @@
 #include "../include/game.h"
 #include "../include/riverlog.h"
 #include "../include/car.h"
+#include "../include/frog.h"
 
 namespace domain {
 
@@ -10,7 +11,10 @@ Game::Game() {
 
 void Game::init(){
 
+	game_objects.push_back(new Frog());
+
 	game_objects.push_back(new Map());
+
 	game_objects.push_back(new Car(1.0, 0.0, 6.0));
 	game_objects.push_back(new Car(5.0, 0.0, 4.0));
 
