@@ -39,7 +39,7 @@ int startX, startY, tracking = 0;
 float alpha = 39.0f, beta = 51.0f;
 float r = 10.0f;
 // Camera Position
-float camX = 0.0, camY = 15.0, camZ = 15.0;
+float camX = 5.0, camY = 15.0, camZ = 15.0;
 
 VSMathLib* core;
 VSResSurfRevLib mySurfRev;
@@ -287,7 +287,7 @@ void newrenderScene(void) {
 	core->loadIdentity(VSMathLib::VIEW);
 	core->loadIdentity(VSMathLib::MODEL);
 	// set camera
-	core->lookAt(camX, camY, camZ, 0,0,0, 0,1,0);
+	core->lookAt(camX, camY, camZ, 5,0,7, 0,1,0);
 
 	/*
 	// transform light to camera space and send it to GLSL
