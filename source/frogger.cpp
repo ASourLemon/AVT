@@ -40,6 +40,10 @@ float alpha = 39.0f, beta = 51.0f;
 float r = 10.0f;
 // Camera Position
 float camX = 5.0, camY = 15.0, camZ = 15.0;
+// light direction
+float lightDir[4] = {1.0f, 1.0f, 1.0f, 0.0f};
+float lightPos[4] = {4.0f, 6.0f, 2.0f, 1.0f};
+float spotDir[4]  = {-4.0f, -6.0f, -2.0f, 0.0f};
 
 VSMathLib* core;
 VSResSurfRevLib mySurfRev;
@@ -290,7 +294,7 @@ void newrenderScene(void) {
 	// set camera
 	core->lookAt(camX, camY, camZ, 5,0,7, 0,1,0);
 
-	/*
+
 	// transform light to camera space and send it to GLSL
 	float res[4];
 	core->multMatrixPoint(VSMathLib::VIEW, lightDir, res);
@@ -301,7 +305,7 @@ void newrenderScene(void) {
 	shader.setBlockUniform("Lights", "l_pos", res);
 
 	core->multMatrixPoint(VSMathLib::VIEW, spotDir, res);
-	shader.setBlockUniform("Lights", "l_spotDir", res);*/
+	shader.setBlockUniform("Lights", "l_spotDir", res);
 
 	// use our shader
 	glUseProgram(shader.getProgramIndex());
@@ -548,8 +552,8 @@ GLuint setupShaders() {
 
 	// Shader for fonts
 	shaderF.init();
-	shaderF.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/vShader.glsl");
-	shaderF.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/fShader.glsl");
+	shaderF.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/color.vert");
+	shaderF.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/color.frag");
 
 	// set semantics for the shader variables
 	shaderF.setProgramOutput(0,"outputF");
@@ -592,8 +596,8 @@ GLuint setupShaders() {
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/pointlight.vert");
 	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/pointlight.frag");
 #else
-	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/vShader.glsl");	/*FIXME: oh dear, fix me when light added!!*/
-	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/fShader.glsl");
+	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/spotlight.vert");	/*FIXME: oh dear, fix me when light added!!*/
+	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/spotlight.frag");
 #endif
 
 	// set semantics for the shader variables

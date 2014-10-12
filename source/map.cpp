@@ -103,7 +103,11 @@ void Map::draw(VSMathLib* core){
 	for(int l = 0.5; l < 5; l++){
 		for(int c = -1; c <= MAP0_W; c++){
 			core->pushMatrix(VSMathLib::MODEL);
-			core->translate(c + deltaWater, -1.0, l );
+			if(l%2 == 0){
+				core->translate(c + deltaWater, -1.0, l );
+			}else {
+				core->translate(c - deltaWater, -1.0, l );
+			}
 			water.render();
 			core->popMatrix(VSMathLib::MODEL);
 		}

@@ -18,7 +18,7 @@ Riverlog::Riverlog(float x, float y, float z, int quality) {
 	body.setMaterialBlockName("Materials");
 	float f[4] = {0.8f, 0.6f, 0.4f, 1.0f};
 	body.setColor(VSResourceLib::DIFFUSE, f);
-	float f2[4] = {0.0f, 0.0f, 1.0f, 1.0f};
+	float f2[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 	body.setColor(VSResourceLib::AMBIENT, f2);
 
 }
