@@ -353,7 +353,13 @@ void reshape(int w, int h) {
 	core->loadIdentity(VSMathLib::PROJECTION);
 
 	if(CAM_TYPE == CAM_ORTHO){
-		core->ortho(-6.0f, 6.0f, -8.0f, 9.5f, 0.1f, 12.0f); //FIXME: maybe?
+		if(ratio > 1){
+			core->ortho(-6.0f*ratio, 6.0f*ratio, -8.0f, 9.0f, 0.1f, 12.0f);
+
+		}else {
+			core->ortho(-6.0f, 6.0f, -8.0f/ratio, 9.0f/ratio, 0.1f, 12.0f);
+
+		}
 
 	}else{
 
