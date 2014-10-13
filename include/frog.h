@@ -19,7 +19,9 @@ namespace domain {
 		Frog(float x, float y, float z);
 		void draw(VSMathLib* core);
 		void move(int d);
-
+		inline float getX(){return x;}
+		inline float getY(){return y;}
+		inline float getZ(){return z;}
 	};
 
 }

@@ -21,6 +21,9 @@ public:
 	void draw(VSMathLib* core);
 	void add_drawable(Drawable* d);
 	void move_frog(int d);
+	inline float getFrogX(){return frog->getX();}
+	inline float getFrogY(){return frog->getY();}
+	inline float getFrogZ(){return frog->getZ();}
 };
 
 

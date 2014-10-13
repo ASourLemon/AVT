@@ -30,6 +30,10 @@ unsigned int FrameCount = 0;
 #define NORMAL_ATTRIB_ORIGINAL 1
 #define TEXTURE_COORD_ATTRIB_ORIGINAL 2
 
+#define CAM_ORTHO 0
+#define CAM_PRESP 1
+#define CAM_FROG 2
+
 GLuint VaoId, VboId[4];
 GLuint VertexShaderId, FragmentShaderId, ProgramId, ColorId;
 GLint UniformId, ProjectionID, ModelID, ViewID;
@@ -53,12 +57,11 @@ VSShaderLib shader, shaderF;
 domain::Game game;
 
 bool oldVersion = false;
-
+int CAM_TYPE = 0;
 
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// ERRORS
 ///////////////////////////////////////////////////////////////////////
-
 
 bool isOpenGLError() {
 	bool isError = false;
@@ -72,25 +75,23 @@ bool isOpenGLError() {
 	return isError;
 }
 
-void checkOpenGLError(std::string error)
-{
+void checkOpenGLError(std::string error) {
 	if (isOpenGLError()) {
 		std::cerr << error << std::endl;
 		exit(EXIT_FAILURE);
 	}
 }
 
-
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// SHADERS
 ///////////////////////////////////////////////////////////////////////
 
-
-static char* readShaderSource(const char* shaderFile)
-{
+static char* readShaderSource(const char* shaderFile) {
 	FILE* fp = fopen(shaderFile, "r");
 
-	if (fp == NULL) { return NULL; }
+	if (fp == NULL) {
+		return NULL;
+	}
 
 	fseek(fp, 0L, SEEK_END);
 	long size = ftell(fp);
@@ -106,18 +107,14 @@ static char* readShaderSource(const char* shaderFile)
 	return buf;
 }
 
-void createShaderProgram()
-{
+void createShaderProgram() {
 	ProgramId = glCreateProgram();
 	struct Shader {
-		const char*  filename;
-		GLenum       type;
-		GLchar*      source;
-	}  shaders[2] = {
-			{ "shaders/oldvShader.glsl", GL_VERTEX_SHADER, NULL },
-			{ "shaders/oldfShader.glsl", GL_FRAGMENT_SHADER, NULL }
-	};
-
+		const char* filename;
+		GLenum type;
+		GLchar* source;
+	} shaders[2] = { { "shaders/oldvShader.glsl", GL_VERTEX_SHADER, NULL }, {
+			"shaders/oldfShader.glsl", GL_FRAGMENT_SHADER, NULL } };
 
 	for (int i = 0; i < 2; ++i) {
 		Shader& s = shaders[i];
@@ -128,14 +125,14 @@ void createShaderProgram()
 		}
 
 		GLuint shader = glCreateShader(s.type);
-		glShaderSource(shader, 1, (const GLchar**)&s.source, NULL);
+		glShaderSource(shader, 1, (const GLchar**) &s.source, NULL);
 		glCompileShader(shader);
 
-		GLint  compiled;
+		GLint compiled;
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
 		if (!compiled) {
 			std::cerr << s.filename << " failed to compile:" << std::endl;
-			GLint  logSize;
+			GLint logSize;
 			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logSize);
 			char* logMsg = new char[logSize];
 			glGetShaderInfoLog(shader, logSize, NULL, logMsg);
@@ -150,9 +147,8 @@ void createShaderProgram()
 		glAttachShader(ProgramId, shader);
 	}
 
-
-	glBindAttribLocation(ProgramId, VERTEX_COORD_ATTRIB_ORIGINAL, "in_position");
-
+	glBindAttribLocation(ProgramId, VERTEX_COORD_ATTRIB_ORIGINAL,
+			"in_position");
 
 	glLinkProgram(ProgramId);
 
@@ -163,8 +159,7 @@ void createShaderProgram()
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
 
-void destroyShaderProgram()
-{
+void destroyShaderProgram() {
 	glUseProgram(0);
 	glDetachShader(ProgramId, VertexShaderId);
 	glDetachShader(ProgramId, FragmentShaderId);
@@ -176,14 +171,11 @@ void destroyShaderProgram()
 	checkOpenGLError("ERROR: Could not destroy shaders.");
 }
 
-
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// VAOs & VBOs
 ///////////////////////////////////////////////////////////////////////
 
-
-void createBufferObjects()
-{
+void createBufferObjects() {
 	glGenVertexArrays(1, &VaoId);
 	glBindVertexArray(VaoId);
 
@@ -209,7 +201,8 @@ void createBufferObjects()
 
 	//index buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[3]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(faceIndex), faceIndex, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(faceIndex), faceIndex,
+			GL_STATIC_DRAW);
 
 	// unbind the VAO
 	glBindVertexArray(0);
@@ -221,12 +214,10 @@ void createBufferObjects()
 	checkOpenGLError("ERROR: Could not create VAOs and VBOs.");
 }
 
-void destroyBufferObjects()
-{
+void destroyBufferObjects() {
 	glDisableVertexAttribArray(VERTEX_COORD_ATTRIB_ORIGINAL);
 	glDisableVertexAttribArray(NORMAL_ATTRIB_ORIGINAL);
 	glDisableVertexAttribArray(TEXTURE_COORD_ATTRIB_ORIGINAL);
-
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -237,23 +228,16 @@ void destroyBufferObjects()
 	checkOpenGLError("ERROR: Could not destroy VAOs and VBOs.");
 }
 
-
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// SCENE
 ///////////////////////////////////////////////////////////////////////
 
-
 typedef float Matrix[16];
 
-const Matrix M = {
-	1.0f, 0.0f, 0.0f, 3.0f,
-	0.0f, 1.0f, 0.0f, 3.0f,
-	0.0f, 0.0f, 1.0f, 3.0f,
-	0.0f, 0.0f, 0.0f, 1.0f
-}; // Row Major (GLSL is Column Major)
+const Matrix M = { 1.0f, 0.0f, 0.0f, 3.0f, 0.0f, 1.0f, 0.0f, 3.0f, 0.0f, 0.0f,
+		1.0f, 3.0f, 0.0f, 0.0f, 0.0f, 1.0f }; // Row Major (GLSL is Column Major)
 
-void renderScene()
-{
+void renderScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	core->loadIdentity(VSMathLib::VIEW);
@@ -273,12 +257,11 @@ void renderScene()
 	glUniformMatrix4fv(ViewID, 1, GL_FALSE, view_mat);
 	glUniformMatrix4fv(ModelID, 1, GL_TRUE, model_mat);
 
-	glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, (GLvoid*)0);
+	glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, (GLvoid*) 0);
 
-	core->loadMatrix(core->MODEL, (float*)&M);
+	core->loadMatrix(core->MODEL, (float*) &M);
 	glUniformMatrix4fv(ModelID, 1, GL_TRUE, model_mat);
-	glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, (GLvoid*)0);
-
+	glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, (GLvoid*) 0);
 
 	glUseProgram(0);
 	glBindVertexArray(0);
@@ -293,8 +276,23 @@ void newrenderScene(void) {
 	core->loadIdentity(VSMathLib::VIEW);
 	core->loadIdentity(VSMathLib::MODEL);
 	// set camera
-	core->lookAt(camX, camY, camZ, 5, 0, 7, 0, 1, 0);
 
+	if(CAM_TYPE == CAM_FROG){
+
+		float fx = game.getFrogX();
+		float fy = game.getFrogY();
+		float fz = game.getFrogZ();
+		core->lookAt(fx, fy + 3, fz - 2, fx, fy, fz + 9, 0, 1, 0);
+
+	}else {
+
+		core->lookAt(5, 10, 7.5, 5, 0, 7.5, 0, 0, 1);
+
+	} /*else {
+
+		core->lookAt(camX, camY, camZ, 5, 0, 7, 0, 1, 0);
+
+	}*/
 
 	// transform light to camera space and send it to GLSL
 	float res[4];
@@ -317,38 +315,31 @@ void newrenderScene(void) {
 	glutSwapBuffers();
 }
 
-
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// CALLBACKS
 ///////////////////////////////////////////////////////////////////////
 
-
-void cleanup()
-{
+void cleanup() {
 	destroyShaderProgram();
 	destroyBufferObjects();
 }
 
-void display()
-{
+void display() {
 	++FrameCount;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if (oldVersion){
+	if (oldVersion) {
 		renderScene();
-	}
-	else{
+	} else {
 		newrenderScene();
 	}
 
 }
 
-void idle()
-{
+void idle() {
 	glutPostRedisplay();
 }
 
-void reshape(int w, int h)
-{
+void reshape(int w, int h) {
 	float ratio;
 	// Prevent a divide by zero, when window is too short
 	// (you cant make a window of zero width).
@@ -360,13 +351,22 @@ void reshape(int w, int h)
 
 	ratio = (1.0f * w) / h;
 	core->loadIdentity(VSMathLib::PROJECTION);
-	core->perspective(90.0f, ratio, 0.5f, 100.0f);
+
+	if(CAM_TYPE == CAM_ORTHO){
+		core->ortho(-6.0f, 6.0f, -8.0f, 9.5f, 0.1f, 12.0f); //FIXME: maybe?
+
+	}else{
+
+		core->perspective(90.0f, ratio, 0.5f, 100.0f);
+	}
+	WinX = w;
+	WinY = h;
 }
 
-void timer(int value)
-{
+void timer(int value) {
 	std::ostringstream oss;
-	oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x" << WinY << ")";
+	oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x" << WinY
+			<< ")";
 	std::string s = oss.str();
 	glutSetWindow(WindowHandle);
 	glutSetWindowTitle(s.c_str());
@@ -374,10 +374,9 @@ void timer(int value)
 	glutTimerFunc(1000, timer, 0);
 }
 
-void processMouseButtons(int button, int state, int xx, int yy)
-{
+void processMouseButtons(int button, int state, int xx, int yy) {
 	// start tracking the mouse
-	if (state == GLUT_DOWN)  {
+	if (state == GLUT_DOWN) {
 		startX = xx;
 		startY = yy;
 		if (button == GLUT_LEFT_BUTTON)
@@ -391,8 +390,7 @@ void processMouseButtons(int button, int state, int xx, int yy)
 		if (tracking == 1) {
 			alpha -= (xx - startX);
 			beta += (yy - startY);
-		}
-		else if (tracking == 2) {
+		} else if (tracking == 2) {
 			r += (yy - startY) * 0.01f;
 			if (r < 0.1f)
 				r = 0.1f;
@@ -401,8 +399,7 @@ void processMouseButtons(int button, int state, int xx, int yy)
 	}
 }
 
-void processMouseMotion(int xx, int yy)
-{
+void processMouseMotion(int xx, int yy) {
 	int deltaX, deltaY;
 	float alphaAux, betaAux;
 	float rAux;
@@ -412,7 +409,6 @@ void processMouseMotion(int xx, int yy)
 
 	// left mouse button: move camera
 	if (tracking == 1) {
-
 
 		alphaAux = alpha + deltaX;
 		betaAux = beta + deltaY;
@@ -434,51 +430,74 @@ void processMouseMotion(int xx, int yy)
 			rAux = 0.1f;
 	}
 
-	camX = rAux * sin(alphaAux * 3.14f / 180.0f) * cos(betaAux * 3.14f / 180.0f);
-	camZ = rAux * cos(alphaAux * 3.14f / 180.0f) * cos(betaAux * 3.14f / 180.0f);
-	camY = rAux *   						       sin(betaAux * 3.14f / 180.0f);
+	camX = rAux * sin(alphaAux * 3.14f / 180.0f)
+	* cos(betaAux * 3.14f / 180.0f);
+	camZ = rAux * cos(alphaAux * 3.14f / 180.0f)
+	* cos(betaAux * 3.14f / 180.0f);
+	camY = rAux * sin(betaAux * 3.14f / 180.0f);
 
 	//  uncomment this if not using an idle func
 	//	glutPostRedisplay();
 }
 
-void processKeys(unsigned char key, int xx, int yy)
-{
+void processKeys(unsigned char key, int xx, int yy) {
 
-	switch(key) {
+	switch (key) {
 
-		case 27:
+	case 27:
 
-			glutLeaveMainLoop();
-			break;
-		case 'c': printf("Camera Spherical Coordinates (%f, %f, %f)\n", alpha, beta, r);
-			break;
-		case 'm': glEnable(GL_MULTISAMPLE); break;
-		case 'n': glDisable(GL_MULTISAMPLE); break;
+		glutLeaveMainLoop();
+		break;
+	case 'c':
+		printf("Camera Spherical Coordinates (%f, %f, %f)\n", alpha, beta, r);
+		break;
+	case '1':
+		CAM_TYPE = CAM_ORTHO;
+		reshape(WinX, WinY);
+		break;
+	case '2':
+		CAM_TYPE = CAM_PRESP;
+		reshape(WinX, WinY);
+		break;
+	case '3':
+		CAM_TYPE = CAM_FROG;
+		reshape(WinX, WinY);
+		break;
 
-		case 'q': game.move_frog(0); break;
+	case 'm':
+		glEnable(GL_MULTISAMPLE);
+		break;
+	case 'n':
+		glDisable(GL_MULTISAMPLE);
+		break;
 
-		case 'a': game.move_frog(1); break;
+	case 'q':
+		game.move_frog(0);
+		break;
 
-		case 'o': game.move_frog(2); break;
+	case 'a':
+		game.move_frog(1);
+		break;
 
-		case 'p': game.move_frog(3); break;
+	case 'o':
+		game.move_frog(2);
+		break;
+
+	case 'p':
+		game.move_frog(3);
+		break;
 	}
 
-
-//  uncomment this if not using an idle func
-//	glutPostRedisplay();
+	//  uncomment this if not using an idle func
+	//	glutPostRedisplay();
 
 }
-
 
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// SETUP
 ///////////////////////////////////////////////////////////////////////
 
-
-void setupCallbacks()
-{
+void setupCallbacks() {
 	glutCloseFunc(cleanup);
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
@@ -516,26 +535,27 @@ void setupGLEW() {
 
 }
 
-void setupGLUT(int argc, char* argv[])
-{
+void setupGLUT(int argc, char* argv[]) {
 	glutInit(&argc, argv);
 
 	glutInitContextVersion(3, 3);
 	glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 
-	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE,
+			GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 
 	glutInitWindowSize(WinX, WinY);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	WindowHandle = glutCreateWindow(CAPTION);
 	if (WindowHandle < 1) {
-		std::cerr << "ERROR: Could not create a new rendering window." << std::endl;
+		std::cerr << "ERROR: Could not create a new rendering window."
+				<< std::endl;
 		exit(EXIT_FAILURE);
 	}
 }
 
-void setupCore(){
+void setupCore() {
 
 	core = VSMathLib::getInstance();
 	core->setUniformBlockName("Matrices");
@@ -567,7 +587,6 @@ GLuint setupShaders() {
 	// Shader for models
 	shader.init();
 
-
 #define _DIF			0
 #define _DIF_AMB		1
 #define _DIF_AMB_SPEC	2
@@ -575,7 +594,7 @@ GLuint setupShaders() {
 #define _POINT			4
 #define _SPOT			5
 
-#define _LIGHT 0
+#define _LIGHT 3
 
 #if (_LIGHT == _DIF)
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdif.vert");
@@ -587,13 +606,15 @@ GLuint setupShaders() {
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdifambspec.vert");
 	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/dirdifambspec.frag");
 #elif (_LIGHT == _PER_PIXEL)
-	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/pixeldirdifambspec.vert");
-	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/pixeldirdifambspec.frag");
+	shader.loadShader(VSShaderLib::VERTEX_SHADER,
+			"shaders/pixeldirdifambspec.vert");
+	shader.loadShader(VSShaderLib::FRAGMENT_SHADER,
+			"shaders/pixeldirdifambspec.frag");
 #elif (_LIGHT == _POINT)
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/pointlight.vert");
 	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/pointlight.frag");
 #else
-	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/spotlight.vert");	/*FIXME: oh dear, fix me when light added!!*/
+	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/spotlight.vert"); /*FIXME: oh dear, fix me when light added!!*/
 	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/spotlight.frag");
 #endif
 
@@ -604,19 +625,16 @@ GLuint setupShaders() {
 	shader.setVertexAttribName(VSShaderLib::TEXTURE_COORD_ATTRIB, "texCoord");
 	shader.prepareProgram();
 
-
-
 	shader.setUniform("texUnit", 0);
 	float f3 = 0.90f;
 	shader.setBlockUniform("Lights", "l_spotCutOff", &f3);
 
-
 	printf("InfoLog for Model Shader\n%s\n\n", shader.getAllInfoLogs().c_str());
 
-	return(shader.isProgramValid());
+	return (shader.isProgramValid());
 }
 
-void setupSurfRev(){
+void setupSurfRev() {
 
 	game.init();
 	// some GL settings
@@ -627,20 +645,18 @@ void setupSurfRev(){
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
-void init(int argc, char* argv[])
-{
+void init(int argc, char* argv[]) {
 	setupGLUT(argc, argv);
 	setupGLEW();
 	setupOpenGL();
 	setupCore();
 
-	if (oldVersion){
+	if (oldVersion) {
 		createShaderProgram();
 		createBufferObjects();
-	}
-	else {
+	} else {
 
-		if (!setupShaders()){
+		if (!setupShaders()) {
 
 		}
 		setupSurfRev();
@@ -649,8 +665,7 @@ void init(int argc, char* argv[])
 	setupCallbacks();
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
 	init(argc, argv);
 	glutMainLoop();
 	exit(EXIT_SUCCESS);
