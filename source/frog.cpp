@@ -86,27 +86,44 @@ namespace domain{
 	void Frog::move(int d){
 		switch(d){
 
-		case(DIR_FRONT):{
-			this->z++;
-			break;
-		}
+			case(DIR_FRONT):{
+				deltaT=glutGet(GLUT_ELAPSED_TIME)-t1;
 
-		case(DIR_BACK):{
-			this->z--;
-			break;
-		}
+				z+=v*deltaT;
+				t1=glutGet(GLUT_ELAPSED_TIME);
+				break;
+			}
 
-		case(DIR_LEFT):{
-			this->x++;
-			break;
-		}
+			case(DIR_BACK):{
+				deltaT=glutGet(GLUT_ELAPSED_TIME)-t2;
 
-		case(DIR_RIGHT):{
-			this->x--;
-			break;
-		}
+				z-=v*deltaT;
+				t2=glutGet(GLUT_ELAPSED_TIME);
+				break;
+			}
 
-		}
+			case(DIR_LEFT):{
+				if(x<10){
+				deltaT=glutGet(GLUT_ELAPSED_TIME)-t3;
+
+				x+=v*deltaT;
+				t3=glutGet(GLUT_ELAPSED_TIME);
+				}
+				break;
+			}
+
+			case(DIR_RIGHT):{
+				if(x>0){
+				deltaT=glutGet(GLUT_ELAPSED_TIME)-t4;
+
+				x-=v*deltaT;
+				t4=glutGet(GLUT_ELAPSED_TIME);
+
+				}
+				break;
+			}
+
+			}
 	}
 
 	void Frog::tick(){

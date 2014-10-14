@@ -44,7 +44,7 @@ int startX, startY, tracking = 0;
 float alpha = 39.0f, beta = 51.0f;
 float r = 10.0f;
 // Camera Position
-float camX = 5.0, camY = 10.0, camZ = -2.0;
+float camX = 0.0, camY = 0.0, camZ = 3.0;
 // light direction
 float lightDir[4] = { 1.0f, 1.0f, 1.0f, 0.0f };
 float lightPos[4] = { 4.0f, 6.0f, 2.0f, 1.0f };
@@ -285,7 +285,7 @@ void newrenderScene(void) {
 		float fx = game.getFrogX();
 		float fy = game.getFrogY();
 		float fz = game.getFrogZ();
-		core->lookAt(fx, fy + 3, fz - 2, fx, fy, fz + 9, 0, 1, 0);
+		core->lookAt(fx, fy + 3.5, fz - 2.5,  fx + camX , (fy + camY * -0.5), (fz + camZ * 0.5), 0, 1, 0);
 
 	}else {
 
@@ -451,6 +451,7 @@ void processMouseMotion(int xx, int yy) {
 	* cos(betaAux * 3.14f / 180.0f);
 	camY = rAux * sin(betaAux * 3.14f / 180.0f);
 
+	printf("camX:%f , camY:%f, camZ:%f\n", camX, camY,camZ);
 	//  uncomment this if not using an idle func
 	//	glutPostRedisplay();
 }
