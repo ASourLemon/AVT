@@ -8,11 +8,6 @@ namespace domain{
 		this->y = y;
 		this->z = z;
 		created = false;
-		body.setMaterialBlockName("Materials");
-		float f[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
-		body.setColor(VSResourceLib::DIFFUSE, f);
-		float f2[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
-		body.setColor(VSResourceLib::AMBIENT, f2);
 	}
 
 	void Frog::draw(VSMathLib* core){
@@ -21,9 +16,13 @@ namespace domain{
 		core->rotate(180, 0,1,0);
 		core->scale(0.4, 0.4, 0.4);
 
-		body.render();
+		//body.render();
 		//corpo
 		core->pushMatrix(VSMathLib::MODEL);
+		body.setMaterialBlockName("Materials");
+		body.setColor(VSResourceLib::SPECULAR, bodySpec);
+		body.setColor(VSResourceLib::DIFFUSE, bodyDiffuse);
+		body.setColor(VSResourceLib::AMBIENT, bodyAmbient);
 		if (!created) {
 			body.createSphere(2.2, FROG_DIVISIONS);
 		}
@@ -31,35 +30,45 @@ namespace domain{
 		core->rotate(35.0, 1.0, 0.0, 0.0);
 		body.render();
 		core->popMatrix(VSMathLib::MODEL);
+
+
+		head.setMaterialBlockName("Materials");
+		body.setColor(VSResourceLib::SPECULAR, headSpec);
+		head.setColor(VSResourceLib::DIFFUSE, headDiffuse);
+		head.setColor(VSResourceLib::AMBIENT, headAmbient);
 		//cabe�a
 		core->pushMatrix(VSMathLib::MODEL);
 		if (!created) {
-			body.createSphere(1.5, 9.0);
+			head.createSphere(1.5, 9.0);
 		}
 		core->translate(0.0, 1.6, -1.8);
 		core->scale(0.8, 0.8, 1.0);
-		body.render();
+		head.render();
 		core->popMatrix(VSMathLib::MODEL);
-		//olhos
+
+		eye.setMaterialBlockName("Materials");
+		body.setColor(VSResourceLib::SPECULAR, eyeSpec);
+		eye.setColor(VSResourceLib::DIFFUSE, eyeDiffuse);
+		eye.setColor(VSResourceLib::AMBIENT, eyeAmbient);
+		//olhos - 1
 		core->pushMatrix(VSMathLib::MODEL);
 		if (!created) {
-			body.createSphere(0.6, 9.0);
+			eye.createSphere(0.6, 9.0);
+			created = true;
 		}
 		core->translate(0.4, 2.8, -1.5);
 		core->scale(0.7, 1.0, 0.7);
-		body.render();
+		eye.render();
 		core->popMatrix(VSMathLib::MODEL);
-		//olhos
+		//olhos - 2
 		core->pushMatrix(VSMathLib::MODEL);
-		if (!created) {
-			body.createSphere(0.6, 9.0);
-		}
 		core->translate(-0.4, 2.8, -1.5);
 		core->scale(0.7, 1.0, 0.7);
-		body.render();
+		eye.render();
+		core->popMatrix(VSMathLib::MODEL);
 		core->popMatrix(VSMathLib::MODEL);
 
-		core->popMatrix(VSMathLib::MODEL);
+
 	}
 
 	void Frog::move(int d){
