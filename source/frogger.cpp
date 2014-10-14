@@ -380,6 +380,7 @@ void timer(int value) {
 	glutSetWindowTitle(s.c_str());
 	FrameCount = 0;
 	game.tick();
+	processKeys();
 	glutTimerFunc(10, timer, 0);
 }
 
@@ -450,6 +451,7 @@ void processMouseMotion(int xx, int yy) {
 }
 
 void keyPressed (unsigned char key, int x, int y) {
+	printf("Ping!\n");
 	keyStates[key] = true; // Set the state of the current key to pressed
 }
 
@@ -596,6 +598,11 @@ void setupCore() {
 	core->setUniformName(VSMathLib::PROJ_VIEW_MODEL, "m_pvm");
 	core->setUniformName(VSMathLib::NORMAL, "m_normal");
 	core->setUniformName(VSMathLib::VIEW_MODEL, "m_viewModel");
+	//Nao sabia onde por isto, a ideia é isto ser feito apenas uma vez
+	keyStates = new bool[256];
+		for(int i=0; i<256; i++){
+			keyStates[i] = false;
+		}
 
 }
 
