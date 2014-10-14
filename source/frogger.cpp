@@ -20,7 +20,7 @@
 #include "../include/vsShaderLib.h"
 #include "../include/vsResSurfRevLib.h"
 
-#define CAPTION "Exercise 1"
+#define CAPTION "Frogger 3D"
 
 int WinX = 640, WinY = 480;
 int WindowHandle = 0;
@@ -60,6 +60,7 @@ bool oldVersion = false;
 int CAM_TYPE = 0;
 void processKeys();
 bool* keyStates;
+int nTimer = 0;
 
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// ERRORS
@@ -372,15 +373,19 @@ void reshape(int w, int h) {
 }
 
 void timer(int value) {
-	std::ostringstream oss;
-	oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x" << WinY
-			<< ")";
+	if(nTimer == 100){
+		std::ostringstream oss;
+		oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x" << WinY << ")";
 	std::string s = oss.str();
 	glutSetWindow(WindowHandle);
 	glutSetWindowTitle(s.c_str());
 	FrameCount = 0;
+	nTimer = 0;
+	}
+	nTimer++;
 	game.tick();
 	processKeys();
+
 	glutTimerFunc(10, timer, 0);
 }
 
@@ -451,7 +456,6 @@ void processMouseMotion(int xx, int yy) {
 }
 
 void keyPressed (unsigned char key, int x, int y) {
-	printf("Ping!\n");
 	keyStates[key] = true; // Set the state of the current key to pressed
 }
 
