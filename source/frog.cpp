@@ -11,6 +11,21 @@ namespace domain{
 	}
 
 	void Frog::draw(VSMathLib* core){
+
+
+		/*Materials FIXME: Please, change my location*/
+		float bodyAmbient[4] = { 0.2f, 1.0f, 0.2f, 1.0f };
+		float bodyDiffuse[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
+		float bodySpec[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+
+		float headAmbient[4] = { 0.2f, 1.0f, 0.2f, 1.0f };
+		float headDiffuse[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
+		float headSpec[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+
+		float eyeAmbient[4] = { 0.5f, 0.2f, 0.2f, 1.0f };
+		float eyeDiffuse[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
+		float eyeSpec[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+
 		core->pushMatrix(VSMathLib::MODEL);
 		core->translate(x, y, z);
 		core->rotate(180, 0,1,0);
@@ -95,6 +110,10 @@ namespace domain{
 		}
 
 		}
+	}
+
+	void Frog::tick(){
+
 	}
 
 }

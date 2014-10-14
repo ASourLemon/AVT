@@ -28,6 +28,7 @@ namespace domain {
 
 		if (!created) {
 			body.createCube(1.0f);
+			created = true;
 		}
 		body.setColor(VSResourceLib::AMBIENT, f2);
 
@@ -38,7 +39,11 @@ namespace domain {
 		body.render();
 		core->popMatrix(VSMathLib::MODEL);
 
-		created = true;
+
+	}
+
+	void Car::tick(){
+		//TODO: Implement my movement, please!
 	}
 
 } /* namespace domain */

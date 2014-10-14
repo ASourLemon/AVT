@@ -33,4 +33,9 @@ void Riverlog::draw(VSMathLib* core){
 
 }
 
+void Riverlog::tick(){
+
+}
+
+
 } /* namespace domain */

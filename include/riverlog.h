@@ -16,6 +16,7 @@ private:
 public:
 	Riverlog(float x, float y, float z, int quality);
 	void draw(VSMathLib* core);
+	void tick();
 
 };
 

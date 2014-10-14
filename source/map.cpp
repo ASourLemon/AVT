@@ -131,4 +131,10 @@ namespace domain {
 
 	}
 
+	void Map::tick(){
+
+	}
+
+
+
 } /* namespace domain */

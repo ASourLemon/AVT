@@ -44,4 +44,13 @@ void Game::move_frog(int d){
 }
 
 
+void Game::tick(){
+
+	for (unsigned int i = 0; i < game_objects.size(); i++){
+		game_objects.at(i)->tick();
+	}
+
+}
+
+
 }

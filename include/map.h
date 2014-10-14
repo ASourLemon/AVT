@@ -38,7 +38,7 @@ private:
 public:
 	Map();
 	void draw(VSMathLib* core);
-
+	void tick();
 };
 
 }
