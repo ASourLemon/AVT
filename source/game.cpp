@@ -16,11 +16,11 @@ void Game::init(){
 
 		game_objects.push_back(new Map());
 
-		game_objects.push_back(new Car(1.0, 0.0, 6.0));
-		game_objects.push_back(new Car(5.0, 0.0, 4.0));
+		game_objects.push_back(new Car(-4.0, 0.0, 6.0, DIR_LEFT, 2));
+		game_objects.push_back(new Car(-6.0, 0.0, 4.0, DIR_LEFT, 1));
 
-		game_objects.push_back(new Riverlog(2.0, -1.0, 10.0, 50));
-		game_objects.push_back(new Riverlog(7.0, -1.0, 12.0, 50));
+		game_objects.push_back(new Riverlog(2.0, -1.0, 10.0, 50, DIR_LEFT, 2));
+		game_objects.push_back(new Riverlog(7.0, -1.0, 12.0, 50, DIR_RIGHT, 1));
 	}
 
 	void Game::draw(VSMathLib* core){
@@ -41,6 +41,19 @@ void Game::init(){
 
 void Game::move_frog(int d){
 	frog->move(d);
+}
+
+void Game::setFrogT1(int i){
+	frog->setT1(i);
+}
+void Game::setFrogT2(int i){
+	frog->setT2(i);
+}
+void Game::setFrogT3(int i){
+	frog->setT3(i);
+}
+void Game::setFrogT4(int i){
+	frog->setT4(i);
 }
 
 

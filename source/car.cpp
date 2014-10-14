@@ -2,7 +2,7 @@
 
 namespace domain {
 
-	Car::Car(float x, float y, float z) : x(x), y(y), z(z) {
+	Car::Car(float x, float y, float z, int direction, float velocity) : x(x), y(y), z(z), direction(direction), velocity(velocity){
 		created = false;
 	}
 
@@ -30,7 +30,12 @@ namespace domain {
 			body.createCube(1.0f);
 			created = true;
 		}
-		body.setColor(VSResourceLib::AMBIENT, f2);
+
+		body.setMaterialBlockName("Materials");
+		float f3[4] = { 0.8f, 0.6f, 0.4f, 1.0f };
+		body.setColor(VSResourceLib::DIFFUSE, f3);
+		float f4[4] = { 0.8f, 0.0f, 0.0f, 1.0f };
+		body.setColor(VSResourceLib::AMBIENT, f4);
 
 
 		core->pushMatrix(VSMathLib::MODEL);
@@ -43,7 +48,15 @@ namespace domain {
 	}
 
 	void Car::tick(){
-		//TODO: Implement my movement, please!
+		if(this->x >= LEFT_X_LIMIT){
+			this->x = RIGHT_X_LIMIT;
+		}
+		float d = velocity * 0.1;
+		if(direction == DIR_LEFT){
+			this->x += d;
+		}
+
+
 	}
 
 } /* namespace domain */

@@ -6,6 +6,7 @@
 #define MAP0_W 10
 #define MAP0_H 16
 #define WALL_CHAR 'X'
+#define WATER_SPEED 0.3f
 
 const char map_0[] =
 {		"XXXXXXXXXX"

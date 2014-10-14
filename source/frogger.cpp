@@ -58,6 +58,8 @@ domain::Game game;
 
 bool oldVersion = false;
 int CAM_TYPE = 0;
+void processKeys();
+bool* keyStates;
 
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// ERRORS
@@ -377,7 +379,8 @@ void timer(int value) {
 	glutSetWindow(WindowHandle);
 	glutSetWindowTitle(s.c_str());
 	FrameCount = 0;
-	glutTimerFunc(1000, timer, 0);
+	game.tick();
+	glutTimerFunc(10, timer, 0);
 }
 
 void processMouseButtons(int button, int state, int xx, int yy) {
@@ -446,53 +449,72 @@ void processMouseMotion(int xx, int yy) {
 	//	glutPostRedisplay();
 }
 
-void processKeys(unsigned char key, int xx, int yy) {
+void keyPressed (unsigned char key, int x, int y) {
+	keyStates[key] = true; // Set the state of the current key to pressed
+}
 
-	switch (key) {
+void keyUp (unsigned char key, int x, int y) {
+	keyStates[key] = false; // Set the state of the current key to not pressed
+}
 
-	case 27:
+void processKeys(){//unsigned char key, int xx, int yy) {
 
-		glutLeaveMainLoop();
-		break;
-	case 'c':
+	if(keyStates['c']){
 		printf("Camera Spherical Coordinates (%f, %f, %f)\n", alpha, beta, r);
-		break;
-	case '1':
+	}
+
+	if(keyStates['1']){
 		CAM_TYPE = CAM_ORTHO;
 		reshape(WinX, WinY);
-		break;
-	case '2':
+	}
+
+	if(keyStates['2']){
 		CAM_TYPE = CAM_PRESP;
 		reshape(WinX, WinY);
-		break;
-	case '3':
+	}
+
+	if(keyStates['3']){
 		CAM_TYPE = CAM_FROG;
 		reshape(WinX, WinY);
-		break;
-
-	case 'm':
-		glEnable(GL_MULTISAMPLE);
-		break;
-	case 'n':
-		glDisable(GL_MULTISAMPLE);
-		break;
-
-	case 'q':
-		game.move_frog(0);
-		break;
-
-	case 'a':
-		game.move_frog(1);
-		break;
-
-	case 'o':
-		game.move_frog(2);
-		break;
-
-	case 'p':
-		game.move_frog(3);
-		break;
 	}
+
+	if(keyStates['m']){
+		glEnable(GL_MULTISAMPLE);
+	}
+
+	if(keyStates['n']){
+		glDisable(GL_MULTISAMPLE);
+	}
+
+	if(keyStates['q']){
+		game.move_frog(0);
+	}else{
+		game.setFrogT1(glutGet(GLUT_ELAPSED_TIME));
+	}
+
+	if(keyStates['a']){
+		game.move_frog(1);
+	}else{
+		game.setFrogT2(glutGet(GLUT_ELAPSED_TIME));
+	}
+
+	if(keyStates['o']){
+		game.move_frog(2);
+	}else{
+		game.setFrogT3(glutGet(GLUT_ELAPSED_TIME));
+	}
+
+	if(keyStates['p']){
+		game.move_frog(3);
+	}else{
+		game.setFrogT4(glutGet(GLUT_ELAPSED_TIME));
+	}
+
+	/*
+	case 27:
+		glutLeaveMainLoop();
+		break;*/
+
 
 	//  uncomment this if not using an idle func
 	//	glutPostRedisplay();
@@ -509,7 +531,13 @@ void setupCallbacks() {
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
 	glutTimerFunc(0, timer, 0);
-	glutKeyboardFunc(processKeys);
+	if(oldVersion){
+		//glutKeyboardFunc(processKeys);
+	}else {
+		glutKeyboardFunc(keyPressed);
+		glutKeyboardUpFunc(keyUp);
+	}
+
 	glutMouseFunc(processMouseButtons);
 	glutMotionFunc(processMouseMotion);
 }

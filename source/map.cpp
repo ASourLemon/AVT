@@ -14,18 +14,6 @@ namespace domain {
 
 	void Map::draw(VSMathLib* core){
 
-		//FIXME: moviment - HAHAHA just remove me :p
-		if (!goingLeft && deltaWater < 1){
-			deltaWater += 0.05;
-		}
-		else {
-			deltaWater -= 0.05;
-			goingLeft = true;
-			if (deltaWater < 0){
-				goingLeft = false;
-			}
-		}
-
 		body.setMaterialBlockName("Materials");
 		float d1[4] = { 0.8f, 0.6f, 0.4f, 1.0f };
 		body.setColor(VSResourceLib::DIFFUSE, d1);
@@ -114,7 +102,7 @@ namespace domain {
 		core->pushMatrix(VSMathLib::MODEL);
 		core->translate(0.0, -1.0, 9.0);	//base translate
 		for (int l = 0.5; l < 5; l++){
-			for (int c = -1; c <= MAP0_W + 1; c++){
+			for (int c = 0; c <= MAP0_W; c++){
 				core->pushMatrix(VSMathLib::MODEL);
 				if (l % 2 == 0){
 					core->translate(c + deltaWater, -1.0, l);
@@ -127,11 +115,21 @@ namespace domain {
 			}
 		}
 		core->popMatrix(VSMathLib::MODEL);
-
-
 	}
 
 	void Map::tick(){
+
+		if (!goingLeft && deltaWater < 1){
+			deltaWater += WATER_SPEED * 0.1;
+		}
+		else {
+			deltaWater -= WATER_SPEED * 0.1;
+			goingLeft = true;
+			if (deltaWater < 0){
+				goingLeft = false;
+			}
+		}
+
 
 	}
 

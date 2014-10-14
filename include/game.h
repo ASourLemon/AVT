@@ -25,6 +25,10 @@ public:
 	inline float getFrogX(){return frog->getX();}
 	inline float getFrogY(){return frog->getY();}
 	inline float getFrogZ(){return frog->getZ();}
+	void setFrogT1(int i);
+	void setFrogT2(int i);
+	void setFrogT3(int i);
+	void setFrogT4(int i);
 };
 
 

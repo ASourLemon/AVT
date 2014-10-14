@@ -3,10 +3,7 @@
 namespace domain{
 
 
-	Frog::Frog(float x, float y, float z){
-		this->x = x;
-		this->y = y;
-		this->z = z;
+	Frog::Frog(float x, float y, float z) : x(x), y(y), z(z), v(0.005), t1(0), t2(0), t3(0), t4(0), deltaT(0) {
 		created = false;
 	}
 
@@ -89,22 +86,22 @@ namespace domain{
 	void Frog::move(int d){
 		switch(d){
 
-		case(FRONT):{
+		case(DIR_FRONT):{
 			this->z++;
 			break;
 		}
 
-		case(BACK):{
+		case(DIR_BACK):{
 			this->z--;
 			break;
 		}
 
-		case(LEFT):{
+		case(DIR_LEFT):{
 			this->x++;
 			break;
 		}
 
-		case(RIGHT):{
+		case(DIR_RIGHT):{
 			this->x--;
 			break;
 		}

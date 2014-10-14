@@ -11,10 +11,15 @@ namespace domain {
 class Riverlog : public Drawable {
 private:
 	VSResSurfRevLib body;
+	float x;
+	float y;
+	float z;
+	float velocity;
+	int direction;
 
 
 public:
-	Riverlog(float x, float y, float z, int quality);
+	Riverlog(float x, float y, float z, int quality, int direction, float velocity);
 	void draw(VSMathLib* core);
 	void tick();
 

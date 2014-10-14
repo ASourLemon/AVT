@@ -4,12 +4,15 @@
 #include "vsMathLib.h"
 #include "vsResSurfRevLib.h"
 
-#define FRONT 0
-#define BACK 1
-#define LEFT 2
-#define RIGHT 3
-#define UP 4
-#define DOWN 5
+#define LEFT_X_LIMIT 11
+#define RIGHT_X_LIMIT -4
+
+#define DIR_FRONT 0
+#define DIR_BACK 1
+#define DIR_LEFT 2
+#define DIR_RIGHT 3
+#define DIR_UP 4
+#define DIR_DOWN 5
 
 namespace domain {
 
