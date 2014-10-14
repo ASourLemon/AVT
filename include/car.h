@@ -11,7 +11,7 @@ namespace domain {
 		float x;
 		float y;
 		float z;
-		float velocity;
+		float speed;
 		int direction;
 		bool created;
 

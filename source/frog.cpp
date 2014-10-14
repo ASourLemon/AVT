@@ -3,7 +3,7 @@
 namespace domain{
 
 
-	Frog::Frog(float x, float y, float z) : x(x), y(y), z(z), v(0.005), t1(0), t2(0), t3(0), t4(0), deltaT(0) {
+	Frog::Frog(float x, float y, float z, float speed) : x(x), y(y), z(z), speed(speed), t1(0), t2(0), t3(0), t4(0), deltaT(0) {
 		created = false;
 	}
 
@@ -89,7 +89,7 @@ namespace domain{
 			case(DIR_FRONT):{
 				deltaT=glutGet(GLUT_ELAPSED_TIME)-t1;
 
-				z+=v*deltaT;
+				z+=speed*deltaT;
 				t1=glutGet(GLUT_ELAPSED_TIME);
 				break;
 			}
@@ -97,7 +97,7 @@ namespace domain{
 			case(DIR_BACK):{
 				deltaT=glutGet(GLUT_ELAPSED_TIME)-t2;
 
-				z-=v*deltaT;
+				z-=speed*deltaT;
 				t2=glutGet(GLUT_ELAPSED_TIME);
 				break;
 			}
@@ -106,7 +106,7 @@ namespace domain{
 				if(x<10){
 				deltaT=glutGet(GLUT_ELAPSED_TIME)-t3;
 
-				x+=v*deltaT;
+				x+=speed*deltaT;
 				t3=glutGet(GLUT_ELAPSED_TIME);
 				}
 				break;
@@ -116,7 +116,7 @@ namespace domain{
 				if(x>0){
 				deltaT=glutGet(GLUT_ELAPSED_TIME)-t4;
 
-				x-=v*deltaT;
+				x-=speed*deltaT;
 				t4=glutGet(GLUT_ELAPSED_TIME);
 
 				}

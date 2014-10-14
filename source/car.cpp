@@ -2,7 +2,7 @@
 
 namespace domain {
 
-	Car::Car(float x, float y, float z, int direction, float velocity) : x(x), y(y), z(z), direction(direction), velocity(velocity){
+	Car::Car(float x, float y, float z, int direction, float velocity) : x(x), y(y), z(z), direction(direction), speed(velocity){
 		created = false;
 	}
 
@@ -48,10 +48,16 @@ namespace domain {
 	}
 
 	void Car::tick(){
+		this->second_in_game += 0.01;	//After 100 calls, 1 second
+		if(second_in_game >= 1){
+			this->speed+= SPEED_INC;
+			second_in_game= 0;
+		}
+
 		if(this->x >= LEFT_X_LIMIT){
 			this->x = RIGHT_X_LIMIT;
 		}
-		float d = velocity * 0.1;
+		float d = speed * 0.1;
 		if(direction == DIR_LEFT){
 			this->x += d;
 		}

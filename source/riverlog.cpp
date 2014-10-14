@@ -9,10 +9,10 @@
 
 namespace domain {
 
-Riverlog::Riverlog(float x, float y, float z, int quality, int direction, float velocity) : x(x), y(y), z(z), direction(direction), velocity(velocity) {
+Riverlog::Riverlog(float x, float y, float z, int quality, int direction, float velocity) : x(x), y(y), z(z), direction(direction), speed(velocity) {
+
 
 	body.createCylinder(LOG_HEIGHT, LOG_RADIOS, quality);
-
 	body.setMaterialBlockName("Materials");
 	float f[4] = {0.4f, 0.2f, 0.0f, 1.0f};
 	body.setColor(VSResourceLib::DIFFUSE, f);
@@ -33,8 +33,13 @@ void Riverlog::draw(VSMathLib* core){
 
 void Riverlog::tick(){
 
+	this->second_in_game += 0.01f;	//After 100 calls, 1 second
+	if(second_in_game >= 1){
+		this->speed+= SPEED_INC;
+		second_in_game = 0.0f;
+	}
 
-	float d = velocity * 0.1;
+	float d = speed * 0.1;
 	if(direction == DIR_LEFT){
 		if(this->x >= LEFT_X_LIMIT){
 			this->x = RIGHT_X_LIMIT;

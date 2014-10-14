@@ -6,6 +6,7 @@
 
 #define LEFT_X_LIMIT 11
 #define RIGHT_X_LIMIT -4
+#define SPEED_INC 0.5f
 
 #define DIR_FRONT 0
 #define DIR_BACK 1
@@ -19,8 +20,8 @@ namespace domain {
 class Drawable {
 
 protected:
-	float _x, _y, _z;
-
+	float second_in_game = 0;
+	float speed;
 
 public:
 

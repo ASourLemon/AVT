@@ -44,7 +44,7 @@ int startX, startY, tracking = 0;
 float alpha = 39.0f, beta = 51.0f;
 float r = 10.0f;
 // Camera Position
-float camX = 0.0, camY = 0.0, camZ = 3.0;
+float camX = 0.0, camY = 0.0, camZ = 2.0;
 // light direction
 float lightDir[4] = { 1.0f, 1.0f, 1.0f, 0.0f };
 float lightPos[4] = { 4.0f, 6.0f, 2.0f, 1.0f };
@@ -285,17 +285,17 @@ void newrenderScene(void) {
 		float fx = game.getFrogX();
 		float fy = game.getFrogY();
 		float fz = game.getFrogZ();
-		core->lookAt(fx, fy + 3.5, fz - 2.5,  fx + camX , (fy + camY * -0.5), (fz + camZ * 0.5), 0, 1, 0);
+		//core->lookAt(fx, fy + 3.5, fz - 2.5,  fx + camX , (fy + camY * -0.5), (fz + camZ * 0.5), 0, 1, 0);
 
-	}else {
+		core->lookAt(fx+camX, fy+camY*-0.5+2.5, fz-camZ ,fx , fy + 3, fz + 3, 0,1,0);	//FIXME: I need some attention D:!
+
+
+	} else {
 
 		core->lookAt(5, 10, 7.5, 5, 0, 7.5, 0, 0, 1);
+		//core->lookAt(camX, camY, camZ, 5, 0, 7, 0, 1, 0);
 
-	} /*else {
-
-		core->lookAt(camX, camY, camZ, 5, 0, 7, 0, 1, 0);
-
-	}*/
+	}
 
 	// transform light to camera space and send it to GLSL
 	float res[4];

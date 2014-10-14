@@ -11,7 +11,7 @@ namespace domain {
 
 
 void Game::init(){
-	frog = new Frog(5.0, 0.0, 1.0);
+	frog = new Frog(5.0, 0.0, 1.0, 0.005);
 	game_objects.push_back(frog);
 
 		game_objects.push_back(new Map());

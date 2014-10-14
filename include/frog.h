@@ -13,15 +13,15 @@ namespace domain {
 class Frog : public Drawable{
 
 private:
-	float x, y, z;
 	VSResSurfRevLib body, head, eye;
 	bool created;
 	int t1, t2, t3, t4, deltaT; //tempos para movimento
-	float v;  //velocidade
+	float x, y, z, speed;
+	int direction;
 
 
 public:
-	Frog(float x, float y, float z);
+	Frog(float x, float y, float z, float speed);
 	void draw(VSMathLib* core);
 	void move(int d);
 	void tick();
