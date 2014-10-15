@@ -11,16 +11,16 @@ namespace domain {
 
 
 void Game::init(){
-	frog = new Frog(5.0, 0.0, 1.0, 0.005);
+	frog = new Frog(5.0, 0.0, 1.0, 0.01);
 	game_objects.push_back(frog);
 
 		game_objects.push_back(new Map());
 
-		game_objects.push_back(new Car(-4.0, 0.0, 6.0, DIR_LEFT, 2));
-		game_objects.push_back(new Car(-6.0, 0.0, 4.0, DIR_LEFT, 1));
+		game_objects.push_back(new Car(-4.0, 0.3, 6.0, DIR_LEFT, 0.2));
+		game_objects.push_back(new Car(-6.0, 0.3, 4.0, DIR_LEFT, 0.2));
 
-		game_objects.push_back(new Riverlog(2.0, -1.0, 10.0, 50, DIR_LEFT, 2));
-		game_objects.push_back(new Riverlog(7.0, -1.0, 12.0, 50, DIR_RIGHT, 1));
+		game_objects.push_back(new Riverlog(2.0, -1.0, 10.0, 50, DIR_LEFT, 0.2));
+		game_objects.push_back(new Riverlog(7.0, -1.0, 12.0, 50, DIR_RIGHT, 0.2));
 	}
 
 	void Game::draw(VSMathLib* core){

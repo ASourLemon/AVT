@@ -8,6 +8,10 @@ namespace domain {
 
 	void Car::draw(VSMathLib* core){
 
+		float tireAmbient[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+		float tireDiffuse[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+		float tireSpec[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+
 		if (!created) {
 			body.createCube(1.0f);
 		}
@@ -28,7 +32,6 @@ namespace domain {
 
 		if (!created) {
 			body.createCube(1.0f);
-			created = true;
 		}
 
 		body.setMaterialBlockName("Materials");
@@ -44,22 +47,70 @@ namespace domain {
 		body.render();
 		core->popMatrix(VSMathLib::MODEL);
 
+		tire.setMaterialBlockName("Materials");
+		tire.setColor(VSResourceLib::SPECULAR, tireSpec);
+		tire.setColor(VSResourceLib::DIFFUSE, tireDiffuse);
+		tire.setColor(VSResourceLib::AMBIENT, tireAmbient);
+		//pneus - 1
+
+		if (!created) {
+			tire.createCylinder(0.2f, 0.4f, 20);
+			created = true;
+		}		
+		
+		core->pushMatrix(VSMathLib::MODEL);
+		core->translate(x+0.7, y, z+0.15f);
+		core->rotate(90, 1, 0, 0);
+		tire.render();
+		core->popMatrix(VSMathLib::MODEL);		
+		core->pushMatrix(VSMathLib::MODEL);
+		core->translate(x + 1.4, y, z + 0.15f);
+		core->rotate(90, 1, 0, 0);
+		tire.render();
+		core->popMatrix(VSMathLib::MODEL);
+
+		core->pushMatrix(VSMathLib::MODEL);
+		core->translate(x + 0.7, y, z + 0.85f);
+		core->rotate(90, 1, 0, 0);
+		tire.render();
+		core->popMatrix(VSMathLib::MODEL);
+		core->pushMatrix(VSMathLib::MODEL);
+		core->translate(x + 1.4, y, z + 0.85f);
+		core->rotate(90, 1, 0, 0);
+		tire.render();
+		core->popMatrix(VSMathLib::MODEL);
+
+		core->pushMatrix(VSMathLib::MODEL);
+		core->translate(x + 2.7, y, z + 0.15f);
+		core->rotate(90, 1, 0, 0);
+		tire.render();
+		core->popMatrix(VSMathLib::MODEL);
+
+		core->pushMatrix(VSMathLib::MODEL);
+		core->translate(x + 2.7, y, z + 0.85f);
+		core->rotate(90, 1, 0, 0);
+		tire.render();
+		core->popMatrix(VSMathLib::MODEL);
+
+
 
 	}
 
 	void Car::tick(){
 		this->second_in_game += 0.01;	//After 100 calls, 1 second
-		if(second_in_game >= 1){
-			this->speed+= SPEED_INC;
-			second_in_game= 0;
-		}
-
-		if(this->x >= LEFT_X_LIMIT){
-			this->x = RIGHT_X_LIMIT;
-		}
+		int r = rand() % 5;
 		float d = speed * 0.1;
-		if(direction == DIR_LEFT){
+		if (direction == DIR_LEFT){
+			if (this->x >= LEFT_X_LIMIT){
+				this->x = RIGHT_X_LIMIT - r;
+			}
 			this->x += d;
+		}
+		else if (direction == DIR_RIGHT){
+			if (this->x <= RIGHT_X_LIMIT){
+				this->x = LEFT_X_LIMIT + r;
+			}
+			this->x -= d;
 		}
 
 

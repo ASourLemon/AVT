@@ -285,9 +285,14 @@ void newrenderScene(void) {
 		float fx = game.getFrogX();
 		float fy = game.getFrogY();
 		float fz = game.getFrogZ();
-		//core->lookAt(fx, fy + 3.5, fz - 2.5,  fx + camX , (fy + camY * -0.5), (fz + camZ * 0.5), 0, 1, 0);
 
-		core->lookAt(fx+camX, fy+camY*-0.5+2.5, fz-camZ ,fx , fy + 3, fz + 3, 0,1,0);	//FIXME: I need some attention D:!
+		if (tracking == 1){
+		core->lookAt(fx, fy + 3.5, fz - 2.5,  fx + camX , (fy + camY * -0.5), (fz + camZ * 0.5), 0, 1, 0);
+
+		}
+		else {
+			core->lookAt(fx + camX, fy + camY*-0.5 + 2.5, fz - camZ, fx, fy, fz, 0, 1, 0);
+		}
 
 
 	} else {
@@ -339,7 +344,7 @@ void display() {
 }
 
 void idle() {
-	glutPostRedisplay();
+	//glutPostRedisplay();
 }
 
 void reshape(int w, int h) {
@@ -366,14 +371,14 @@ void reshape(int w, int h) {
 
 	}else{
 
-		core->perspective(90.0f, ratio, 0.5f, 100.0f);
+		core->perspective(90.0f, ratio, 0.5f, 30.0f);
 	}
 	WinX = w;
 	WinY = h;
 }
 
 void timer(int value) {
-	if(nTimer == 100){
+	if(nTimer == 70){
 		std::ostringstream oss;
 		oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x" << WinY << ")";
 	std::string s = oss.str();
@@ -385,8 +390,8 @@ void timer(int value) {
 	nTimer++;
 	game.tick();
 	processKeys();
-
-	glutTimerFunc(10, timer, 0);
+	glutPostRedisplay();
+	glutTimerFunc(17, timer, 0);
 }
 
 void processMouseButtons(int button, int state, int xx, int yy) {
@@ -423,7 +428,7 @@ void processMouseMotion(int xx, int yy) {
 	deltaY = yy - startY;
 
 	// left mouse button: move camera
-	if (tracking == 1) {
+	//if (tracking == 1) {
 
 		alphaAux = alpha + deltaX;
 		betaAux = beta + deltaY;
@@ -433,7 +438,7 @@ void processMouseMotion(int xx, int yy) {
 		else if (betaAux < -85.0f)
 			betaAux = -85.0f;
 		rAux = r;
-	}
+	/*}
 
 	// right mouse button: zoom
 	else if (tracking == 2) {
@@ -443,7 +448,7 @@ void processMouseMotion(int xx, int yy) {
 		rAux = r + (deltaY * 0.01f);
 		if (rAux < 0.1f)
 			rAux = 0.1f;
-	}
+	}*/
 
 	camX = rAux * sin(alphaAux * 3.14f / 180.0f)
 	* cos(betaAux * 3.14f / 180.0f);

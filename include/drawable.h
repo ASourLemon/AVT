@@ -4,9 +4,9 @@
 #include "vsMathLib.h"
 #include "vsResSurfRevLib.h"
 
-#define LEFT_X_LIMIT 11
+#define LEFT_X_LIMIT 17
 #define RIGHT_X_LIMIT -4
-#define SPEED_INC 0.5f
+#define SPEED_INC 0.1f
 
 #define DIR_FRONT 0
 #define DIR_BACK 1

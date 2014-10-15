@@ -8,6 +8,7 @@ namespace domain {
 	class Car : public Drawable {
 	private:
 		VSResSurfRevLib body;
+		VSResSurfRevLib tire;
 		float x;
 		float y;
 		float z;

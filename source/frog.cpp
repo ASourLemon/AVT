@@ -45,7 +45,7 @@ namespace domain{
 
 
 		head.setMaterialBlockName("Materials");
-		body.setColor(VSResourceLib::SPECULAR, headSpec);
+		head.setColor(VSResourceLib::SPECULAR, headSpec);
 		head.setColor(VSResourceLib::DIFFUSE, headDiffuse);
 		head.setColor(VSResourceLib::AMBIENT, headAmbient);
 		//cabe�a
@@ -59,7 +59,7 @@ namespace domain{
 		core->popMatrix(VSMathLib::MODEL);
 
 		eye.setMaterialBlockName("Materials");
-		body.setColor(VSResourceLib::SPECULAR, eyeSpec);
+		eye.setColor(VSResourceLib::SPECULAR, eyeSpec);
 		eye.setColor(VSResourceLib::DIFFUSE, eyeDiffuse);
 		eye.setColor(VSResourceLib::AMBIENT, eyeAmbient);
 		//olhos - 1
