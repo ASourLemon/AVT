@@ -297,7 +297,7 @@ void newrenderScene(void) {
 
 	} else {
 
-		core->lookAt(5, 10, 7.5, 5, 0, 7.5, 0, 0, 1);
+		core->lookAt(10, 10, 7.5, 10, 0, 7.5, 0, 0, 1);
 		//core->lookAt(camX, camY, camZ, 5, 0, 7, 0, 1, 0);
 
 	}
@@ -362,16 +362,16 @@ void reshape(int w, int h) {
 
 	if(CAM_TYPE == CAM_ORTHO){
 		if(ratio > 1){
-			core->ortho(-6.0f*ratio, 6.0f*ratio, -8.0f, 9.0f, 0.1f, 12.0f);
+			core->ortho(-8.0f*ratio, 8.0f*ratio, -10.0f, 11.0f, 0.1f, 12.0f);
 
 		}else {
-			core->ortho(-6.0f, 6.0f, -8.0f/ratio, 9.0f/ratio, 0.1f, 12.0f);
+			core->ortho(-8.0f, 8.0f, -9.0f/ratio, 11.0f/ratio, 0.1f, 12.0f);
 
 		}
 
 	}else{
 
-		core->perspective(90.0f, ratio, 0.5f, 30.0f);
+		core->perspective(90.0f, ratio, 0.5f, 40.0f);
 	}
 	WinX = w;
 	WinY = h;
@@ -645,7 +645,7 @@ GLuint setupShaders() {
 #define _POINT			4
 #define _SPOT			5
 
-#define _LIGHT 3
+#define _LIGHT 4
 
 #if (_LIGHT == _DIF)
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdif.vert");

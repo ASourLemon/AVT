@@ -18,10 +18,12 @@ private:
 	int t1, t2, t3, t4, deltaT; //tempos para movimento
 	float x, y, z, speed;
 	int direction;
+	int map_limit;
 
 
 public:
 	Frog(float x, float y, float z, float speed);
+	~Frog();
 	void draw(VSMathLib* core);
 	void move(int d);
 	void tick();
@@ -32,6 +34,7 @@ public:
 	inline void setT2(int i){t2 = i;}
 	inline void setT3(int i){t3 = i;}
 	inline void setT4(int i){t4 = i;}
+	inline void setMaplimit(int i){map_limit = i;}
 	//void setT2(int i){t2 = i;}
 	//void setT3(int i){t3 = i;}
 	//void setT4(int i){t4 = i;}

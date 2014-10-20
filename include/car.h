@@ -19,6 +19,7 @@ namespace domain {
 
 	public:
 		Car(float x, float y, float z, int direction, float velocity);
+		~Car();
 		void draw(VSMathLib* core);
 		void tick();
 

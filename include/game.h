@@ -2,10 +2,11 @@
 #define INCLUDE_GAME_H_
 
 #include <list>
-#include "drawable.h"
-#include "map.h"
-#include "frog.h"
-
+#include "../include/drawable.h"
+#include "../include/map.h"
+#include "../include/frog.h"
+#include "../include/car.h"
+#include "../include/riverlog.h"
 
 namespace domain {
 
@@ -13,10 +14,21 @@ class Game {
 private:
 	std::vector<Drawable*> game_objects;
 	Frog* frog;
+	Map* map;
+	Car* car1;
+	Car* car2;
+	Car* car3;
+	Car* car4;
+
+	Riverlog* rlog1;
+	Riverlog* rlog2;
+	Riverlog* rlog3;
+	Riverlog* rlog4;
 
 
 public:
 	Game();
+	~Game();
 	void init();
 	void draw(VSMathLib* core);
 	void add_drawable(Drawable* d);

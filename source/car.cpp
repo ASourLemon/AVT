@@ -6,6 +6,8 @@ namespace domain {
 		created = false;
 	}
 
+	Car::~Car(){}
+
 	void Car::draw(VSMathLib* core){
 
 		float tireAmbient[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
@@ -22,7 +24,8 @@ namespace domain {
 		float f2[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
 		body.setColor(VSResourceLib::AMBIENT, f2);
 
-
+		
+		
 		core->pushMatrix(VSMathLib::MODEL);
 		core->translate(x, y, z);
 		core->scale(3.0f, 1.0f, 1.0f);
@@ -40,9 +43,12 @@ namespace domain {
 		float f4[4] = { 0.8f, 0.0f, 0.0f, 1.0f };
 		body.setColor(VSResourceLib::AMBIENT, f4);
 
-
+		
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(x + 3.0f, y, z);
+		if(direction == DIR_RIGHT)
+			core->translate(x - 0.7f, y, z);
+		else
+			core->translate(x + 3.0f, y, z);
 		core->scale(0.7f, 0.7f, 0.9f);
 		body.render();
 		core->popMatrix(VSMathLib::MODEL);
@@ -59,40 +65,59 @@ namespace domain {
 		}		
 		
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(x+0.7, y, z+0.15f);
+		if(direction == DIR_RIGHT)
+			core->translate(x+1.6, y, z+0.15f);
+		else
+			core->translate(x+0.7, y, z+0.15f);
 		core->rotate(90, 1, 0, 0);
 		tire.render();
 		core->popMatrix(VSMathLib::MODEL);		
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(x + 1.4, y, z + 0.15f);
+		if(direction == DIR_RIGHT)
+			core->translate(x + 2.3, y, z + 0.15f);
+		else
+			core->translate(x + 1.4, y, z + 0.15f);
 		core->rotate(90, 1, 0, 0);
 		tire.render();
 		core->popMatrix(VSMathLib::MODEL);
 
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(x + 0.7, y, z + 0.85f);
+		if(direction == DIR_RIGHT)
+			core->translate(x + 1.6, y, z + 0.85f);
+		else
+			core->translate(x + 0.7, y, z + 0.85f);
 		core->rotate(90, 1, 0, 0);
 		tire.render();
 		core->popMatrix(VSMathLib::MODEL);
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(x + 1.4, y, z + 0.85f);
+		if(direction == DIR_RIGHT)
+			core->translate(x + 2.3, y, z + 0.85f);
+		else
+			core->translate(x + 1.4, y, z + 0.85f);
 		core->rotate(90, 1, 0, 0);
 		tire.render();
 		core->popMatrix(VSMathLib::MODEL);
 
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(x + 2.7, y, z + 0.15f);
+		if(direction == DIR_RIGHT)
+			core->translate(x + 0.1, y, z + 0.15f);
+		else
+			core->translate(x + 2.7, y, z + 0.15f);
 		core->rotate(90, 1, 0, 0);
 		tire.render();
 		core->popMatrix(VSMathLib::MODEL);
 
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(x + 2.7, y, z + 0.85f);
+		if(direction == DIR_RIGHT)
+			core->translate(x + 0.1, y, z + 0.85f);
+		else
+			core->translate(x + 2.7, y, z + 0.85f);
 		core->rotate(90, 1, 0, 0);
 		tire.render();
 		core->popMatrix(VSMathLib::MODEL);
 
-
+		
+		
 
 	}
 

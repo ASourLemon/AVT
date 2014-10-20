@@ -12,6 +12,8 @@ namespace domain {
 
 	}
 
+	Map::~Map(){}
+
 	void Map::draw(VSMathLib* core){
 
 		body.setMaterialBlockName("Materials");
@@ -62,21 +64,21 @@ namespace domain {
 		//top border
 		core->pushMatrix(VSMathLib::MODEL);
 		core->translate(0.0, -1.0, 0.0);
-		core->scale(MAP0_W, 1, 3);
+		core->scale(MAP0_W, 1.0, 3.0);
 		body.render();
 		core->popMatrix(VSMathLib::MODEL);
 
 		//mid border
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(0.0, -1.0, 8.0);
-		core->scale(MAP0_W, 1, 1);
+		core->translate(0.0, -1.0, 13.0);
+		core->scale(MAP0_W, 1.0, 3.0);
 		body.render();
 		core->popMatrix(VSMathLib::MODEL);
 
 		//down border
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(0.0, -1.0, 13.0);
-		core->scale(MAP0_W, 1, 3);
+		core->translate(0.0, -1.0, 24.0);
+		core->scale(MAP0_W, 1, 8);
 		body.render();
 		core->popMatrix(VSMathLib::MODEL);
 
@@ -88,7 +90,7 @@ namespace domain {
 		//road	FIXME:	CHANGE MATERIAL
 		core->pushMatrix(VSMathLib::MODEL);
 		core->translate(0.0, -1.0, 3.0);
-		core->scale(MAP0_W, 1, 5);
+		core->scale(MAP0_W, 1, 10);
 		body.render();
 		core->popMatrix(VSMathLib::MODEL);
 
@@ -100,8 +102,8 @@ namespace domain {
 
 		//river	FIXME:	CHANGE MATERIAL
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(0.0, -1.0, 9.0);	//base translate
-		for (int l = 0.5; l < 5; l++){
+		core->translate(0.0, -1.0, 16.0);	//base translate
+		for (int l = 0.5; l < 10; l++){
 			for (int c = 0; c <= MAP0_W; c++){
 				core->pushMatrix(VSMathLib::MODEL);
 				if (l % 2 == 0){

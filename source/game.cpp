@@ -1,7 +1,5 @@
 #include "../include/game.h"
-#include "../include/riverlog.h"
-#include "../include/car.h"
-#include "../include/frog.h"
+
 
 namespace domain {
 
@@ -9,18 +7,42 @@ namespace domain {
 
 	}
 
+	Game::~Game(){
+		delete frog;
+		delete map;
+		delete car1;
+		delete car2;
+		delete car3;
+		delete car4;
+	}
 
-void Game::init(){
-	frog = new Frog(5.0, 0.0, 1.0, 0.01);
-	game_objects.push_back(frog);
 
-		game_objects.push_back(new Map());
+	void Game::init(){
+		frog = new Frog(10.0, 0.0, 1.0, 0.01);
+		game_objects.push_back(frog);
 
-		game_objects.push_back(new Car(-4.0, 0.3, 6.0, DIR_LEFT, 0.2));
-		game_objects.push_back(new Car(-6.0, 0.3, 4.0, DIR_LEFT, 0.2));
+		map = new Map();
+		game_objects.push_back(map);
 
-		game_objects.push_back(new Riverlog(2.0, -1.0, 10.0, 50, DIR_LEFT, 0.2));
-		game_objects.push_back(new Riverlog(7.0, -1.0, 12.0, 50, DIR_RIGHT, 0.2));
+		car1 = new Car(-4.0, 0.3, 6.0, DIR_LEFT, 0.2);
+		game_objects.push_back(car1);
+		car2 = new Car(-6.0, 0.3, 4.0, DIR_LEFT, 0.2);
+		game_objects.push_back(car2);
+		car3 = new Car(-4.0, 0.3, 8.0, DIR_RIGHT, 0.2);
+		game_objects.push_back(car3);
+		car4 = new Car(-6.0, 0.3, 10.0, DIR_RIGHT, 0.2);
+		game_objects.push_back(car4);
+
+		rlog1 = new Riverlog(2.0, -1.0, 16.0, 50, DIR_LEFT, 0.2);
+		game_objects.push_back(rlog1);
+		rlog2 = new Riverlog(7.0, -1.0, 18.0, 50, DIR_RIGHT, 0.2);
+		game_objects.push_back(rlog2);
+		rlog3 = new Riverlog(2.0, -1.0, 20.0, 50, DIR_LEFT, 0.2);
+		game_objects.push_back(rlog3);
+		rlog4 = new Riverlog(7.0, -1.0, 22.0, 50, DIR_RIGHT, 0.2);
+		game_objects.push_back(rlog4);
+
+		frog->setMaplimit(map->getMaplimit());
 	}
 
 	void Game::draw(VSMathLib* core){

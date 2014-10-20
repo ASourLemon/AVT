@@ -7,6 +7,8 @@ namespace domain{
 		created = false;
 	}
 
+	Frog::~Frog(){}
+
 	void Frog::draw(VSMathLib* core){
 
 
@@ -103,7 +105,7 @@ namespace domain{
 			}
 
 			case(DIR_LEFT):{
-				if(x<10){
+				if(x<map_limit-1){
 				deltaT=glutGet(GLUT_ELAPSED_TIME)-t3;
 
 				x+=speed*deltaT;
@@ -113,7 +115,7 @@ namespace domain{
 			}
 
 			case(DIR_RIGHT):{
-				if(x>0){
+				if(x>1){
 				deltaT=glutGet(GLUT_ELAPSED_TIME)-t4;
 
 				x-=speed*deltaT;

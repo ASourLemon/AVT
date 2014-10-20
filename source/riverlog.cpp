@@ -21,6 +21,8 @@ Riverlog::Riverlog(float x, float y, float z, int quality, int direction, float 
 
 }
 
+Riverlog::~Riverlog(){}
+
 void Riverlog::draw(VSMathLib* core){
 	if (x < -1 || x > 17)
 		return;

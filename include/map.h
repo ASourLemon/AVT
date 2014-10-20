@@ -3,26 +3,10 @@
 
 #include "drawable.h"
 
-#define MAP0_W 10
-#define MAP0_H 16
+#define MAP0_W 20
+#define MAP0_H 32
 #define WALL_CHAR 'X'
 #define WATER_SPEED 0.3f
-
-const char map_0[] =
-{		"XXXXXXXXXX"
-		"XXXXXXXXXX"
-		"XXXXXXXXXX"
-		"          "
-		"          "
-		"          "
-		"XXXXXXXXXX"
-		"          "
-		"          "
-		"          "
-		"XXXXXXXXXX"
-		"XXXXXXXXXX"
-		"XXXXXXXXXX"
-};
 
 namespace domain {
 
@@ -38,8 +22,10 @@ private:
 
 public:
 	Map();
+	~Map();
 	void draw(VSMathLib* core);
 	void tick();
+	int getMaplimit(){return MAP0_W;}
 };
 
 }

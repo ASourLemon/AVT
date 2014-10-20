@@ -20,7 +20,7 @@ namespace domain {
 class Drawable {
 
 protected:
-	float second_in_game = 0;
+	float second_in_game;
 	float speed;
 
 public:

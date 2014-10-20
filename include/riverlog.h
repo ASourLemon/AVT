@@ -20,6 +20,7 @@ private:
 
 public:
 	Riverlog(float x, float y, float z, int quality, int direction, float velocity);
+	~Riverlog();
 	void draw(VSMathLib* core);
 	void tick();
 
