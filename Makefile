@@ -6,11 +6,11 @@ BDIR=bin
 LIBS= -lGL -lglut -lGLU -lGLEW -lX11
 
 CC=g++
-CFLAGS= -g -Wall -ansi -I$(IDIR)
+CFLAGS= -g -std=c++11 -Wall -ansi -I$(IDIR)
 
 OUT_DIRS= obj bin
 _DEPS = *.h	##ADD .h's here
-_OBJ = frogger.o vsMathLib.o vsShaderLib.o vsResSurfRevLib.o vsResourceLib.o vsLogLib.o  map.o riverlog.o game.o car.o frog.o			##ADD .o's here
+_OBJ = frogger.o light.o vsMathLib.o vsShaderLib.o vsResSurfRevLib.o vsResourceLib.o vsLogLib.o  map.o riverlog.o game.o car.o frog.o			##ADD .o's here
 
 
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))

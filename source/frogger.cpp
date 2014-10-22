@@ -26,6 +26,9 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
+
+
+#define FPS 60
 #define VERTEX_COORD_ATTRIB_ORIGINAL 0
 #define NORMAL_ATTRIB_ORIGINAL 1
 #define TEXTURE_COORD_ATTRIB_ORIGINAL 2
@@ -45,10 +48,8 @@ float alpha = 39.0f, beta = 51.0f;
 float r = 10.0f;
 // Camera Position
 float camX = 0.0, camY = 0.0, camZ = 2.0;
-// light direction
-float lightDir[4] = { 1.0f, 1.0f, 1.0f, 0.0f };
-float lightPos[4] = { 4.0f, 6.0f, 2.0f, 1.0f };
-float spotDir[4] = { -4.0f, -6.0f, -2.0f, 0.0f };
+
+Light l0;
 
 VSMathLib* core;
 VSResSurfRevLib mySurfRev;
@@ -111,25 +112,14 @@ void newrenderScene(void) {
 			core->lookAt(fx + camX, fy + camY*-0.5 + 2.5, fz - camZ, fx, fy, fz, 0, 1, 0);
 		}
 
-
 	} else {
 
 		core->lookAt(10, 10, 7.5, 10, 0, 7.5, 0, 0, 1);
 		//core->lookAt(camX, camY, camZ, 5, 0, 7, 0, 1, 0);
-
 	}
 
-	// transform light to camera space and send it to GLSL
-	float res[4];
-	core->multMatrixPoint(VSMathLib::VIEW, lightDir, res);
-	core->normalize(res);
-	shader.setBlockUniform("Lights", "l_dir", res);
 
-	core->multMatrixPoint(VSMathLib::VIEW, lightPos, res);
-	shader.setBlockUniform("Lights", "l_pos", res);
-
-	core->multMatrixPoint(VSMathLib::VIEW, spotDir, res);
-	shader.setBlockUniform("Lights", "l_spotDir", res);
+	l0.draw(&shader, core);
 
 	// use our shader
 	glUseProgram(shader.getProgramIndex());
@@ -186,8 +176,6 @@ void reshape(int w, int h) {
 	WinX = w;
 	WinY = h;
 }
-
-#define FPS 60
 
 void timer(int value) {
 	int start, finish, deltat;
