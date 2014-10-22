@@ -5,7 +5,7 @@ namespace domain {
 	Map::Map() {
 
 		body.createCube(1.0f);
-		water.createSphere(0.85, 100);
+		water.createSphere(2.4, 5);
 
 		deltaWater = 0;
 		goingLeft = false;
@@ -100,11 +100,12 @@ namespace domain {
 		float f6[4] = { 0.0f, 0.2f, 0.6f, 1.0f };
 		water.setColor(VSResourceLib::AMBIENT, f6);
 
+
 		//river	FIXME:	CHANGE MATERIAL
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(0.0, -1.0, 16.0);	//base translate
-		for (int l = 0.5; l < 10; l++){
-			for (int c = 0; c <= MAP0_W; c++){
+		core->translate(0.0, -2.0, 16.0);	//base translate
+		for (int l = 0.5; l < 10; l+=3){
+			for (int c = 0; c <= MAP0_W; c+=2){
 				core->pushMatrix(VSMathLib::MODEL);
 				if (l % 2 == 0){
 					core->translate(c + deltaWater, -1.0, l);
@@ -120,7 +121,6 @@ namespace domain {
 	}
 
 	void Map::tick(){
-
 		if (!goingLeft && deltaWater < 1){
 			deltaWater += WATER_SPEED * 0.1;
 		}

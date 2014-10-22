@@ -1,6 +1,7 @@
 #ifndef INCLUDE_DRAWABLE_H_
 #define INCLUDE_DRAWABLE_H_
 
+#include <stdlib.h>
 #include "vsMathLib.h"
 #include "vsResSurfRevLib.h"
 

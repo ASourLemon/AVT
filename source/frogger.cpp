@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////
 //
 // 
-// (c) 2014 by Jo�o Madeiras Pereira
+// (c) 2014 by Jo���o Madeiras Pereira
 //
 ///////////////////////////////////////////////////////////////////////
 
@@ -56,7 +56,6 @@ VSResSurfRevLib mySurfRev;
 VSShaderLib shader, shaderF;
 domain::Game game;
 
-bool oldVersion = false;
 int CAM_TYPE = 0;
 void processKeys();
 bool* keyStates;
@@ -86,194 +85,12 @@ void checkOpenGLError(std::string error) {
 }
 
 ///////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////// SHADERS
-///////////////////////////////////////////////////////////////////////
-
-static char* readShaderSource(const char* shaderFile) {
-	FILE* fp = fopen(shaderFile, "r");
-
-	if (fp == NULL) {
-		return NULL;
-	}
-
-	fseek(fp, 0L, SEEK_END);
-	long size = ftell(fp);
-
-	fseek(fp, 0L, SEEK_SET);
-	char* buf = new char[size + 1];
-	//memset(buf, size, sizeof(char));
-	int n_read = fread(buf, 1, size, fp);
-
-	buf[n_read] = '\0';
-	fclose(fp);
-
-	return buf;
-}
-
-void createShaderProgram() {
-	ProgramId = glCreateProgram();
-	struct Shader {
-		const char* filename;
-		GLenum type;
-		GLchar* source;
-	} shaders[2] = { { "shaders/oldvShader.glsl", GL_VERTEX_SHADER, NULL }, {
-			"shaders/oldfShader.glsl", GL_FRAGMENT_SHADER, NULL } };
-
-	for (int i = 0; i < 2; ++i) {
-		Shader& s = shaders[i];
-		s.source = readShaderSource(s.filename);
-		if (shaders[i].source == NULL) {
-			std::cerr << "Failed to read " << s.filename << std::endl;
-			exit(EXIT_FAILURE);
-		}
-
-		GLuint shader = glCreateShader(s.type);
-		glShaderSource(shader, 1, (const GLchar**) &s.source, NULL);
-		glCompileShader(shader);
-
-		GLint compiled;
-		glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
-		if (!compiled) {
-			std::cerr << s.filename << " failed to compile:" << std::endl;
-			GLint logSize;
-			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logSize);
-			char* logMsg = new char[logSize];
-			glGetShaderInfoLog(shader, logSize, NULL, logMsg);
-			std::cerr << logMsg << std::endl;
-			delete[] logMsg;
-
-			exit(EXIT_FAILURE);
-		}
-
-		delete[] s.source;
-
-		glAttachShader(ProgramId, shader);
-	}
-
-	glBindAttribLocation(ProgramId, VERTEX_COORD_ATTRIB_ORIGINAL,
-			"in_position");
-
-	glLinkProgram(ProgramId);
-
-	ProjectionID = glGetUniformLocation(ProgramId, "P");
-	ViewID = glGetUniformLocation(ProgramId, "V");
-	ModelID = glGetUniformLocation(ProgramId, "M");
-	ColorId = glGetUniformLocation(ProgramId, "in_color");
-	checkOpenGLError("ERROR: Could not create shaders.");
-}
-
-void destroyShaderProgram() {
-	glUseProgram(0);
-	glDetachShader(ProgramId, VertexShaderId);
-	glDetachShader(ProgramId, FragmentShaderId);
-
-	glDeleteShader(FragmentShaderId);
-	glDeleteShader(VertexShaderId);
-	glDeleteProgram(ProgramId);
-
-	checkOpenGLError("ERROR: Could not destroy shaders.");
-}
-
-///////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////// VAOs & VBOs
-///////////////////////////////////////////////////////////////////////
-
-void createBufferObjects() {
-	glGenVertexArrays(1, &VaoId);
-	glBindVertexArray(VaoId);
-
-	glGenBuffers(4, VboId);
-
-	//vertex coordinates buffer
-	glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(VERTEX_COORD_ATTRIB_ORIGINAL);
-	glVertexAttribPointer(VERTEX_COORD_ATTRIB_ORIGINAL, 4, GL_FLOAT, 0, 0, 0);
-
-	//normals buffer
-	glBindBuffer(GL_ARRAY_BUFFER, VboId[2]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(NORMAL_ATTRIB_ORIGINAL);
-	glVertexAttribPointer(NORMAL_ATTRIB_ORIGINAL, 3, GL_FLOAT, 0, 0, 0);
-
-	//texture coordinates buffer
-	glBindBuffer(GL_ARRAY_BUFFER, VboId[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(TEXTURE_COORD_ATTRIB_ORIGINAL);
-	glVertexAttribPointer(TEXTURE_COORD_ATTRIB_ORIGINAL, 2, GL_FLOAT, 0, 0, 0);
-
-	//index buffer
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[3]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(faceIndex), faceIndex,
-			GL_STATIC_DRAW);
-
-	// unbind the VAO
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	//glDisableVertexAttribArray(VERTICES);
-	//glDisableVertexAttribArray(COLORS);
-
-	checkOpenGLError("ERROR: Could not create VAOs and VBOs.");
-}
-
-void destroyBufferObjects() {
-	glDisableVertexAttribArray(VERTEX_COORD_ATTRIB_ORIGINAL);
-	glDisableVertexAttribArray(NORMAL_ATTRIB_ORIGINAL);
-	glDisableVertexAttribArray(TEXTURE_COORD_ATTRIB_ORIGINAL);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	glDeleteBuffers(4, VboId);
-	glDeleteVertexArrays(1, &VaoId);
-	checkOpenGLError("ERROR: Could not destroy VAOs and VBOs.");
-}
-
-///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// SCENE
 ///////////////////////////////////////////////////////////////////////
 
-typedef float Matrix[16];
-
-const Matrix M = { 1.0f, 0.0f, 0.0f, 3.0f, 0.0f, 1.0f, 0.0f, 3.0f, 0.0f, 0.0f,
-		1.0f, 3.0f, 0.0f, 0.0f, 0.0f, 1.0f }; // Row Major (GLSL is Column Major)
-
-void renderScene() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	core->loadIdentity(VSMathLib::VIEW);
-	core->loadIdentity(VSMathLib::MODEL);
-
-	glBindVertexArray(VaoId);
-	glUseProgram(ProgramId);
-
-	core->lookAt(camX, camY, camZ, 0.0, 0.0, 0.0, 0, 1, 0);
-	core->loadIdentity(VSMathLib::MODEL);
-
-	float* proj_mat = core->get(core->PROJECTION);
-	float* view_mat = core->get(core->VIEW);
-	float* model_mat = core->get(core->MODEL);
-
-	glUniformMatrix4fv(ProjectionID, 1, GL_FALSE, proj_mat);
-	glUniformMatrix4fv(ViewID, 1, GL_FALSE, view_mat);
-	glUniformMatrix4fv(ModelID, 1, GL_TRUE, model_mat);
-
-	glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, (GLvoid*) 0);
-
-	core->loadMatrix(core->MODEL, (float*) &M);
-	glUniformMatrix4fv(ModelID, 1, GL_TRUE, model_mat);
-	glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, (GLvoid*) 0);
-
-	glUseProgram(0);
-	glBindVertexArray(0);
-
-	checkOpenGLError("ERROR: Could not draw scene.");
-}
-
 void newrenderScene(void) {
-
+	int start;
+	start = glutGet(GLUT_ELAPSED_TIME);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	core->loadIdentity(VSMathLib::VIEW);
@@ -287,7 +104,7 @@ void newrenderScene(void) {
 		float fz = game.getFrogZ();
 
 		if (tracking == 1){
-		core->lookAt(fx, fy + 3.5, fz - 2.5,  fx + camX , (fy + camY * -0.5), (fz + camZ * 0.5), 0, 1, 0);
+			core->lookAt(fx, fy + 3.5, fz - 2.5,  fx + camX , (fy + camY * -0.5), (fz + camZ * 0.5), 0, 1, 0);
 
 		}
 		else {
@@ -321,29 +138,22 @@ void newrenderScene(void) {
 
 	//swap buffers
 	glutSwapBuffers();
+	printf("Time for draw: %dms;\n", glutGet(GLUT_ELAPSED_TIME)-start);
 }
 
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// CALLBACKS
 ///////////////////////////////////////////////////////////////////////
 
-void cleanup() {
-	destroyShaderProgram();
-	destroyBufferObjects();
-}
-
 void display() {
 	++FrameCount;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if (oldVersion) {
-		renderScene();
-	} else {
-		newrenderScene();
-	}
+	newrenderScene();
 
 }
 
 void idle() {
+	//printf("Doing nothing!\n");
 	//glutPostRedisplay();
 }
 
@@ -362,7 +172,7 @@ void reshape(int w, int h) {
 
 	if(CAM_TYPE == CAM_ORTHO){
 		if(ratio > 1){
-			core->ortho(-8.0f*ratio, 8.0f*ratio, -10.0f, 11.0f, 0.1f, 12.0f);
+			core->ortho(-8.0f*ratio, 8.0f*ratio, -10.0f, 11.0f, 0.1f, 12.0f); //FIXME: lawl, you know what to do
 
 		}else {
 			core->ortho(-8.0f, 8.0f, -9.0f/ratio, 11.0f/ratio, 0.1f, 12.0f);
@@ -377,21 +187,30 @@ void reshape(int w, int h) {
 	WinY = h;
 }
 
+#define FPS 60
+
 void timer(int value) {
-	if(nTimer == 70){
+	int start, finish, deltat;
+	start = glutGet(GLUT_ELAPSED_TIME);
+
+	if(nTimer == FPS){
 		std::ostringstream oss;
 		oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x" << WinY << ")";
-	std::string s = oss.str();
-	glutSetWindow(WindowHandle);
-	glutSetWindowTitle(s.c_str());
-	FrameCount = 0;
-	nTimer = 0;
+		std::string s = oss.str();
+		glutSetWindow(WindowHandle);
+		glutSetWindowTitle(s.c_str());
+		FrameCount = 0;
+		nTimer = 0;
 	}
 	nTimer++;
 	game.tick();
 	processKeys();
+
 	glutPostRedisplay();
-	glutTimerFunc(17, timer, 0);
+	finish = glutGet(GLUT_ELAPSED_TIME);
+	deltat = finish - start;
+	printf("Delay to discount: %dms\n",deltat);
+	glutTimerFunc((1000/FPS) - deltat/1000, timer, 0);
 }
 
 void processMouseButtons(int button, int state, int xx, int yy) {
@@ -430,14 +249,14 @@ void processMouseMotion(int xx, int yy) {
 	// left mouse button: move camera
 	//if (tracking == 1) {
 
-		alphaAux = alpha + deltaX;
-		betaAux = beta + deltaY;
+	alphaAux = alpha + deltaX;
+	betaAux = beta + deltaY;
 
-		if (betaAux > 85.0f)
-			betaAux = 85.0f;
-		else if (betaAux < -85.0f)
-			betaAux = -85.0f;
-		rAux = r;
+	if (betaAux > 85.0f)
+		betaAux = 85.0f;
+	else if (betaAux < -85.0f)
+		betaAux = -85.0f;
+	rAux = r;
 	/*}
 
 	// right mouse button: zoom
@@ -457,8 +276,8 @@ void processMouseMotion(int xx, int yy) {
 	camY = rAux * sin(betaAux * 3.14f / 180.0f);
 
 	printf("camX:%f , camY:%f, camZ:%f\n", camX, camY,camZ);
-	//  uncomment this if not using an idle func
-	//	glutPostRedisplay();
+
+	//glutPostRedisplay();
 }
 
 void keyPressed (unsigned char key, int x, int y) {
@@ -469,13 +288,12 @@ void keyUp (unsigned char key, int x, int y) {
 	keyStates[key] = false; // Set the state of the current key to not pressed
 }
 
-void processKeys(){//unsigned char key, int xx, int yy) {
+void processKeys(){
 
 	if(keyStates['c']){
 		printf("Camera Spherical Coordinates (%f, %f, %f)\n", alpha, beta, r);
-	}
 
-	if(keyStates['1']){
+	}if(keyStates['1']){
 		CAM_TYPE = CAM_ORTHO;
 		reshape(WinX, WinY);
 	}
@@ -521,15 +339,7 @@ void processKeys(){//unsigned char key, int xx, int yy) {
 	}else{
 		game.setFrogT4(glutGet(GLUT_ELAPSED_TIME));
 	}
-
-	/*
-	case 27:
-		glutLeaveMainLoop();
-		break;*/
-
-
-	//  uncomment this if not using an idle func
-	//	glutPostRedisplay();
+	//glutPostRedisplay();
 
 }
 
@@ -538,17 +348,13 @@ void processKeys(){//unsigned char key, int xx, int yy) {
 ///////////////////////////////////////////////////////////////////////
 
 void setupCallbacks() {
-	glutCloseFunc(cleanup);
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
 	glutTimerFunc(0, timer, 0);
-	if(oldVersion){
-		//glutKeyboardFunc(processKeys);
-	}else {
-		glutKeyboardFunc(keyPressed);
-		glutKeyboardUpFunc(keyUp);
-	}
+	glutKeyboardFunc(keyPressed);
+	glutKeyboardUpFunc(keyUp);
+
 
 	glutMouseFunc(processMouseButtons);
 	glutMotionFunc(processMouseMotion);
@@ -608,11 +414,11 @@ void setupCore() {
 	core->setUniformName(VSMathLib::PROJ_VIEW_MODEL, "m_pvm");
 	core->setUniformName(VSMathLib::NORMAL, "m_normal");
 	core->setUniformName(VSMathLib::VIEW_MODEL, "m_viewModel");
-	//Nao sabia onde por isto, a ideia é isto ser feito apenas uma vez
+	//Nao sabia onde por isto, a ideia �� isto ser feito apenas uma vez
 	keyStates = new bool[256];
-		for(int i=0; i<256; i++){
-			keyStates[i] = false;
-		}
+	for(int i=0; i<256; i++){
+		keyStates[i] = false;
+	}
 
 }
 
@@ -702,17 +508,10 @@ void init(int argc, char* argv[]) {
 	setupOpenGL();
 	setupCore();
 
-	if (oldVersion) {
-		createShaderProgram();
-		createBufferObjects();
-	} else {
+	if (!setupShaders()) {
 
-		if (!setupShaders()) {
-
-		}
-		setupSurfRev();
 	}
-
+	setupSurfRev();
 	setupCallbacks();
 }
 
