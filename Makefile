@@ -6,7 +6,7 @@ BDIR=bin
 LIBS= -lGL -lglut -lGLU -lGLEW -lX11
 
 CC=g++
-CFLAGS= -g -Wall -ansi -I$(IDIR)
+CFLAGS= -std=c++11 -g -Wall -ansi -I$(IDIR) -Llib
 
 OUT_DIRS= obj bin
 _DEPS = *.h	##ADD .h's here
