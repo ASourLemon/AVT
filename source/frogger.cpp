@@ -49,8 +49,6 @@ float r = 10.0f;
 // Camera Position
 float camX = 0.0, camY = 0.0, camZ = 2.0;
 
-Light l0;
-
 VSMathLib* core;
 VSResSurfRevLib mySurfRev;
 
@@ -90,8 +88,6 @@ void checkOpenGLError(std::string error) {
 ///////////////////////////////////////////////////////////////////////
 
 void newrenderScene(void) {
-	int start;
-	start = glutGet(GLUT_ELAPSED_TIME);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	core->loadIdentity(VSMathLib::VIEW);
@@ -114,12 +110,8 @@ void newrenderScene(void) {
 
 	} else {
 
-		core->lookAt(10, 10, 7.5, 10, 0, 7.5, 0, 0, 1);
-		//core->lookAt(camX, camY, camZ, 5, 0, 7, 0, 1, 0);
+		core->lookAt(10, 10, 15.0, 10, 0, 15.0, 0, 0, 1);
 	}
-
-
-	l0.draw(&shader, core);
 
 	// use our shader
 	glUseProgram(shader.getProgramIndex());
@@ -128,7 +120,6 @@ void newrenderScene(void) {
 
 	//swap buffers
 	glutSwapBuffers();
-	printf("Time for draw: %dms;\n", glutGet(GLUT_ELAPSED_TIME)-start);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -162,25 +153,22 @@ void reshape(int w, int h) {
 
 	if(CAM_TYPE == CAM_ORTHO){
 		if(ratio > 1){
-			core->ortho(-8.0f*ratio, 8.0f*ratio, -10.0f, 11.0f, 0.1f, 12.0f); //FIXME: lawl, you know what to do
+			core->ortho(-8.0f*ratio, 8.0f*ratio, -16.0f, 18.0f, 1.6f, 12.0f);
 
 		}else {
-			core->ortho(-8.0f, 8.0f, -9.0f/ratio, 11.0f/ratio, 0.1f, 12.0f);
+			core->ortho(-8.0f, 8.0f, -16.0f/ratio, 18.0f/ratio, 1.6f, 12.0f);
 
 		}
 
 	}else{
 
-		core->perspective(90.0f, ratio, 0.5f, 40.0f);
+		core->perspective(125.0f, ratio, 0.6f, 40.0f);
 	}
 	WinX = w;
 	WinY = h;
 }
 
 void timer(int value) {
-	int start, finish, deltat;
-	start = glutGet(GLUT_ELAPSED_TIME);
-
 	if(nTimer == FPS){
 		std::ostringstream oss;
 		oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x" << WinY << ")";
@@ -195,10 +183,7 @@ void timer(int value) {
 	processKeys();
 
 	glutPostRedisplay();
-	finish = glutGet(GLUT_ELAPSED_TIME);
-	deltat = finish - start;
-	printf("Delay to discount: %dms\n",deltat);
-	glutTimerFunc((1000/FPS) - deltat/1000, timer, 0);
+	glutTimerFunc(1000/FPS, timer, 0);
 }
 
 void processMouseButtons(int button, int state, int xx, int yy) {
@@ -264,8 +249,6 @@ void processMouseMotion(int xx, int yy) {
 	camY = rAux * sin(betaAux * 3.14f / 180.0f);
 
 	printf("camX:%f , camY:%f, camZ:%f\n", camX, camY,camZ);
-
-	//glutPostRedisplay();
 }
 
 void keyPressed (unsigned char key, int x, int y) {
@@ -303,7 +286,9 @@ void processKeys(){
 	if(keyStates['n']){
 		glDisable(GL_MULTISAMPLE);
 	}
-
+	if(keyStates['l']){
+	
+	}
 	if(keyStates['q']){
 		game.move_frog(0);
 	}else{
@@ -327,8 +312,6 @@ void processKeys(){
 	}else{
 		game.setFrogT4(glutGet(GLUT_ELAPSED_TIME));
 	}
-	//glutPostRedisplay();
-
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -439,7 +422,7 @@ GLuint setupShaders() {
 #define _POINT			4
 #define _SPOT			5
 
-#define _LIGHT 4
+#define _LIGHT 5
 
 #if (_LIGHT == _DIF)
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdif.vert");

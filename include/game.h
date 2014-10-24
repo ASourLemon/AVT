@@ -7,7 +7,6 @@
 #include "../include/frog.h"
 #include "../include/car.h"
 #include "../include/riverlog.h"
-#include "../include/light.h"
 
 namespace domain {
 
