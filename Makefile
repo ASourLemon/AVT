@@ -6,7 +6,8 @@ BDIR=bin
 LIBS= -lGL -lglut -lGLU -lGLEW -lX11
 
 CC=g++
-CFLAGS= -g -std=c++11 -Wall -ansi -I$(IDIR)
+
+CFLAGS= -std=c++11 -g -Wall -ansi -I$(IDIR) -Llib
 
 OUT_DIRS= obj bin
 _DEPS = *.h	##ADD .h's here
@@ -15,6 +16,10 @@ _OBJ = frogger.o light.o vsMathLib.o vsShaderLib.o vsResSurfRevLib.o vsResourceL
 
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+
+all: build
+
+rebuild: clean build
 
 init:
 	mkdir -p $(OUT_DIRS)

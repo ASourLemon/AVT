@@ -14,6 +14,10 @@ namespace domain {
 		delete car2;
 		delete car3;
 		delete car4;
+		delete rlog1;
+		delete rlog2;
+		delete rlog3;
+		delete rlog4;
 	}
 
 
