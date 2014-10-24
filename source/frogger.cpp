@@ -19,6 +19,7 @@
 #include "../include/vsMathLib.h"
 #include "../include/vsShaderLib.h"
 #include "../include/vsResSurfRevLib.h"
+#include "../include/lightManager.h"
 
 #define CAPTION "Frogger 3D"
 
@@ -422,7 +423,7 @@ GLuint setupShaders() {
 #define _POINT			4
 #define _SPOT			5
 
-#define _LIGHT 5
+#define _LIGHT 4
 
 #if (_LIGHT == _DIF)
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdif.vert");
