@@ -1,5 +1,6 @@
 #version 330
 
+const int max_lights = 2;
 out vec4 colorOut;
 
 layout (std140) uniform Materials {
@@ -11,47 +12,46 @@ layout (std140) uniform Materials {
 	int texCount;
 };
 
-layout (std140) uniform Lights {
-	vec4 l_pos, l_spotDir;
-	float l_spotCutOff;
-};
+uniform int n_lights;
+uniform vec4 l_spotDir[4];
+uniform float l_spotCutOff[4];
 
-//in Data {
-//	sample vec3 normal;
-//	sample vec2 texCoord;
-//	sample vec3 eye;
-//	sample vec3 lightDir;
-//} DataIn;
-
-in Data {
-	vec3 normal;
-	vec2 texCoord;
-	vec3 eye;
-	vec3 lightDir;
-} DataIn;
+in	vec3 normal_a[max_lights];
+in	vec2 texCoord[max_lights];
+in	vec3 eye[max_lights];
+in	vec3 lightDir[max_lights];
 
 
 void main() {
+	int l;
+	float intensity;
+	vec4 spec;
+	vec3 ld, sd;
+	colorOut = vec4(0.0);
+	for(l = 0; l < n_lights; l++){
+		intensity = 0.0;
+		spec = vec4(0.0);
+		ld = normalize(lightDir[l]);
+		sd = normalize(vec3(-l_spotDir[l]));	
 
-	float intensity = 0.0;
-	vec4 spec = vec4(0.0);
-
-	vec3 ld = normalize(DataIn.lightDir);
-	vec3 sd = normalize(vec3(-l_spotDir));	
-
-	// inside the cone?
-	if (dot(sd,ld) > l_spotCutOff) {
-		
-		vec3 n = normalize(DataIn.normal);
-		intensity = max(dot(n,ld), 0.0);
-		
-		if (intensity > 0.0) {
-			vec3 eye = normalize(DataIn.eye);
-			vec3 h = normalize(ld + eye);
-			float intSpec = max(dot(h,n), 0.0);
-			spec = specular * pow(intSpec, shininess);
+			// inside the cone?
+		if (dot(sd,ld) > l_spotCutOff[l]) {
+			
+			vec3 n = normalize(normal_a[l]);
+			intensity = max(dot(n,ld), 0.0);
+			
+			if (intensity > 0.0) {
+				vec3 eye = normalize(eye[l]);
+				vec3 h = normalize(ld + eye);
+				float intSpec = max(dot(h,n), 0.0);
+				spec = specular * pow(intSpec, shininess);
+			}
 		}
+		colorOut = colorOut + max(intensity * diffuse + spec * 4, ambient);
+		
 	}
-	
-	colorOut = max(intensity * diffuse + spec, ambient);
+	//float debug = 1.0f;
+	//debug += l_spotDir[0].x;
+	colorOut /= n_lights;
+
 }

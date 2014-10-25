@@ -61,6 +61,8 @@ void processKeys();
 bool* keyStates;
 int nTimer = 0;
 
+LightManager lightManager;
+
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// ERRORS
 ///////////////////////////////////////////////////////////////////////
@@ -100,6 +102,8 @@ void newrenderScene(void) {
 		float fx = game.getFrogX();
 		float fy = game.getFrogY();
 		float fz = game.getFrogZ();
+		
+		printf("fx:%f, fy%f, fz%f\n", fx, fy, fz); 
 
 		if (tracking == 1){
 			core->lookAt(fx, fy + 3.5, fz - 2.5,  fx + camX , (fy + camY * -0.5), (fz + camZ * 0.5), 0, 1, 0);
@@ -113,7 +117,7 @@ void newrenderScene(void) {
 
 		core->lookAt(10, 10, 15.0, 10, 0, 15.0, 0, 0, 1);
 	}
-
+	lightManager.drawLight();
 	// use our shader
 	glUseProgram(shader.getProgramIndex());
 
@@ -288,7 +292,11 @@ void processKeys(){
 		glDisable(GL_MULTISAMPLE);
 	}
 	if(keyStates['l']){
-	
+		if(lightManager.isOn()){
+			lightManager.lightsOff();
+		}else{
+			lightManager.lightsOn();
+		}
 	}
 	if(keyStates['q']){
 		game.move_frog(0);
@@ -418,12 +426,12 @@ GLuint setupShaders() {
 
 #define _DIF			0
 #define _DIF_AMB		1
-#define _DIF_AMB_SPEC	2
+#define _DIF_AMB_SPEC	2	
 #define _PER_PIXEL		3
-#define _POINT			4
-#define _SPOT			5
+#define _POINT			4	//lampada
+#define _SPOT			5	//cone
 
-#define _LIGHT 4
+#define _LIGHT 5
 
 #if (_LIGHT == _DIF)
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdif.vert");
@@ -455,8 +463,6 @@ GLuint setupShaders() {
 	shader.prepareProgram();
 
 	shader.setUniform("texUnit", 0);
-	float f3 = 0.90f;
-	shader.setBlockUniform("Lights", "l_spotCutOff", &f3);
 
 	printf("InfoLog for Model Shader\n%s\n\n", shader.getAllInfoLogs().c_str());
 
@@ -474,6 +480,28 @@ void setupSurfRev() {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
+void setupLight(){
+	lightManager.init(&shader);
+	float l0_cut = 0.6f;
+	float l0_pos[4] = {-3.0f, 0.0f, -7.0f, 1.0f};	//CAMERA COORDINATES!!
+	float l0_dir[4] = {0.0f, -7.0f, -7.0f, 1.0f};
+	lightManager.addLight(l0_pos, l0_dir, l0_cut);
+	
+	float l1_cut = 0.6f;
+	float l1_pos[4] = {3.0f, 0.0f, -7.0f, 1.0f};
+	float l1_dir[4] = {0.0f, -7.0f, -7.0f, 1.0f};
+	lightManager.addLight(l1_pos, l1_dir, l1_cut);
+	
+	float l1_cut = 0.6f;
+	float l1_pos[4] = {3.0f, 0.0f, -7.0f, 1.0f};
+	float l1_dir[4] = {0.0f, -7.0f, -7.0f, 1.0f};
+	lightManager.addLight(l1_pos, l1_dir, l1_cut);
+	
+	
+	int n_lights = lightManager.getNumLights();
+	shader.setUniform("n_lights", &n_lights);
+}
+
 void init(int argc, char* argv[]) {
 	setupGLUT(argc, argv);
 	setupGLEW();
@@ -483,6 +511,7 @@ void init(int argc, char* argv[]) {
 	if (!setupShaders()) {
 
 	}
+	setupLight();
 	setupSurfRev();
 	setupCallbacks();
 }
