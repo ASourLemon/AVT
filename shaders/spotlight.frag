@@ -1,6 +1,6 @@
 #version 330
 
-const int max_lights = 2;
+const int max_lights = 5;
 out vec4 colorOut;
 
 layout (std140) uniform Materials {
@@ -13,8 +13,8 @@ layout (std140) uniform Materials {
 };
 
 uniform int n_lights;
-uniform vec4 l_spotDir[4];
-uniform float l_spotCutOff[4];
+uniform vec4 l_spotDir[max_lights];
+uniform float l_spotCutOff[max_lights];
 
 in	vec3 normal_a[max_lights];
 in	vec2 texCoord[max_lights];

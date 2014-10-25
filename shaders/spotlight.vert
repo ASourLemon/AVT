@@ -1,6 +1,6 @@
 #version 330
 
-const int max_lights = 2;
+const int max_lights = 5;
 
 layout (std140) uniform Matrices {
 	mat4 m_pvm;
@@ -9,8 +9,8 @@ layout (std140) uniform Matrices {
 };
 
 uniform int n_lights;
-uniform vec4 l_pos[4], l_spotDir[4];
-uniform float l_spotCutOff[4];
+uniform vec4 l_pos[max_lights], l_spotDir[max_lights];
+uniform float l_spotCutOff[max_lights];
 
 in vec4 position;
 in vec3 normal;

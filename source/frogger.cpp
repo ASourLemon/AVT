@@ -482,20 +482,20 @@ void setupSurfRev() {
 
 void setupLight(){
 	lightManager.init(&shader);
-	float l0_cut = 0.6f;
+	float l0_cut = 0.3f;
 	float l0_pos[4] = {-3.0f, 0.0f, -7.0f, 1.0f};	//CAMERA COORDINATES!!
 	float l0_dir[4] = {0.0f, -7.0f, -7.0f, 1.0f};
 	lightManager.addLight(l0_pos, l0_dir, l0_cut);
 	
-	float l1_cut = 0.6f;
+	float l1_cut = 0.3f;
 	float l1_pos[4] = {3.0f, 0.0f, -7.0f, 1.0f};
 	float l1_dir[4] = {0.0f, -7.0f, -7.0f, 1.0f};
 	lightManager.addLight(l1_pos, l1_dir, l1_cut);
 	
-	float l1_cut = 0.6f;
-	float l1_pos[4] = {3.0f, 0.0f, -7.0f, 1.0f};
-	float l1_dir[4] = {0.0f, -7.0f, -7.0f, 1.0f};
-	lightManager.addLight(l1_pos, l1_dir, l1_cut);
+	float l2_cut = 0.3f;
+	float l2_pos[4] = {9.0f, 0.0f, -7.0f, 1.0f};
+	float l2_dir[4] = {0.0f, -7.0f, -7.0f, 1.0f};
+	lightManager.addLight(l2_pos, l2_dir, l2_cut);
 	
 	
 	int n_lights = lightManager.getNumLights();
