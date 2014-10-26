@@ -1,12 +1,13 @@
-#include "BoxAABB.h"
+#include "../include/BoxAABB.h"
 
 
 namespace domain {
 
-	BoxAABB::BoxAABB(float *x, float *y, float xmin, float ymin, float xmax, float ymax)
-	: x(x), y(y), _xmin(xmin), _ymin(ymin), _xmax(xmax), _ymax(ymax){
+	BoxAABB::BoxAABB(float center[3], float xmin, float xmax, float ymin,  float ymax, float zmin, float zmax)
+	:  _xmin(xmin),  _xmax(xmax), _ymin(ymin), _ymax(ymax), _zmin(zmin), _zmax(zmax){
  
- 
+		for(int i = 0; i<3; i++)
+			_center[i] = center[1];
 	}
 
 	BoxAABB::~BoxAABB(){}

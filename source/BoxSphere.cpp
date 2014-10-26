@@ -1,9 +1,11 @@
-#include "BoxSphere.h"
+#include "../include/BoxSphere.h"
 
 namespace domain{
 
-	BoxSphere::BoxSphere(float raio, float *x, float *y) : _raio(raio), raio2(_raio*_raio), x(x), y(y){
- 
+	BoxSphere::BoxSphere(float center[3], float raio) : _raio(raio){
+
+		for(int i = 0; i<3; i++)
+			_center[i] = center[i];
 
 	}
 

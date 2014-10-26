@@ -6,22 +6,23 @@ namespace domain {
 	
 	class BoxAABB{
 
-		BoxAABB(float *x, float *y, float xmin, float ymin, float xmax, float ymax);
+		BoxAABB(float center[3], float xmin, float ymin, float xmax, float ymax, float zmin, float zmax);
 		~BoxAABB();
 
-		float get_x(){return *x;}
-		float get_y(){return *y;}
-		float get_xmin(){return *x-_xmin;}
-		float get_ymin(){return *y-_ymin;}
-		float get_xmax(){return *x+_xmax;}
-		float get_ymax(){return *y+_ymax;}
+		float get_x(){return *_center;}
+		//float get_y(){return *y;}
+		float get_xmin(){return _center[0]-_xmin;}
+		float get_xmax(){return _center[0]+_xmax;}
+		float get_ymin(){return _center[1]-_ymin;}
+		float get_ymax(){return _center[1]+_ymax;}
+		float get_zmin(){return _center[0]-_zmin;}
+		float get_zmax(){return _center[0]+_zmax;}
  
-     
      
 		private:
  
-		float *x, *y;
-		float _xmin, _ymin, _xmax, _ymax; //Diferença do centro para os Xs e Ys max e min, varia com cada objecto
+		float *_center; //(x, y, z)
+		float _xmin, _ymin, _xmax, _ymax, _zmin, _zmax; //Diferença do centro para os Xs e Ys max e min, varia com cada objecto
  
 
 
