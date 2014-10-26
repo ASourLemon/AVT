@@ -1,4 +1,4 @@
-#include "BoxSphere.h"
+#include "../include/BoxSphere.h"
 
 namespace domain{
 
