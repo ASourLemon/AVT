@@ -13,8 +13,8 @@ private:
 public:
 	Camera(float pos[3], float up[3], float at[3], float near, float far);
 	virtual ~Camera();
-	virtual void update();
-	virtual void load();
+	virtual void update() = 0;
+	virtual void load() = 0;
 
 };
 

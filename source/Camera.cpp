@@ -1,12 +1,12 @@
-#include "../include/PerspectiveCamera.h"
+#include "../include/camera.h"
 
 namespace domain {
 
-PerspectiveCamera::PerspectiveCamera(float pos[3], float up[3], float at[3], float near, float far, float fovy, float ratio) {
+Camera::Camera(float pos[3], float up[3], float at[3], float near, float far) {
 
 }
 
-PerspectiveCamera::~PerspectiveCamera() {
+Camera::~Camera() {
 }
 
 } /* namespace domain */

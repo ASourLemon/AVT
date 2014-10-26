@@ -56,7 +56,7 @@ namespace domain {
 
 		float d2[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
 		body.setColor(VSResourceLib::DIFFUSE, d2);
-		float f3[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
+		float f3[4] = { 0.02f, 0.05f, 0.02f, 1.0f };
 		body.setColor(VSResourceLib::AMBIENT, f3);
 		///////////////////////////////////
 		/////////////////////////////////// floor
