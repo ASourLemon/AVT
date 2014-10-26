@@ -1,4 +1,4 @@
-#include "../include/BoxAABB.h"
+#include "BoxAABB.h"
 
 
 namespace domain {
