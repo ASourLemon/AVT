@@ -2,6 +2,20 @@
 
 namespace domain{
 
+	float Frog::bodyAmbient[4] = { 0.2f, 0.4f, 0.2f, 1.0f };
+	float Frog::bodyDiffuse[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
+	float Frog::bodySpec[4] = { 0.3f, 0.3f, 0.3f, 1.0f };
+	float Frog::bodyShininess = 100;
+
+	float Frog::headAmbient[4] = { 0.2f, 0.4f, 0.2f, 1.0f };
+	float Frog::headDiffuse[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
+	float Frog::headSpec[4] = { 0.3f, 0.3f, 0.3f, 1.0f };
+	float Frog::headShininess = 100;
+
+	float Frog::eyeAmbient[4] = { 0.6f, 0.6f, 0.6f, 1.0f };
+	float Frog::eyeDiffuse[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
+	float Frog::eyeSpec[4] = { 0.4f, 0.4f, 0.4f, 1.0f };
+	float Frog::eyeShininess = 100;
 
 	Frog::Frog(float x, float y, float z, float speed) : x(x), y(y), z(z), speed(speed), t1(0), t2(0), t3(0), t4(0), deltaT(0) {
 		created = false;

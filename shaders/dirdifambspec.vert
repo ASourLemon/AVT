@@ -21,10 +21,12 @@ layout (std140) uniform Lights {
 
 in vec4 position;	// local space
 in vec3 normal;		// local space
+in vec4 texCoord;
 
 // the data to be sent to the fragment shader
 out Data {
 	vec4 color;
+	vec2 tex_coord;
 } DataOut;
 
 
@@ -53,10 +55,7 @@ void main () {
 	}
 	// add the specular color when the vertex is lit
 	DataOut.color = max(intensity *  diffuse + spec, ambient);
-
-	/*if(l_dir.y != -1.0){
-		DataOut.color = vec4(0.0);
-	}*/
+	DataOut.tex_coord = texCoord.st;
 
 	gl_Position = m_pvm * position;	
 }

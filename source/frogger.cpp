@@ -20,6 +20,7 @@
 #include "../include/vsShaderLib.h"
 #include "../include/vsResSurfRevLib.h"
 #include "../include/lightManager.h"
+#include "../include/TGA.h"
 
 #define CAPTION "Frogger 3D"
 
@@ -41,6 +42,9 @@ unsigned int FrameCount = 0;
 GLuint VaoId, VboId[4];
 GLuint VertexShaderId, FragmentShaderId, ProgramId, ColorId;
 GLint UniformId, ProjectionID, ModelID, ViewID;
+GLint tex_loc;
+GLuint TextureArray[1];
+
 
 // Mouse Tracking Variables
 int startX, startY, tracking = 0;
@@ -129,6 +133,16 @@ void newrenderScene(void) {
 	glUseProgram(shader.getProgramIndex());
 
 	game.draw(core);
+
+	//FIXME: just a test
+	//Associar os Texture Units aos Objects Texture
+	//stone.tga loaded in TU0; checker.tga loaded in TU1;  lightwood.tga loaded in TU2
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
+
+	//Indicar aos tres samplers do GLSL quais os Texture Units a serem usados
+	glUniform1i(tex_loc, 0);
 
 	//swap buffers
 	glutSwapBuffers();
@@ -467,6 +481,10 @@ GLuint setupShaders() {
 	shader.setVertexAttribName(VSShaderLib::VERTEX_COORD_ATTRIB, "position");
 	shader.setVertexAttribName(VSShaderLib::NORMAL_ATTRIB, "normal");
 	shader.setVertexAttribName(VSShaderLib::TEXTURE_COORD_ATTRIB, "texCoord");
+
+	//FIXME: hardcode
+	tex_loc = glGetUniformLocation(shader.getProgramIndex(), "texmap");
+	
 	shader.prepareProgram();
 
 	shader.setUniform("texUnit", 0);
@@ -521,6 +539,9 @@ void init(int argc, char* argv[]) {
 	setupLight();
 	setupSurfRev();
 	setupCallbacks();
+
+	glGenTextures(1, TextureArray);
+	TGA_Texture(TextureArray, "lightwood.tga", 0);
 }
 
 int main(int argc, char* argv[]) {
