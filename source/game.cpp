@@ -106,9 +106,10 @@ namespace domain {
 			turtles.at(i)->tick();
 	
 		for(unsigned int i = 0; i < cars.size(); i++){
-			if(testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())){
-				delete frog;
-				frog = new Frog(10.0, 0.0, 1.0, 0.01);
+			if(testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB()) == true){
+				//delete frog;
+				//frog = new Frog(10.0, 0.0, 1.0, 0.01);
+				std::cout << "OLAAAAAAAAAAAA" << std::endl;
 			}
 				
 		}

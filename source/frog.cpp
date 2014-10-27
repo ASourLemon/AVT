@@ -20,7 +20,7 @@ float Frog::eyeShininess = 100;
 
 Frog::Frog(float x, float y, float z, float speed) : x(x), y(y), z(z), speed(speed), t1(0), t2(0), t3(0), t4(0), deltaT(0) {
 	created = false;
-	float center[3] = { x, y, z};
+	float center[3] = { this->x, this->y, this->z};
 	Sphere = new BoxSphere(center, 2.6);
 }
 
