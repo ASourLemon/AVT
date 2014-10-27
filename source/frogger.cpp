@@ -28,8 +28,6 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-
-
 #define FPS 60
 #define VERTEX_COORD_ATTRIB_ORIGINAL 0
 #define NORMAL_ATTRIB_ORIGINAL 1
@@ -43,8 +41,7 @@ GLuint VaoId, VboId[4];
 GLuint VertexShaderId, FragmentShaderId, ProgramId, ColorId;
 GLint UniformId, ProjectionID, ModelID, ViewID;
 GLint tex_loc;
-GLuint TextureArray[1];
-
+GLuint TextureArray[3];
 
 // Mouse Tracking Variables
 int startX, startY, tracking = 0;
@@ -94,27 +91,28 @@ void checkOpenGLError(std::string error) {
 /////////////////////////////////////////////////////////////////////// SCENE
 ///////////////////////////////////////////////////////////////////////
 
-void newrenderScene(void) {
+void renderScene(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	core->loadIdentity(VSMathLib::VIEW);
 	core->loadIdentity(VSMathLib::MODEL);
 	// set camera
 
-	if(CAM_TYPE == CAM_FROG){
+	if (CAM_TYPE == CAM_FROG) {
 
 		float fx = game.getFrogX();
 		float fy = game.getFrogY();
 		float fz = game.getFrogZ();
-		
-		printf("fx:%f, fy%f, fz%f\n", fx, fy, fz); 
 
-		if (tracking == 1){
-			core->lookAt(fx, fy + 3.5, fz - 2.5,  fx + camX , (fy + camY * -0.5), (fz + camZ * 0.5), 0, 1, 0);
+		printf("fx:%f, fy%f, fz%f\n", fx, fy, fz);
 
-		}
-		else {
-			core->lookAt(fx + camX, fy + camY*-0.5 + 2.5, fz - camZ, fx, fy, fz, 0, 1, 0);
+		if (tracking == 1) {
+			core->lookAt(fx, fy + 3.5, fz - 2.5, fx + camX, (fy + camY * -0.5),
+					(fz + camZ * 0.5), 0, 1, 0);
+
+		} else {
+			core->lookAt(fx + camX, fy + camY * -0.5 + 2.5, fz - camZ, fx, fy,
+					fz, 0, 1, 0);
 		}
 
 	} else {
@@ -122,29 +120,15 @@ void newrenderScene(void) {
 		core->lookAt(10, 10, 15.0, 10, 0, 15.0, 0, 0, 1);
 	}
 
-
-	float l0_dir[4] = {0.0f, 1.0f, 0.0f, 0.0f};
+	// FIXME: hard code directional light
+	float l0_dir[4] = { 1.0f, 1.0f, 1.0f, 0.0f };
 	float res[4];
 	core->multMatrixPoint(VSMathLib::VIEW, l0_dir, res);
 	shader.setBlockUniform("Lights", "l_dir", res);
-	
+
 	//lightManager.drawLight(core);
-	// use our shader
 	glUseProgram(shader.getProgramIndex());
-
 	game.draw(core);
-
-	//FIXME: just a test
-	//Associar os Texture Units aos Objects Texture
-	//stone.tga loaded in TU0; checker.tga loaded in TU1;  lightwood.tga loaded in TU2
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
-
-	//Indicar aos tres samplers do GLSL quais os Texture Units a serem usados
-	glUniform1i(tex_loc, 0);
-
-	//swap buffers
 	glutSwapBuffers();
 }
 
@@ -155,19 +139,13 @@ void newrenderScene(void) {
 void display() {
 	++FrameCount;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	newrenderScene();
-
-}
-
-void idle() {
-	//printf("Doing nothing!\n");
-	//glutPostRedisplay();
+	renderScene();
 }
 
 void reshape(int w, int h) {
 	float ratio;
-	// Prevent a divide by zero, when window is too short
-	// (you cant make a window of zero width).
+
+	// Prevents a divide by zero, when window is too short
 	if (h == 0)
 		h = 1;
 
@@ -177,16 +155,18 @@ void reshape(int w, int h) {
 	ratio = (1.0f * w) / h;
 	core->loadIdentity(VSMathLib::PROJECTION);
 
-	if(CAM_TYPE == CAM_ORTHO){
-		if(ratio > 1){
-			core->ortho(-8.0f*ratio, 8.0f*ratio, -16.0f, 18.0f, 1.6f, 12.0f);
+	if (CAM_TYPE == CAM_ORTHO) {
+		if (ratio > 1) {
+			core->ortho(-8.0f * ratio, 8.0f * ratio, -16.0f, 18.0f, 1.6f,
+					12.0f);
 
-		}else {
-			core->ortho(-8.0f, 8.0f, -16.0f/ratio, 18.0f/ratio, 1.6f, 12.0f);
+		} else {
+			core->ortho(-8.0f, 8.0f, -16.0f / ratio, 18.0f / ratio, 1.6f,
+					12.0f);
 
 		}
 
-	}else{
+	} else {
 
 		core->perspective(125.0f, ratio, 0.6f, 40.0f);
 	}
@@ -195,9 +175,10 @@ void reshape(int w, int h) {
 }
 
 void timer(int value) {
-	if(nTimer == FPS){
+	if (nTimer == FPS) {
 		std::ostringstream oss;
-		oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x" << WinY << ")";
+		oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x"
+				<< WinY << ")";
 		std::string s = oss.str();
 		glutSetWindow(WindowHandle);
 		glutSetWindowTitle(s.c_str());
@@ -209,7 +190,7 @@ void timer(int value) {
 	processKeys();
 
 	glutPostRedisplay();
-	glutTimerFunc(1000/FPS, timer, 0);
+	glutTimerFunc(1000 / FPS, timer, 0);
 }
 
 void processMouseButtons(int button, int state, int xx, int yy) {
@@ -258,88 +239,89 @@ void processMouseMotion(int xx, int yy) {
 	rAux = r;
 	/*}
 
-	// right mouse button: zoom
-	else if (tracking == 2) {
+	 // right mouse button: zoom
+	 else if (tracking == 2) {
 
-		alphaAux = alpha;
-		betaAux = beta;
-		rAux = r + (deltaY * 0.01f);
-		if (rAux < 0.1f)
-			rAux = 0.1f;
-	}*/
+	 alphaAux = alpha;
+	 betaAux = beta;
+	 rAux = r + (deltaY * 0.01f);
+	 if (rAux < 0.1f)
+	 rAux = 0.1f;
+	 }*/
 
 	camX = rAux * sin(alphaAux * 3.14f / 180.0f)
-	* cos(betaAux * 3.14f / 180.0f);
+			* cos(betaAux * 3.14f / 180.0f);
 	camZ = rAux * cos(alphaAux * 3.14f / 180.0f)
-	* cos(betaAux * 3.14f / 180.0f);
+			* cos(betaAux * 3.14f / 180.0f);
 	camY = rAux * sin(betaAux * 3.14f / 180.0f);
 
-	printf("camX:%f , camY:%f, camZ:%f\n", camX, camY,camZ);
+	printf("camX:%f , camY:%f, camZ:%f\n", camX, camY, camZ);
 }
 
-void keyPressed (unsigned char key, int x, int y) {
+void keyPressed(unsigned char key, int x, int y) {
 	keyStates[key] = true; // Set the state of the current key to pressed
 }
 
-void keyUp (unsigned char key, int x, int y) {
+void keyUp(unsigned char key, int x, int y) {
 	keyStates[key] = false; // Set the state of the current key to not pressed
 }
 
-void processKeys(){
+void processKeys() {
 
-	if(keyStates['c']){
+	if (keyStates['c']) {
 		printf("Camera Spherical Coordinates (%f, %f, %f)\n", alpha, beta, r);
 
-	}if(keyStates['1']){
+	}
+	if (keyStates['1']) {
 		CAM_TYPE = CAM_ORTHO;
 		reshape(WinX, WinY);
 	}
 
-	if(keyStates['2']){
+	if (keyStates['2']) {
 		CAM_TYPE = CAM_PRESP;
 		reshape(WinX, WinY);
 	}
 
-	if(keyStates['3']){
+	if (keyStates['3']) {
 		CAM_TYPE = CAM_FROG;
 		reshape(WinX, WinY);
 	}
 
-	if(keyStates['m']){
+	if (keyStates['m']) {
 		glEnable(GL_MULTISAMPLE);
 	}
 
-	if(keyStates['n']){
+	if (keyStates['n']) {
 		glDisable(GL_MULTISAMPLE);
 	}
-	if(keyStates['l']){
-		if(lightManager.isOn()){
+	if (keyStates['l']) {
+		if (lightManager.isOn()) {
 			lightManager.lightsOff();
-		}else{
+		} else {
 			lightManager.lightsOn();
 		}
 	}
-	if(keyStates['q']){
+	if (keyStates['q']) {
 		game.move_frog(0);
-	}else{
+	} else {
 		game.setFrogT1(glutGet(GLUT_ELAPSED_TIME));
 	}
 
-	if(keyStates['a']){
+	if (keyStates['a']) {
 		game.move_frog(1);
-	}else{
+	} else {
 		game.setFrogT2(glutGet(GLUT_ELAPSED_TIME));
 	}
 
-	if(keyStates['o']){
+	if (keyStates['o']) {
 		game.move_frog(2);
-	}else{
+	} else {
 		game.setFrogT3(glutGet(GLUT_ELAPSED_TIME));
 	}
 
-	if(keyStates['p']){
+	if (keyStates['p']) {
 		game.move_frog(3);
-	}else{
+	} else {
 		game.setFrogT4(glutGet(GLUT_ELAPSED_TIME));
 	}
 }
@@ -350,12 +332,10 @@ void processKeys(){
 
 void setupCallbacks() {
 	glutDisplayFunc(display);
-	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
 	glutTimerFunc(0, timer, 0);
 	glutKeyboardFunc(keyPressed);
 	glutKeyboardUpFunc(keyUp);
-
 
 	glutMouseFunc(processMouseButtons);
 	glutMotionFunc(processMouseMotion);
@@ -417,7 +397,7 @@ void setupCore() {
 	core->setUniformName(VSMathLib::VIEW_MODEL, "m_viewModel");
 	//Nao sabia onde por isto, a ideia �� isto ser feito apenas uma vez
 	keyStates = new bool[256];
-	for(int i=0; i<256; i++){
+	for (int i = 0; i < 256; i++) {
 		keyStates[i] = false;
 	}
 
@@ -451,7 +431,6 @@ GLuint setupShaders() {
 #define _PER_PIXEL		3
 #define _POINT			4	//lampada
 #define _SPOT			5	//cone
-
 #define _LIGHT 2
 
 #if (_LIGHT == _DIF)
@@ -462,7 +441,8 @@ GLuint setupShaders() {
 	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/dirdifamb.frag");
 #elif (_LIGHT == _DIF_AMB_SPEC)
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdifambspec.vert");
-	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/dirdifambspec.frag");
+	shader.loadShader(VSShaderLib::FRAGMENT_SHADER,
+			"shaders/dirdifambspec.frag");
 #elif (_LIGHT == _PER_PIXEL)
 	shader.loadShader(VSShaderLib::VERTEX_SHADER,
 			"shaders/pixeldirdifambspec.vert");
@@ -482,9 +462,6 @@ GLuint setupShaders() {
 	shader.setVertexAttribName(VSShaderLib::NORMAL_ATTRIB, "normal");
 	shader.setVertexAttribName(VSShaderLib::TEXTURE_COORD_ATTRIB, "texCoord");
 
-	//FIXME: hardcode
-	tex_loc = glGetUniformLocation(shader.getProgramIndex(), "texmap");
-	
 	shader.prepareProgram();
 
 	shader.setUniform("texUnit", 0);
@@ -505,26 +482,26 @@ void setupSurfRev() {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
-void setupLight(){
-	lightManager.init(&shader);
-	float l0_cut = 0.3f;
-	float l0_pos[4] = {15.0f, 2.0f, 10.0f, 1.0f};	//WORLD COORDINATES!!
-	float l0_dir[4] = {0.0f, 0.0f, -1.0f, 0.0f};
-	lightManager.addLight(l0_pos, l0_dir, l0_cut);
-	
-	float l1_cut = 0.3f;
-	float l1_pos[4] = { 5.0f, 2.0f, 10.0f, 1.0f };
-	float l1_dir[4] = { 0.0f, 0.0f, -1.0f, 0.0f };
-	//lightManager.addLight(l1_pos, l1_dir, l1_cut);
-	
-	float l2_cut = 0.3f;
-	float l2_pos[4] = { 6.0f, 2.0f, 30.0f, 1.0f };
-	float l2_dir[4] = { 0.0f, 0.0f, -1.0f, 0.0f };
-	//lightManager.addLight(l2_pos, l2_dir, l2_cut);
-	
-	
-	int n_lights = lightManager.getNumLights();
-	shader.setUniform("n_lights", &n_lights);
+void setupLight() {/*
+ lightManager.init(&shader);
+ float l0_cut = 0.3f;
+ float l0_pos[4] = {15.0f, 2.0f, 10.0f, 1.0f};	//WORLD COORDINATES!!
+ float l0_dir[4] = {1.0f, 1.0f, -1.0f, 0.0f};
+ //	lightManager.addLight(l0_pos, l0_dir, l0_cut);
+
+ float l1_cut = 0.3f;
+ float l1_pos[4] = { 5.0f, 2.0f, 10.0f, 1.0f };
+ float l1_dir[4] = { 0.0f, 0.0f, -1.0f, 0.0f };
+ //lightManager.addLight(l1_pos, l1_dir, l1_cut);
+
+ float l2_cut = 0.3f;
+ float l2_pos[4] = { 6.0f, 2.0f, 30.0f, 1.0f };
+ float l2_dir[4] = { 0.0f, 0.0f, -1.0f, 0.0f };
+ //lightManager.addLight(l2_pos, l2_dir, l2_cut);
+
+
+ int n_lights = lightManager.getNumLights();
+ shader.setUniform("n_lights", &n_lights);*/
 }
 
 void init(int argc, char* argv[]) {
@@ -540,8 +517,17 @@ void init(int argc, char* argv[]) {
 	setupSurfRev();
 	setupCallbacks();
 
-	glGenTextures(1, TextureArray);
-	TGA_Texture(TextureArray, "lightwood.tga", 0);
+	glGenTextures(3, TextureArray);
+	TGA_Texture(TextureArray, "textures/lightwood.tga", 0);
+	TGA_Texture(TextureArray, "textures/road.tga", 1);
+	TGA_Texture(TextureArray, "textures/water.tga", 2);
+
+	//FIXME: hardcode. right place?
+//		tex_loc = glGetUniformLocation(shader.getProgramIndex(), "texmap");
+//		glUniform1i(tex_loc, 0);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
 }
 
 int main(int argc, char* argv[]) {
