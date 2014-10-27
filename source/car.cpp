@@ -2,29 +2,41 @@
 
 namespace domain {
 
+float Car::driverAmb[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
+float Car::driverDif[4] = { 0.4f, 0.4f, 0.4f, 1.0f };
+float Car::driverSpec[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+float Car::driverShininess = 100;
+
+float Car::loadAmb[4] = { 0.4f, 0.1f, 0.1f, 1.0f };
+float Car::loadDif[4] = { 0.5f, 0.3f, 0.3f, 1.0f };
+float Car::loadSpec[4] = { 0.6f, 0.4f, 0.4f, 1.0f };
+float Car::loadShininess = 10;
+
+float Car::tireAmb[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+float Car::tireDif[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+float Car::tireSpec[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+float Car::tireShininess = 100;
+
+
 Car::Car(float x, float y, float z, int direction, float velocity) :
 		x(x), y(y), z(z), direction(direction), speed(velocity) {
 	created = false;
-	VSResSurfRevLib umaVarSemNome;
-	umaVarSemNome.createCube(1);
+	VSResSurfRevLib load;
+	load.createCube(1);
 
-	//FIXME: Fix these vector names
-	float f[4] = { 0.8f, 0.6f, 0.4f, 1.0f };
-	float f2[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
-	umaVarSemNome.setMaterialBlockName("Materials");
-	umaVarSemNome.setColor(VSResourceLib::DIFFUSE, f);
-	umaVarSemNome.setColor(VSResourceLib::AMBIENT, f2);
+	load.setMaterialBlockName("Materials");
+	load.setColor(VSResourceLib::DIFFUSE, loadDif);
+	load.setColor(VSResourceLib::AMBIENT, loadAmb);
+	load.setColor(VSResourceLib::SPECULAR, loadSpec);
+	load.setColor(VSResourceLib::SHININESS, &loadShininess);
 
-	components.push_front(umaVarSemNome);
+	components.push_front(load);
 }
 
 Car::~Car() {
 }
 
 void Car::draw(VSMathLib* core) {
-	float tireAmbient[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
-	float tireDiffuse[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
-	float tireSpec[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
 
 	std::list<VSResSurfRevLib>::iterator iter;
 	for (iter = components.begin(); iter != components.end(); iter++) {
@@ -36,14 +48,14 @@ void Car::draw(VSMathLib* core) {
 	}
 
 	if (!created) {
-		body.createCube(1.0f);
+		driver.createCube(1.0f);
 	}
 
-	body.setMaterialBlockName("Materials");
-	float f3[4] = { 0.8f, 0.6f, 0.4f, 1.0f };
-	body.setColor(VSResourceLib::DIFFUSE, f3);
-	float f4[4] = { 0.8f, 0.0f, 0.0f, 1.0f };
-	body.setColor(VSResourceLib::AMBIENT, f4);
+	driver.setMaterialBlockName("Materials");
+	driver.setColor(VSResourceLib::DIFFUSE, driverDif);
+	driver.setColor(VSResourceLib::AMBIENT, driverAmb);
+	driver.setColor(VSResourceLib::SPECULAR, driverSpec);
+	driver.setColor(VSResourceLib::SHININESS, &driverShininess);
 
 	core->pushMatrix(VSMathLib::MODEL);
 	if (direction == DIR_RIGHT)
@@ -51,13 +63,14 @@ void Car::draw(VSMathLib* core) {
 	else
 		core->translate(x + 3.0f, y, z);
 	core->scale(0.7f, 0.7f, 0.9f);
-	body.render();
+	driver.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	tire.setMaterialBlockName("Materials");
 	tire.setColor(VSResourceLib::SPECULAR, tireSpec);
-	tire.setColor(VSResourceLib::DIFFUSE, tireDiffuse);
-	tire.setColor(VSResourceLib::AMBIENT, tireAmbient);
+	tire.setColor(VSResourceLib::DIFFUSE, tireDif);
+	tire.setColor(VSResourceLib::AMBIENT, tireAmb);
+	tire.setColor(VSResourceLib::SHININESS, &tireShininess);
 	//pneus - 1
 
 	if (!created) {

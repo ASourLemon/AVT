@@ -1,6 +1,5 @@
 #ifndef INCLUDE_RIVERLOG_H_
 #define INCLUDE_RIVERLOG_H_
-
 #include "drawable.h"
 
 #define LOG_RADIOS 0.5f
@@ -8,8 +7,16 @@
 
 namespace domain {
 
+
+
 class Riverlog : public Drawable {
 private:
+	static float logAmbient[4];
+	static float logDiffuse[4];
+	static float logSpec[4];
+	static float logShininess;
+
+protected:
 	VSResSurfRevLib body;
 	float x;
 	float y;
@@ -26,6 +33,6 @@ public:
 
 };
 
-} /* namespace domain */
+}
 
-#endif /* INCLUDE_RIVERLOG_H_ */
+#endif

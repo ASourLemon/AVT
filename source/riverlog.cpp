@@ -9,15 +9,21 @@
 
 namespace domain {
 
+float Riverlog::logAmbient[4] = { 0.35f, 0.16f, 0.14f, 1.0f };
+float Riverlog::logDiffuse[4] = { 0.40f, 0.21f, 0.19f, 1.0f };
+float Riverlog::logSpec[4] = { 0.6f, 0.6f, 0.6f, 1.0f };
+float Riverlog::logShininess = 100;
+
+
 Riverlog::Riverlog(float x, float y, float z, int quality, int direction, float velocity) : x(x), y(y), z(z), direction(direction), speed(velocity) {
 
 
 	body.createCylinder(LOG_HEIGHT, LOG_RADIOS, quality);
 	body.setMaterialBlockName("Materials");
-	float f[4] = {0.4f, 0.2f, 0.0f, 1.0f};
-	body.setColor(VSResourceLib::DIFFUSE, f);
-	float f2[4] = {0.4f, 0.2f, 0.0f, 1.0f};
-	body.setColor(VSResourceLib::AMBIENT, f2);
+	body.setColor(VSResourceLib::SPECULAR, logSpec);
+	body.setColor(VSResourceLib::DIFFUSE, logDiffuse);
+	body.setColor(VSResourceLib::AMBIENT,logAmbient);
+	body.setColor(VSResourceLib::SHININESS, &logShininess);;
 
 }
 

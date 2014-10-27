@@ -13,8 +13,6 @@ namespace domain {
 class Frog : public Drawable{
 	
 private:
-
-	/*Materials FIXME: Please, change my location*/
 	static float bodyAmbient[4];
 	static float bodyDiffuse[4];
 	static float bodySpec[4];
@@ -29,14 +27,14 @@ private:
 	static float eyeDiffuse[4];
 	static float eyeSpec[4];
 	static float eyeShininess;
-
+	
+protected:
 	VSResSurfRevLib body, head, eye;
 	bool created;
 	int t1, t2, t3, t4, deltaT; //tempos para movimento
 	float x, y, z, speed;
 	int direction;
 	int map_limit;
-
 
 public:
 	Frog(float x, float y, float z, float speed);
