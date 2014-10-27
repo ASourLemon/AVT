@@ -37,15 +37,24 @@ namespace domain {
 		car4 = new Car(-6.0, 0.3, 10.0, DIR_RIGHT, 0.2);
 		game_objects.push_back(car4);
 
-		rlog1 = new Riverlog(2.0, -0.5, 17.0, 50, DIR_LEFT, 0.2);
+		rlog1 = new Riverlog(2.0, -0.5, 17.0, 10, DIR_LEFT, 0.2);
 		game_objects.push_back(rlog1);
-		rlog2 = new Riverlog(7.0, -0.5, 19.0, 50, DIR_RIGHT, 0.2);
-		game_objects.push_back(rlog2);
-		rlog3 = new Riverlog(2.0, -0.5, 21.0, 50, DIR_LEFT, 0.2);
+		
+		//rlog2 = new Riverlog(7.0, -0.5, 19.0, 10, DIR_RIGHT, 0.2);
+		//game_objects.push_back(rlog2);
+		
+		rlog3 = new Riverlog(2.0, -0.5, 21.0, 10, DIR_LEFT, 0.2);
 		game_objects.push_back(rlog3);
-		rlog4 = new Riverlog(7.0, -0.5, 23.0, 50, DIR_RIGHT, 0.2);
-		game_objects.push_back(rlog4);
-
+		
+		//rlog4 = new Riverlog(7.0, -0.5, 23.0, 10, DIR_RIGHT, 0.2);
+		//game_objects.push_back(rlog4);
+		
+		turtle1 = new Turtle(10.0, -.5, 19.0, DIR_RIGHT, 0.2);
+		game_objects.push_back(turtle1);
+		
+		turtle2 = new Turtle(10.0, -.5, 23.0, DIR_LEFT, 0.2);
+		game_objects.push_back(turtle2);
+				
 		frog->setMaplimit(map->getMaplimit());
 	}
 

@@ -47,7 +47,7 @@ GLuint TextureArray[3];
 int startX, startY, tracking = 0;
 // Camera Spherical Coordinates
 float alpha = 39.0f, beta = 51.0f;
-float r = 10.0f;
+float r = 5.0f;
 // Camera Position
 float camX = 0.0, camY = 0.0, camZ = 2.0;
 
@@ -210,7 +210,7 @@ void processMouseButtons(int button, int state, int xx, int yy) {
 			alpha -= (xx - startX);
 			beta += (yy - startY);
 		} else if (tracking == 2) {
-			r += (yy - startY) * 0.01f;
+			//r += (yy - startY) * 0.01f;
 			if (r < 0.1f)
 				r = 0.1f;
 		}
@@ -306,7 +306,12 @@ void processKeys() {
 	} else {
 		game.setFrogT1(glutGet(GLUT_ELAPSED_TIME));
 	}
-
+	if (keyStates['w']) {
+		r+= 0.1;
+	}
+	if (keyStates['s']) {
+		r-= 0.1;
+	}
 	if (keyStates['a']) {
 		game.move_frog(1);
 	} else {

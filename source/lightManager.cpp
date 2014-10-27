@@ -69,6 +69,7 @@ void LightManager::drawLight(VSMathLib* core){
 					glGetUniformLocation(shader->getProgramIndex(), l_spotDirNames[l]),
 					1,
 					lights[l].l_dir);
+					
 			//send l_spot_cut
 			glProgramUniform1fv(shader->getProgramIndex(), 
 					glGetUniformLocation(shader->getProgramIndex(), l_spotCutNames[l]), 

@@ -7,6 +7,7 @@
 #include "../include/frog.h"
 #include "../include/car.h"
 #include "../include/riverlog.h"
+#include "../include/turtle.h"
 
 namespace domain {
 
@@ -24,6 +25,9 @@ private:
 	Riverlog* rlog2;
 	Riverlog* rlog3;
 	Riverlog* rlog4;
+	
+	Turtle* turtle1;
+	Turtle* turtle2;	
 
 
 public:
