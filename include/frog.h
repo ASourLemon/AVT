@@ -11,8 +11,25 @@
 namespace domain {
 
 class Frog : public Drawable{
-
+	
 private:
+
+	/*Materials FIXME: Please, change my location*/
+	float bodyAmbient[4] = { 0.2f, 0.4f, 0.2f, 1.0f };
+	float bodyDiffuse[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
+	float bodySpec[4] = { 0.3f, 0.3f, 0.3f, 1.0f };
+	float bodyShininess = 100;
+
+	float headAmbient[4] = { 0.2f, 0.4f, 0.2f, 1.0f };
+	float headDiffuse[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
+	float headSpec[4] = { 0.3f, 0.3f, 0.3f, 1.0f };
+	float headShininess = 100;
+
+	float eyeAmbient[4] = { 0.6f, 0.6f, 0.6f, 1.0f };
+	float eyeDiffuse[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
+	float eyeSpec[4] = { 0.4f, 0.4f, 0.4f, 1.0f };
+	float eyeShininess = 100;
+	
 	VSResSurfRevLib body, head, eye;
 	bool created;
 	int t1, t2, t3, t4, deltaT; //tempos para movimento

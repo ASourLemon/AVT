@@ -54,5 +54,9 @@ void main () {
 	// add the specular color when the vertex is lit
 	DataOut.color = max(intensity *  diffuse + spec, ambient);
 
+	/*if(l_dir.y != -1.0){
+		DataOut.color = vec4(0.0);
+	}*/
+
 	gl_Position = m_pvm * position;	
 }

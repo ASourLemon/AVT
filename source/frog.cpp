@@ -11,32 +11,18 @@ namespace domain{
 
 	void Frog::draw(VSMathLib* core){
 
-
-		/*Materials FIXME: Please, change my location*/
-		float bodyAmbient[4] = { 0.2f, 1.0f, 0.2f, 1.0f };
-		float bodyDiffuse[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
-		float bodySpec[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
-
-		float headAmbient[4] = { 0.2f, 1.0f, 0.2f, 1.0f };
-		float headDiffuse[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
-		float headSpec[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
-
-		float eyeAmbient[4] = { 0.5f, 0.2f, 0.2f, 1.0f };
-		float eyeDiffuse[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
-		float eyeSpec[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
-
 		core->pushMatrix(VSMathLib::MODEL);
 		core->translate(x, y, z);
 		core->rotate(180, 0,1,0);
 		core->scale(0.4, 0.4, 0.4);
-
-		//body.render();
+		
 		//corpo
 		core->pushMatrix(VSMathLib::MODEL);
 		body.setMaterialBlockName("Materials");
 		body.setColor(VSResourceLib::SPECULAR, bodySpec);
 		body.setColor(VSResourceLib::DIFFUSE, bodyDiffuse);
 		body.setColor(VSResourceLib::AMBIENT, bodyAmbient);
+		body.setColor(VSResourceLib::SHININESS, &bodyShininess);
 		if (!created) {
 			body.createSphere(2.2, FROG_DIVISIONS);
 		}
@@ -50,7 +36,8 @@ namespace domain{
 		head.setColor(VSResourceLib::SPECULAR, headSpec);
 		head.setColor(VSResourceLib::DIFFUSE, headDiffuse);
 		head.setColor(VSResourceLib::AMBIENT, headAmbient);
-		//cabe�a
+		head.setColor(VSResourceLib::SHININESS, &headShininess);
+		//cabeca
 		core->pushMatrix(VSMathLib::MODEL);
 		if (!created) {
 			head.createSphere(1.5, 9.0);
@@ -64,6 +51,8 @@ namespace domain{
 		eye.setColor(VSResourceLib::SPECULAR, eyeSpec);
 		eye.setColor(VSResourceLib::DIFFUSE, eyeDiffuse);
 		eye.setColor(VSResourceLib::AMBIENT, eyeAmbient);
+		eye.setColor(VSResourceLib::SHININESS, &eyeShininess);
+		
 		//olhos - 1
 		core->pushMatrix(VSMathLib::MODEL);
 		if (!created) {

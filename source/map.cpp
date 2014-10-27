@@ -5,7 +5,7 @@ namespace domain {
 	Map::Map() {
 
 		body.createCube(1.0f);
-		water.createSphere(2.4, 5);
+		water.createSphere(2.4, 10);
 
 		deltaWater = 0;
 		goingLeft = false;
@@ -21,6 +21,9 @@ namespace domain {
 		body.setColor(VSResourceLib::DIFFUSE, d1);
 		float f2[4] = { 0.7f, 0.7f, 0.7f, 1.0f };
 		body.setColor(VSResourceLib::AMBIENT, f2);
+		float rawr[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		body.setColor(VSResourceLib::SPECULAR, rawr);
+		
 		////////////////////////////////////
 		/////////////////////////////////// walls
 		///////////////////////////////////
@@ -95,9 +98,9 @@ namespace domain {
 		core->popMatrix(VSMathLib::MODEL);
 
 		water.setMaterialBlockName("Materials");
-		float d4[4] = { 0.0f, 0.2f, 0.6f, 1.0f };
+		float d4[4] = { 0.2f, 0.2f, 0.75f, 1.0f };
 		water.setColor(VSResourceLib::DIFFUSE, d4);
-		float f6[4] = { 0.0f, 0.2f, 0.6f, 1.0f };
+		float f6[4] = { 0.2f, 0.2f, 0.5f, 1.0f };
 		water.setColor(VSResourceLib::AMBIENT, f6);
 
 
