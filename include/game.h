@@ -14,6 +14,9 @@ namespace domain {
 class Game {
 private:
 	std::vector<Drawable*> game_objects;
+	std::vector<Car*> cars;
+	std::vector<Riverlog*> riverlogs;
+	std::vector<Turtle*> turtles;
 	Frog* frog;
 	Map* map;
 	Car* car1;
@@ -22,12 +25,12 @@ private:
 	Car* car4;
 
 	Riverlog* rlog1;
-	Riverlog* rlog2;
+	//Riverlog* rlog2;
 	Riverlog* rlog3;
-	Riverlog* rlog4;
-	
+	//Riverlog* rlog4;
+
 	Turtle* turtle1;
-	Turtle* turtle2;	
+	Turtle* turtle2;
 
 
 public:
@@ -45,6 +48,9 @@ public:
 	void setFrogT2(int i);
 	void setFrogT3(int i);
 	void setFrogT4(int i);
+
+	float sqDistPointAABB(float* p, BoxAABB *aabb);
+	bool testCircleAABB(BoxSphere *sphere, BoxAABB *aabb);
 };
 
 

@@ -31,9 +31,13 @@ Car::Car(float x, float y, float z, int direction, float velocity) :
 	load.setColor(VSResourceLib::SHININESS, &loadShininess);
 
 	components.push_front(load);
+
+	float center[] = { x, y, z};
+	AABB = new BoxAABB(center, x-2.5f, y-2.5f, x+2.5f, y+2.5f, z-2.5f, z+2.5f);
 }
 
 Car::~Car() {
+	delete AABB;
 }
 
 void Car::draw(VSMathLib* core) {
@@ -66,6 +70,15 @@ void Car::draw(VSMathLib* core) {
 	driver.render();
 	core->popMatrix(VSMathLib::MODEL);
 
+	/*core->pushMatrix(VSMathLib::MODEL);
+	if (direction == DIR_RIGHT)
+		core->translate(x - 0.7f, y, z);
+	else
+		core->translate(x , y, z);
+	core->scale(5.0f, 1.0f, 1.0f);
+	driver.render();
+	core->popMatrix(VSMathLib::MODEL);*/
+
 	tire.setMaterialBlockName("Materials");
 	tire.setColor(VSResourceLib::SPECULAR, tireSpec);
 	tire.setColor(VSResourceLib::DIFFUSE, tireDif);
@@ -80,52 +93,52 @@ void Car::draw(VSMathLib* core) {
 
 	core->pushMatrix(VSMathLib::MODEL);
 	if (direction == DIR_RIGHT)
-		core->translate(x + 1.6, y, z + 0.15f);
+		core->translate(x + 1.6f, y, z + 0.15f);
 	else
-		core->translate(x + 0.7, y, z + 0.15f);
+		core->translate(x + 0.7f, y, z + 0.15f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
 	core->pushMatrix(VSMathLib::MODEL);
 	if (direction == DIR_RIGHT)
-		core->translate(x + 2.3, y, z + 0.15f);
+		core->translate(x + 2.3f, y, z + 0.15f);
 	else
-		core->translate(x + 1.4, y, z + 0.15f);
-	core->rotate(90, 1, 0, 0);
-	tire.render();
-	core->popMatrix(VSMathLib::MODEL);
-
-	core->pushMatrix(VSMathLib::MODEL);
-	if (direction == DIR_RIGHT)
-		core->translate(x + 1.6, y, z + 0.85f);
-	else
-		core->translate(x + 0.7, y, z + 0.85f);
-	core->rotate(90, 1, 0, 0);
-	tire.render();
-	core->popMatrix(VSMathLib::MODEL);
-	core->pushMatrix(VSMathLib::MODEL);
-	if (direction == DIR_RIGHT)
-		core->translate(x + 2.3, y, z + 0.85f);
-	else
-		core->translate(x + 1.4, y, z + 0.85f);
+		core->translate(x + 1.4f, y, z + 0.15f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
 	if (direction == DIR_RIGHT)
-		core->translate(x + 0.1, y, z + 0.15f);
+		core->translate(x + 1.6f, y, z + 0.85f);
 	else
-		core->translate(x + 2.7, y, z + 0.15f);
+		core->translate(x + 0.7f, y, z + 0.85f);
+	core->rotate(90, 1, 0, 0);
+	tire.render();
+	core->popMatrix(VSMathLib::MODEL);
+	core->pushMatrix(VSMathLib::MODEL);
+	if (direction == DIR_RIGHT)
+		core->translate(x + 2.3f, y, z + 0.85f);
+	else
+		core->translate(x + 1.4f, y, z + 0.85f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
 	if (direction == DIR_RIGHT)
-		core->translate(x + 0.1, y, z + 0.85f);
+		core->translate(x + 0.1f, y, z + 0.15f);
 	else
-		core->translate(x + 2.7, y, z + 0.85f);
+		core->translate(x + 2.7f, y, z + 0.15f);
+	core->rotate(90, 1, 0, 0);
+	tire.render();
+	core->popMatrix(VSMathLib::MODEL);
+
+	core->pushMatrix(VSMathLib::MODEL);
+	if (direction == DIR_RIGHT)
+		core->translate(x + 0.1f, y, z + 0.85f);
+	else
+		core->translate(x + 2.7f, y, z + 0.85f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);

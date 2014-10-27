@@ -5,8 +5,8 @@
 namespace domain {
 	
 	class BoxAABB{
-
-		BoxAABB(float center[3], float xmin, float ymin, float xmax, float ymax, float zmin, float zmax);
+	public:
+		BoxAABB(float *center, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
 		~BoxAABB();
 
 		float get_x(){return *_center;}
@@ -21,7 +21,7 @@ namespace domain {
      
 		private:
  
-		float *_center; //(x, y, z)
+		float _center[3]; //(x, y, z)
 		float _xmin, _ymin, _xmax, _ymax, _zmin, _zmax; //Diferença do centro para os Xs e Ys max e min, varia com cada objecto
  
 

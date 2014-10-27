@@ -2,6 +2,7 @@
 #define INCLUDE_FROG_H_
 
 #include "drawable.h"
+#include "BoxSphere.h"
 #include <GL/freeglut.h>
 #include <iostream>
 
@@ -35,6 +36,7 @@ protected:
 	float x, y, z, speed;
 	int direction;
 	int map_limit;
+	BoxSphere *Sphere;
 
 public:
 	Frog(float x, float y, float z, float speed);
@@ -50,6 +52,8 @@ public:
 	inline void setT3(int i){t3 = i;}
 	inline void setT4(int i){t4 = i;}
 	inline void setMaplimit(int i){map_limit = i;}
+
+	BoxSphere * get_Sphere(){return Sphere;}
 	//void setT2(int i){t2 = i;}
 	//void setT3(int i){t3 = i;}
 	//void setT4(int i){t4 = i;}

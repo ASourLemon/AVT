@@ -20,9 +20,13 @@ float Frog::eyeShininess = 100;
 
 Frog::Frog(float x, float y, float z, float speed) : x(x), y(y), z(z), speed(speed), t1(0), t2(0), t3(0), t4(0), deltaT(0) {
 	created = false;
+	float center[3] = { x, y, z};
+	Sphere = new BoxSphere(center, 2.6);
 }
 
-Frog::~Frog(){}
+Frog::~Frog(){
+	delete Sphere;
+}
 
 void Frog::draw(VSMathLib* core){
 
@@ -85,7 +89,14 @@ void Frog::draw(VSMathLib* core){
 	eye.render();
 	core->popMatrix(VSMathLib::MODEL);
 	core->popMatrix(VSMathLib::MODEL);
-
+	
+	/*core->pushMatrix(VSMathLib::MODEL);
+	
+	core->scale(4.3, 4.3, 4.3);
+	core->translate(0.0,0.2,-0.15);
+	eye.render();
+	core->popMatrix(VSMathLib::MODEL);
+	core->popMatrix(VSMathLib::MODEL);*/
 
 }
 

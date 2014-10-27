@@ -11,7 +11,7 @@ namespace domain {
 			BoxSphere( float center[3], float raio);
 			~BoxSphere();
      
-			float get_center(){return *_center;}
+			float* get_center(){return _center;}
 			//float get_y(){return *y;}
  
 			float get_raio(){return _raio;}

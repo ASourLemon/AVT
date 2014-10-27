@@ -2,6 +2,7 @@
 #define INCLUDE_CAR_H_
 
 #include "drawable.h"
+#include "BoxAABB.h"
 
 namespace domain {
 class Car: public Drawable {
@@ -31,12 +32,14 @@ protected:
 	float speed;
 	int direction;
 	bool created;
+	BoxAABB *AABB;
 
 public:
 	Car(float x, float y, float z, int direction, float velocity);
 	~Car();
 	void draw(VSMathLib* core);
 	void tick();
+	BoxAABB * get_AABB(){return AABB;}
 
 };
 
