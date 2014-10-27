@@ -432,7 +432,7 @@ GLuint setupShaders() {
 #define _POINT			4	//lampada
 #define _SPOT			5	//cone
 
-#define _LIGHT 5
+#define _LIGHT 4
 
 #if (_LIGHT == _DIF)
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdif.vert");
@@ -484,19 +484,19 @@ void setupSurfRev() {
 void setupLight(){
 	lightManager.init(&shader);
 	float l0_cut = 0.3f;
-	float l0_pos[4] = {15.0f, 5.0f, 10.0f, 1.0f};	//WORLD COORDINATES!!
+	float l0_pos[4] = {15.0f, 2.0f, 10.0f, 1.0f};	//WORLD COORDINATES!!
 	float l0_dir[4] = {0.0f, 0.0f, -1.0f, 0.0f};
 	lightManager.addLight(l0_pos, l0_dir, l0_cut);
 	
-	float l1_cut = 0.00001f;
-	float l1_pos[4] = { 5.0f, 5.0f, 10.0f, 1.0f };
+	float l1_cut = 0.3f;
+	float l1_pos[4] = { 5.0f, 2.0f, 10.0f, 1.0f };
 	float l1_dir[4] = { 0.0f, 0.0f, -1.0f, 0.0f };
 	lightManager.addLight(l1_pos, l1_dir, l1_cut);
 	
 	float l2_cut = 0.3f;
-	float l2_pos[4] = { 6.0f, 3.0f, -7.0f, 1.0f };
-	float l2_dir[4] = { 0.0f, -1.0f, 0.0f, 0.0f };
-	//lightManager.addLight(l2_pos, l2_dir, l2_cut);
+	float l2_pos[4] = { 6.0f, 2.0f, 30.0f, 1.0f };
+	float l2_dir[4] = { 0.0f, 0.0f, -1.0f, 0.0f };
+	lightManager.addLight(l2_pos, l2_dir, l2_cut);
 	
 	
 	int n_lights = lightManager.getNumLights();
