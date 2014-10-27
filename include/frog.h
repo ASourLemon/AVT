@@ -28,6 +28,7 @@ private:
 	static float eyeDiffuse[4];
 	static float eyeSpec[4];
 	static float eyeShininess;
+	BoxSphere *Sphere;
 	
 protected:
 	VSResSurfRevLib body, head, eye;
@@ -36,7 +37,7 @@ protected:
 	float x, y, z, speed;
 	int direction;
 	int map_limit;
-	BoxSphere *Sphere;
+	
 
 public:
 	Frog(float x, float y, float z, float speed);
@@ -54,9 +55,6 @@ public:
 	inline void setMaplimit(int i){map_limit = i;}
 
 	BoxSphere * get_Sphere(){return Sphere;}
-	//void setT2(int i){t2 = i;}
-	//void setT3(int i){t3 = i;}
-	//void setT4(int i){t4 = i;}
 };
 
 }

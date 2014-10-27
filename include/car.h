@@ -21,6 +21,7 @@ private:
 	static float tireDif[4];
 	static float tireSpec[4];
 	static float tireShininess;
+	BoxAABB *AABB;
 
 protected:
 	std::list<VSResSurfRevLib> components;
@@ -32,7 +33,7 @@ protected:
 	float speed;
 	int direction;
 	bool created;
-	BoxAABB *AABB;
+	
 
 public:
 	Car(float x, float y, float z, int direction, float velocity);

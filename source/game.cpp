@@ -25,10 +25,10 @@ namespace domain {
 
 	void Game::init(){
 		frog = new Frog(10.0, 0.0, 1.0, 0.01);
-		game_objects.push_back(frog);
+		//game_objects.push_back(frog);
 
 		map = new Map();
-		game_objects.push_back(map);
+		//game_objects.push_back(map);
 
 		car1 = new Car(-4.0, 0.3, 6.0, DIR_LEFT, 0.2);
 		cars.push_back(car1);
@@ -58,8 +58,10 @@ namespace domain {
 
 	void Game::draw(VSMathLib* core){
 
-		for (unsigned int i = 0; i < game_objects.size(); i++)
-			game_objects.at(i)->draw(core);
+		//for (unsigned int i = 0; i < game_objects.size(); i++)
+			//game_objects.at(i)->draw(core);
+		frog->draw(core);
+		map->draw(core);
 		for (unsigned int i = 0; i < cars.size(); i++)
 			cars.at(i)->draw(core);
 		for (unsigned int i = 0; i < riverlogs.size(); i++)
@@ -91,8 +93,11 @@ namespace domain {
 
 	void Game::tick(){
 
-		for (unsigned int i = 0; i < game_objects.size(); i++)
-			game_objects.at(i)->tick();
+		//for (unsigned int i = 0; i < game_objects.size(); i++)
+			//game_objects.at(i)->tick();
+		frog->tick();
+		map->tick();
+
 		for (unsigned int i = 0; i < cars.size(); i++)
 			cars.at(i)->tick();
 		for (unsigned int i = 0; i < riverlogs.size(); i++)
@@ -100,8 +105,13 @@ namespace domain {
 		for (unsigned int i = 0; i < turtles.size(); i++)
 			turtles.at(i)->tick();
 	
-
-		
+		for(unsigned int i = 0; i < cars.size(); i++){
+			if(testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())){
+				delete frog;
+				frog = new Frog(10.0, 0.0, 1.0, 0.01);
+			}
+				
+		}
 	}
 
 	float Game::sqDistPointAABB(float* p, BoxAABB *aabb){
