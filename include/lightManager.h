@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "vsShaderLib.h"
+#include "vsMathLib.h"
 
 #define MAX_LIGHTS 8
 
@@ -41,7 +42,7 @@ public:
 	void addLight(float l_spot[4]);
 	void addLight(float l_spot[4], float l_dir[4], float l_cut);
 	void setLightColor(int light_num, float amb[4], float dif[4], float spec[4]);
-	void drawLight();
+	void drawLight(VSMathLib* core);
 	void lightsOff();
 	void lightsOn();
 	inline bool isOn(){return lights_on;}

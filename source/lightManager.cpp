@@ -52,16 +52,17 @@ void LightManager::setLightColor(int light_num, float amb[4], float dif[4], floa
 }
 
 
-void LightManager::drawLight(){
+void LightManager::drawLight(VSMathLib* core){
 	if(lights_on){
 		int l;
+		float res[4];
 		for(l = 0; l < n_lights; ++l){
-			
+			core->multMatrixPoint(VSMathLib::VIEW, lights[l].l_pos,res);   //lightPos definido em World Coord so is converted to eye space
 			//send spotPos
 			glProgramUniform4fv(shader->getProgramIndex(),
 					glGetUniformLocation(shader->getProgramIndex(), l_posNames[l]),
 					1,
-					lights[l].l_pos);
+					res);
 			
 			//send spotDir
 			glProgramUniform4fv(shader->getProgramIndex(),

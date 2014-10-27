@@ -25,8 +25,11 @@ void main () {
 	
 	for(l = 0; l < n_lights; l++){
 		vec4 pos = m_viewModel * position;
+		
 		normal_a[l] = normalize(m_normal * normal);
+		
 		lightDir[l] = vec3(l_pos[l]-pos);
+		
 		eye[l] = vec3(-pos);
 	}
 
