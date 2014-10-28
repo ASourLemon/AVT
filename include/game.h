@@ -32,7 +32,6 @@ private:
 	Turtle* turtle1;
 	Turtle* turtle2;
 
-
 public:
 	Game();
 	~Game();
@@ -49,7 +48,7 @@ public:
 	void setFrogT3(int i);
 	void setFrogT4(int i);
 
-	float sqDistPointAABB(float* p, BoxAABB *aabb);
+	float sqDistPointAABB(float x, float y, float z, BoxAABB *aabb);
 	bool testCircleAABB(BoxSphere *sphere, BoxAABB *aabb);
 };
 

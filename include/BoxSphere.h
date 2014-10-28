@@ -8,18 +8,20 @@ namespace domain {
 
 		public:
      
-			BoxSphere( float center[3], float raio);
+			BoxSphere(float *x, float *y, float *z, float raio);
 			~BoxSphere();
      
-			float* get_center(){return _center;}
-			//float get_y(){return *y;}
+			
+			float get_x(){return *_x;}
+			float get_y(){return *_y;}
+			float get_z(){return *_z;}
  
 			float get_raio(){return _raio;}
  
      
 		private:
 			float _raio, raio2;
-			float _center[3];
+			float *_x, *_y, *_z;
 	
 	};
 }

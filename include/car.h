@@ -27,9 +27,9 @@ protected:
 	std::list<VSResSurfRevLib> components;
 	VSResSurfRevLib driver;
 	VSResSurfRevLib tire;
-	float x;
-	float y;
-	float z;
+	float _x;
+	float _y;
+	float _z;
 	float speed;
 	int direction;
 	bool created;

@@ -34,7 +34,7 @@ protected:
 	VSResSurfRevLib body, head, eye;
 	bool created;
 	int t1, t2, t3, t4, deltaT; //tempos para movimento
-	float x, y, z, speed;
+	float _x, _y, _z, speed;
 	int direction;
 	int map_limit;
 	
@@ -45,9 +45,12 @@ public:
 	void draw(VSMathLib* core);
 	void move(int d);
 	void tick();
-	inline float getX(){return x;}
-	inline float getY(){return y;}
-	inline float getZ(){return z;}
+	inline float getX(){return _x;}
+	inline float getY(){return _y;}
+	inline float getZ(){return _z;}
+	inline void setX(float i){_x = i;}
+	inline void setY(float i){_y = i;}
+	inline void setZ(float i){_z = i;}
 	inline void setT1(int i){t1 = i;}
 	inline void setT2(int i){t2 = i;}
 	inline void setT3(int i){t3 = i;}

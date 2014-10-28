@@ -19,7 +19,7 @@ float Car::tireShininess = 100;
 
 
 Car::Car(float x, float y, float z, int direction, float velocity) :
-		x(x), y(y), z(z), direction(direction), speed(velocity) {
+		_x(x), _y(y), _z(z), direction(direction), speed(velocity) {
 	created = false;
 	VSResSurfRevLib load;
 	load.createCube(1);
@@ -32,8 +32,8 @@ Car::Car(float x, float y, float z, int direction, float velocity) :
 
 	components.push_front(load);
 
-	float center[] = { this->x, this->y, this->z};
-	AABB = new BoxAABB(center, 2.5f, 2.5f, 2.5f, 2.5f, 2.5f, 2.5f);
+	//float center[] = { this->x, this->y, this->z};
+	AABB = new BoxAABB(&_x, &_y, &_z, 0.05f, 2.35f, 0.01f, 0.01f, 0.01f, 0.01f);
 }
 
 Car::~Car() {
@@ -45,7 +45,7 @@ void Car::draw(VSMathLib* core) {
 	std::list<VSResSurfRevLib>::iterator iter;
 	for (iter = components.begin(); iter != components.end(); iter++) {
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(x, y, z);
+		core->translate(_x, _y, _z);
 		core->scale(3.0f, 1.0f, 1.0f);
 		iter->render();
 		core->popMatrix(VSMathLib::MODEL);
@@ -63,9 +63,9 @@ void Car::draw(VSMathLib* core) {
 
 	core->pushMatrix(VSMathLib::MODEL);
 	if (direction == DIR_RIGHT)
-		core->translate(x - 0.7f, y, z);
+		core->translate(_x - 0.7f, _y, _z);
 	else
-		core->translate(x + 3.0f, y, z);
+		core->translate(_x + 3.0f, _y, _z);
 	core->scale(0.7f, 0.7f, 0.9f);
 	driver.render();
 	core->popMatrix(VSMathLib::MODEL);
@@ -93,52 +93,52 @@ void Car::draw(VSMathLib* core) {
 
 	core->pushMatrix(VSMathLib::MODEL);
 	if (direction == DIR_RIGHT)
-		core->translate(x + 1.6f, y, z + 0.15f);
+		core->translate(_x + 1.6f, _y, _z + 0.15f);
 	else
-		core->translate(x + 0.7f, y, z + 0.15f);
+		core->translate(_x + 0.7f, _y, _z + 0.15f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
 	core->pushMatrix(VSMathLib::MODEL);
 	if (direction == DIR_RIGHT)
-		core->translate(x + 2.3f, y, z + 0.15f);
+		core->translate(_x + 2.3f, _y, _z + 0.15f);
 	else
-		core->translate(x + 1.4f, y, z + 0.15f);
-	core->rotate(90, 1, 0, 0);
-	tire.render();
-	core->popMatrix(VSMathLib::MODEL);
-
-	core->pushMatrix(VSMathLib::MODEL);
-	if (direction == DIR_RIGHT)
-		core->translate(x + 1.6f, y, z + 0.85f);
-	else
-		core->translate(x + 0.7f, y, z + 0.85f);
-	core->rotate(90, 1, 0, 0);
-	tire.render();
-	core->popMatrix(VSMathLib::MODEL);
-	core->pushMatrix(VSMathLib::MODEL);
-	if (direction == DIR_RIGHT)
-		core->translate(x + 2.3f, y, z + 0.85f);
-	else
-		core->translate(x + 1.4f, y, z + 0.85f);
+		core->translate(_x + 1.4f, _y, _z + 0.15f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
 	if (direction == DIR_RIGHT)
-		core->translate(x + 0.1f, y, z + 0.15f);
+		core->translate(_x + 1.6f, _y, _z + 0.85f);
 	else
-		core->translate(x + 2.7f, y, z + 0.15f);
+		core->translate(_x + 0.7f, _y, _z + 0.85f);
+	core->rotate(90, 1, 0, 0);
+	tire.render();
+	core->popMatrix(VSMathLib::MODEL);
+	core->pushMatrix(VSMathLib::MODEL);
+	if (direction == DIR_RIGHT)
+		core->translate(_x + 2.3f, _y, _z + 0.85f);
+	else
+		core->translate(_x + 1.4f, _y, _z + 0.85f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
 	if (direction == DIR_RIGHT)
-		core->translate(x + 0.1f, y, z + 0.85f);
+		core->translate(_x + 0.1f, _y, _z + 0.15f);
 	else
-		core->translate(x + 2.7f, y, z + 0.85f);
+		core->translate(_x + 2.7f, _y, _z + 0.15f);
+	core->rotate(90, 1, 0, 0);
+	tire.render();
+	core->popMatrix(VSMathLib::MODEL);
+
+	core->pushMatrix(VSMathLib::MODEL);
+	if (direction == DIR_RIGHT)
+		core->translate(_x + 0.1f, _y, _z + 0.85f);
+	else
+		core->translate(_x + 2.7f, _y, _z + 0.85f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
@@ -150,15 +150,15 @@ void Car::tick() {
 	int r = rand() % 5;
 	float d = speed * 0.1;
 	if (direction == DIR_LEFT) {
-		if (this->x >= LEFT_X_LIMIT) {
-			this->x = RIGHT_X_LIMIT - r;
+		if (this->_x >= LEFT_X_LIMIT) {
+			this->_x = RIGHT_X_LIMIT - r;
 		}
-		this->x += d;
+		this->_x += d;
 	} else if (direction == DIR_RIGHT) {
-		if (this->x <= RIGHT_X_LIMIT) {
-			this->x = LEFT_X_LIMIT + r;
+		if (this->_x <= RIGHT_X_LIMIT) {
+			this->_x = LEFT_X_LIMIT + r;
 		}
-		this->x -= d;
+		this->_x -= d;
 	}
 
 }

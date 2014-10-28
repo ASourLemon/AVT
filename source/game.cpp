@@ -10,7 +10,7 @@ namespace domain {
 	Game::~Game(){
 		delete frog;
 		delete map;
-		delete car1;
+		//delete car1;
 		delete car2;
 		delete car3;
 		delete car4;
@@ -30,8 +30,8 @@ namespace domain {
 		map = new Map();
 		//game_objects.push_back(map);
 
-		car1 = new Car(-4.0, 0.3, 6.0, DIR_LEFT, 0.2);
-		cars.push_back(car1);
+		//car1 = new Car(-4.0, 0.3, 6.0, DIR_LEFT, 0.2);
+		//cars.push_back(car1);
 		car2 = new Car(-6.0, 0.3, 4.0, DIR_LEFT, 0.2);
 		cars.push_back(car2);
 		car3 = new Car(-4.0, 0.3, 8.0, DIR_RIGHT, 0.2);
@@ -107,15 +107,24 @@ namespace domain {
 	
 		for(unsigned int i = 0; i < cars.size(); i++){
 			if(testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB()) == true){
-				//delete frog;
-				//frog = new Frog(10.0, 0.0, 1.0, 0.01);
-				std::cout << "OLAAAAAAAAAAAA" << std::endl;
-			}
+				//frog->setX(10.0);
+				//frog->setY(0.0);
+				//frog->setZ(1.0);
+				//frog->tick();
+				std::cout << "COLIDE!!! " << std::endl;
 				
+			}else{
+				float x = car2->get_AABB()->get_x();
+				float xmin = car2->get_AABB()->get_xmin();
+				float xmax = car2->get_AABB()->get_xmax();
+				std::cout << "x: "<< x << " xmin: " << xmin << " xmax: " << xmax << std::endl;
+				float fx = frog->getX();
+				std::cout << "FROGx: "<< fx << std::endl;
+			}
 		}
 	}
 
-	float Game::sqDistPointAABB(float* p, BoxAABB *aabb){
+	float Game::sqDistPointAABB(float x, float y, float z, BoxAABB *aabb){
 		float sqDist = 0.0;
 		float v;
 		float minX, minY, minZ, maxX, maxY, maxZ;
@@ -129,7 +138,7 @@ namespace domain {
 		maxZ = aabb->get_zmax();
 		
 		// test the bounds against the points X axis
-		v = p[0];
+		v = x;
 
 		if(v < minX)
 			sqDist += (minX - v) * (minX - v);
@@ -137,7 +146,7 @@ namespace domain {
 			sqDist += (v - maxX) * (v - maxX);
 
 		// test the bounds against the points Y axis
-		v = p[1];
+		v = y;
       
 		if (v < minY) 
 			sqDist += (minY - v) * (minY - v);
@@ -145,7 +154,7 @@ namespace domain {
 			sqDist += (v - maxY) * (v - maxY);
 
 		// test the bounds against the points Z axis
-		 v = p[2];
+		 v = z;
       
 		if (v < minZ) 
 			sqDist += (minZ - v) * (minZ - v);
@@ -158,11 +167,13 @@ namespace domain {
 
 	bool Game::testCircleAABB(BoxSphere *sphere, BoxAABB *aabb){
 		
-		float* tempC = sphere->get_center();
+		float x = sphere->get_x();
+		float y = sphere->get_y();
+		float z = sphere->get_z();
 
 		// get the squared distance between sphere center and the AABB
 
-		float sqDist = sqDistPointAABB(tempC, aabb);
+		float sqDist = sqDistPointAABB(x, y, z, aabb);
 		float r = sphere->get_raio();
       
 		return sqDist <= r * r;
