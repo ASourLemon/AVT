@@ -8,9 +8,9 @@
 
 #define MAX_LIGHTS 8
 
-#define DIRECTIONAL_LIGHT 0
-#define POINT_LIGHT 1
-#define SPOT_LIGHT 2
+#define SPOT_LIGHT 0
+#define DIR_LIGHT 1
+#define POINT_LIGHT 2
 
 
 struct Light{

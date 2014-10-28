@@ -120,23 +120,44 @@ void renderScene(void) {
 
 		core->lookAt(10, 10, 15.0, 10, 0, 15.0, 0, 0, 1);
 	}
+	
+	
+	int type = POINT_LIGHT;	
+	
 
-	/* FIXME: hard code directional light
+	
+#define _MODE 2
+	
+#if (_MODE == 0)
+
+	type = DIR_LIGHT;	
 	float l0_dir[4] = { 1.0f, 1.0f, 1.0f, 0.0f };
 	float res[4];
 	core->multMatrixPoint(VSMathLib::VIEW, l0_dir, res);
-	shader.setBlockUniform("Lights", "l_dir", res);*/
+	shader.setBlockUniform("Lights", "l_dir", res);
 	
-	// FIXME: hard code point light
-
-	float l1_pos[4] = { 10.0f, 2.0f, 10.0f, 1.0f };
+#elif (_MODE == 1)
+	type = POINT_LIGHT;	
+	float l1_pos[4] = { 10.0f, 2.0f, 5.0f, 1.0f };
 	float res[4];
 	core->multMatrixPoint(VSMathLib::VIEW, l1_pos, res);
 	shader.setBlockUniform("Lights", "l_pos", res);
-	bool r = true;
-	shader.setBlockUniform("Lights", "isPoint", &r);
+#else	
+	type = SPOT_LIGHT;	
+	float res[4];
+	float l2_pos[4] = { 10.0f, 2.0f, 10.0f, 1.0f };
+	float l2_dir[4] = { 0.0f, -1.0f, 0.0f, 0.0f };
+	float l2_cut = 0.6;
+	core->multMatrixPoint(VSMathLib::VIEW, l2_pos, res);
+	shader.setBlockUniform("Lights", "l_pos", res);
+	core->multMatrixPoint(VSMathLib::VIEW, l2_dir, res);
+	shader.setBlockUniform("Lights", "l_spotDir", res);	
+	shader.setBlockUniform("Lights", "l_spotCutOff", &l2_cut);	
+#endif
+
+	shader.setBlockUniform("Lights", "l_type", &type);
 	shader.setUniform("light_on", &l_on);
-	
+
 	//lightManager.drawLight(core);
 	glUseProgram(shader.getProgramIndex());
 	game.draw(core);

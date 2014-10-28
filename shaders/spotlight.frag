@@ -28,6 +28,7 @@ void main() {
 	vec4 spec;
 	vec3 ld, sd;
 	colorOut = vec4(0.0);
+	
 	for(l = 0; l < n_lights; l++){
 		intensity = 0.0;
 		spec = vec4(0.0);
@@ -46,6 +47,7 @@ void main() {
 				float intSpec = max(dot(h,n), 0.0);
 				spec = specular * pow(intSpec, shininess);
 			}
+			
 		}
 		colorOut = colorOut + max(intensity * diffuse + spec * 4, ambient);
 		
