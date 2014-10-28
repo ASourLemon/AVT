@@ -5,12 +5,12 @@ namespace domain{
 float Frog::bodyAmbient[4] = { 0.2f, 0.4f, 0.2f, 1.0f };
 float Frog::bodyDiffuse[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
 float Frog::bodySpec[4] = { 0.3f, 0.3f, 0.3f, 1.0f };
-float Frog::bodyShininess = 100;
+float Frog::bodyShininess = 20;
 
 float Frog::headAmbient[4] = { 0.2f, 0.4f, 0.2f, 1.0f };
 float Frog::headDiffuse[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
 float Frog::headSpec[4] = { 0.3f, 0.3f, 0.3f, 1.0f };
-float Frog::headShininess = 100;
+float Frog::headShininess = 20;
 
 float Frog::eyeAmbient[4] = { 0.6f, 0.6f, 0.6f, 1.0f };
 float Frog::eyeDiffuse[4] = { 0.8f, 0.8f, 0.8f, 1.0f };

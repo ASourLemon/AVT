@@ -7,7 +7,7 @@ namespace domain {
 float Map::roadAmb[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
 float Map::roadDif[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
 float Map::roadSpec[4] = { 0.6f, 0.6f, 0.6f, 1.0f };
-float Map::roadShininess = 1;
+float Map::roadShininess = 100;
 
 float Map::grassAmb[4] = { 0.02f, 0.05f, 0.02f, 1.0f };
 float Map::grassDif[4] = { 0.2f, 0.5f, 0.2f, 1.0f };

@@ -126,7 +126,9 @@ void renderScene(void) {
 	
 
 	
-#define _MODE 2
+#define _MODE 1
+	
+int n_lights = 3;
 	
 #if (_MODE == 0)
 
@@ -137,11 +139,40 @@ void renderScene(void) {
 	shader.setBlockUniform("Lights", "l_dir", res);
 	
 #elif (_MODE == 1)
+	
 	type = POINT_LIGHT;	
 	float l1_pos[4] = { 10.0f, 2.0f, 5.0f, 1.0f };
 	float res[4];
+	float res1[4];
 	core->multMatrixPoint(VSMathLib::VIEW, l1_pos, res);
-	shader.setBlockUniform("Lights", "l_pos", res);
+	int loc0 = glGetUniformLocation(shader.getProgramIndex(), "lights[0].l_type");
+	int loc1 = glGetUniformLocation(shader.getProgramIndex(), "lights[0].l_pos");	
+	glUniform1i(loc0, type);
+	glUniform4f(loc1, res[0], res[1], res[2], res[3]);
+	
+	float l0_pos[4] = { 5.0f, 2.0f, 5.0f, 1.0f };
+	core->multMatrixPoint(VSMathLib::VIEW, l0_pos, res1);	
+	int loc4 = glGetUniformLocation(shader.getProgramIndex(), "lights[1].l_type");
+	int loc5 = glGetUniformLocation(shader.getProgramIndex(), "lights[1].l_pos");	
+	glUniform1i(loc4, type);
+	glUniform4f(loc5, res1[0], res1[1], res1[2], res1[3]);
+	
+	float l2_pos[4] = { 15.0f, 2.0f, 26.0f, 1.0f };
+	float l2_dir[4] = { 0.0f, -1.0f, 0.0f, 0.0f };
+	float l2_cut = 0.6;
+	int loc6 = glGetUniformLocation(shader.getProgramIndex(), "lights[2].l_type");		//int	
+	int loc7 = glGetUniformLocation(shader.getProgramIndex(), "lights[2].l_pos");		//4f
+	int loc8 = glGetUniformLocation(shader.getProgramIndex(), "lights[2].l_spotDir");	//4f
+	int loc9 = glGetUniformLocation(shader.getProgramIndex(), "lights[2].l_spotCutOff");//1f
+	
+	type = SPOT_LIGHT;
+	glUniform1i(loc6, type);
+	core->multMatrixPoint(VSMathLib::VIEW, l2_pos, res1);
+	glUniform4f(loc7, res1[0], res1[1], res1[2], res1[3]);
+	core->multMatrixPoint(VSMathLib::VIEW, l2_dir, res1);
+	glUniform4f(loc8, res1[0], res1[1], res1[2], res1[3]);
+	glUniform1f(loc9, l2_cut);
+	
 #else	
 	type = SPOT_LIGHT;	
 	float res[4];
@@ -155,8 +186,12 @@ void renderScene(void) {
 	shader.setBlockUniform("Lights", "l_spotCutOff", &l2_cut);	
 #endif
 
-	shader.setBlockUniform("Lights", "l_type", &type);
 	shader.setUniform("light_on", &l_on);
+	
+	shader.setUniform("n_lights", &n_lights);
+	
+	
+	
 
 	//lightManager.drawLight(core);
 	glUseProgram(shader.getProgramIndex());
