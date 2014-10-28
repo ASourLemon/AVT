@@ -11,6 +11,11 @@ layout (std140) uniform Lights {
 	vec3 l_dir;	   // camera space
 };
 
+struct Light{
+	vec3 l_dir;	
+}
+uniform Light lights[1];
+
 in vec4 position;	// local space
 in vec3 normal;		// local space
 

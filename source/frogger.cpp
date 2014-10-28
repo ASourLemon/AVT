@@ -189,7 +189,7 @@ void renderScene(void) {
 #endif
 
 
-	shader.setUniform("light_on", &l_on);
+	shader.setUniform("isDay", &l_on);
 	lightManager.drawLight(core);
 	glUseProgram(shader.getProgramIndex());
 	game.draw(core);
@@ -356,10 +356,10 @@ void processKeys() {
 		glEnable(GL_MULTISAMPLE);
 	}
 
-	if (keyStates['n']) {
+	if (keyStates['l']) {
 		glDisable(GL_MULTISAMPLE);
 	}
-	if (keyStates['l']) {
+	if (keyStates['n']) {
 		if (l_on) {
 			printf("Lights off\n");
 			l_on = false;
@@ -367,7 +367,7 @@ void processKeys() {
 			printf("Lights on\n");
 			l_on = true;
 		}
-		keyStates['l'] = false;
+		keyStates['n'] = false;
 	}
 	if (keyStates['q']) {
 		game.move_frog(0);
@@ -562,18 +562,20 @@ void setupSurfRev() {
 }
 
 void setupLight() {
-	lightManager.init(&shader);
-
-	float l0_pos[4] = { 5.0f, 2.0f, 5.0f, 1.0f };
+	lightManager.init(&shader, game.getFrog());
+	
+	float l0_pos[4] = { 15.0f, 4.0f, 15.0f, 1.0f };
 	lightManager.addLight(l0_pos);
 
 	float l1_dir[4] = { 0.0f, 1.0f, 0.0f, 0.0f };
 	lightManager.addLight(l1_dir);
-
-	float l2_cut = 0.9f;
-	float l2_pos[4] = { 10.0f, 2.0f, 25.0f, 1.0f };
-	float l2_dir[4] = { 0.0f, -1.0f, 0.0f, 0.0f };
+	
+	float l2_cut = 0.2f;
+	float l2_pos[4] = { 0.0f, 2.0f, 1.0f, 1.0f };	//<- capacete de mineiro - coordenadas da camara 
+	float l2_dir[4] = { 0.0f, 0.0f, 1.0f, 0.0f };
 	//lightManager.addLight(l2_pos, l2_dir, l2_cut);
+	lightManager.addLight(l2_dir, l2_cut);
+	
 
 	int n_lights = lightManager.getNumLights();
 	shader.setUniform("n_lights", &n_lights);
@@ -589,11 +591,10 @@ void init(int argc, char* argv[]) {
 	if (!setupShaders()) {
 		exit(1);
 	}
-	setupLight();
-	l_on = false;
 	setupSurfRev();
 	setupCallbacks();
-
+	setupLight();
+	l_on = false;
 	glGenTextures(3, TextureArray);
 	TGA_Texture(TextureArray, "textures/lightwood.tga", 0);
 	TGA_Texture(TextureArray, "textures/road.tga", 1);

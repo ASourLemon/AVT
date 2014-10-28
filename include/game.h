@@ -52,6 +52,9 @@ public:
 	inline float getFrogZ() {
 		return frog->getZ();
 	}
+	inline domain::Frog* getFrog(){
+		return frog;
+	}
 	void setFrogT1(int i);
 	void setFrogT2(int i);
 	void setFrogT3(int i);

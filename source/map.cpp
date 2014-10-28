@@ -19,10 +19,10 @@ float Map::waterDif[4] = { 0.4f, 0.6f, 0.4f, 1.0f };
 float Map::waterSpec[4] = { 0.7f, 0.7f, 0.7f, 1.0f };
 float Map::waterShininess = 1;
 
-float Map::wallAmb[4] = { 0.8f, 0.6f, 0.4f, 1.0f };
-float Map::wallDif[4] = { 0.2f, 0.2f, 0.75f, 1.0f };
-float Map::wallSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-float Map::wallShininess = 100;
+float Map::wallAmb[4] = { 0.4f, 0.3f, 0.2f, 1.0f };
+float Map::wallDif[4] = { 0.6f, 0.3f, 0.4f, 1.0f };
+float Map::wallSpec[4] = { 0.7f, 0.7f, 0.7f, 1.0f };
+float Map::wallShininess = 1;
 
 Map::Map() {
 
@@ -156,8 +156,8 @@ void Map::draw(VSMathLib* core) {
 	glBindTexture(GL_TEXTURE_2D, TextureArray[1]);
 
 	core->pushMatrix(VSMathLib::MODEL);
-	core->translate(0.0, -1.0, 3.0);
-	core->scale(MAP0_W+4, 1, 10);
+	core->translate(-2.0, -1.0, 3.0);
+	core->scale(MAP0_W+5, 1, 10);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
