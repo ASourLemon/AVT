@@ -63,6 +63,7 @@ bool* keyStates;
 int nTimer = 0;
 
 LightManager lightManager;
+bool l_on;
 
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// ERRORS
@@ -120,12 +121,22 @@ void renderScene(void) {
 		core->lookAt(10, 10, 15.0, 10, 0, 15.0, 0, 0, 1);
 	}
 
-	// FIXME: hard code directional light
+	/* FIXME: hard code directional light
 	float l0_dir[4] = { 1.0f, 1.0f, 1.0f, 0.0f };
 	float res[4];
 	core->multMatrixPoint(VSMathLib::VIEW, l0_dir, res);
-	shader.setBlockUniform("Lights", "l_dir", res);
+	shader.setBlockUniform("Lights", "l_dir", res);*/
+	
+	// FIXME: hard code point light
 
+	float l1_pos[4] = { 10.0f, 2.0f, 10.0f, 1.0f };
+	float res[4];
+	core->multMatrixPoint(VSMathLib::VIEW, l1_pos, res);
+	shader.setBlockUniform("Lights", "l_pos", res);
+	bool r = true;
+	shader.setBlockUniform("Lights", "isPoint", &r);
+	shader.setUniform("light_on", &l_on);
+	
 	//lightManager.drawLight(core);
 	glUseProgram(shader.getProgramIndex());
 	game.draw(core);
@@ -183,12 +194,13 @@ void timer(int value) {
 		glutSetWindow(WindowHandle);
 		glutSetWindowTitle(s.c_str());
 		FrameCount = 0;
-		nTimer = 0;
+		nTimer = 0;	
 	}
 	nTimer++;
 	game.tick();
-	processKeys();
 
+	processKeys();
+	
 	glutPostRedisplay();
 	glutTimerFunc(1000 / FPS, timer, 0);
 }
@@ -295,10 +307,10 @@ void processKeys() {
 		glDisable(GL_MULTISAMPLE);
 	}
 	if (keyStates['l']) {
-		if (lightManager.isOn()) {
-			lightManager.lightsOff();
+		if (l_on) {
+			l_on = false;
 		} else {
-			lightManager.lightsOn();
+			l_on = true;
 		}
 	}
 	if (keyStates['q']) {
@@ -436,7 +448,10 @@ GLuint setupShaders() {
 #define _PER_PIXEL		3
 #define _POINT			4	//lampada
 #define _SPOT			5	//cone
-#define _LIGHT 2
+#define _SPECIAL		6
+
+
+#define _LIGHT 6
 
 #if (_LIGHT == _DIF)
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdif.vert");
@@ -456,9 +471,12 @@ GLuint setupShaders() {
 #elif (_LIGHT == _POINT)
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/pointlight.vert");
 	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/pointlight.frag");
-#else
-	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/spotlight.vert"); /*FIXME: oh dear, fix me when light added!!*/
+#elif(_LIGHT == _SPOT)
+	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/spotlight.vert");
 	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/spotlight.frag");
+#else
+	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/oldvShader.glsl");
+	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/oldfShader.glsl");
 #endif
 
 	// set semantics for the shader variables
@@ -516,9 +534,10 @@ void init(int argc, char* argv[]) {
 	setupCore();
 
 	if (!setupShaders()) {
-
+		exit(1);
 	}
 	setupLight();
+	l_on = false;
 	setupSurfRev();
 	setupCallbacks();
 

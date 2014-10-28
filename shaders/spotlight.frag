@@ -1,6 +1,6 @@
 #version 330
 
-const int max_lights = 5;
+const int max_lights = 1;
 out vec4 colorOut;
 
 layout (std140) uniform Materials {
