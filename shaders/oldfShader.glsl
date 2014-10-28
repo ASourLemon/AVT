@@ -47,7 +47,7 @@ void main() {
 			vec4 spec = vec4(0.0);
 			vec3 light_direction = vec3(0.0);
 			
-			if(lights[1].l_type == DIR_LIGHT){
+			if(lights[k].l_type == DIR_LIGHT){
 				light_direction = lights[k].l_dir;
 			}else {
 				light_direction = normalize(DataIn.lightDir[k]);

@@ -12,7 +12,7 @@ float Map::roadShininess = 100;
 float Map::grassAmb[4] = { 0.02f, 0.05f, 0.02f, 1.0f };
 float Map::grassDif[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
 float Map::grassSpec[4] = { 0.4f, 0.4f, 0.4f, 1.0f };
-float Map::grassShininess = 100;
+float Map::grassShininess = 1;
 
 float Map::waterAmb[4] = { 0.2f, 0.2f, 0.5f, 1.0f };
 float Map::waterDif[4] = { 0.4f, 0.6f, 0.4f, 1.0f };

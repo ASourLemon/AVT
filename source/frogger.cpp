@@ -567,15 +567,12 @@ void setupLight() {
 	float l0_pos[4] = { 5.0f, 2.0f, 5.0f, 1.0f };
 	lightManager.addLight(l0_pos);
 
-	float l1_cut = 0.3f;
-	float l1_pos[4] = { 5.0f, 2.0f, 10.0f, 1.0f };
-	float l1_dir[4] = { 0.0f, 0.0f, -1.0f, 0.0f };
-	float l3_pos[4] = { 10.0f, 2.0f, 25.0f, 1.0f };
-	lightManager.addLight(l3_pos);
+	float l1_dir[4] = { 0.0f, 1.0f, 0.0f, 0.0f };
+	lightManager.addLight(l1_dir);
 
-	float l2_cut = 0.3f;
-	float l2_pos[4] = { 6.0f, 2.0f, 30.0f, 1.0f };
-	float l2_dir[4] = { 0.0f, 0.0f, -1.0f, 0.0f };
+	float l2_cut = 0.9f;
+	float l2_pos[4] = { 10.0f, 2.0f, 25.0f, 1.0f };
+	float l2_dir[4] = { 0.0f, -1.0f, 0.0f, 0.0f };
 	//lightManager.addLight(l2_pos, l2_dir, l2_cut);
 
 	int n_lights = lightManager.getNumLights();

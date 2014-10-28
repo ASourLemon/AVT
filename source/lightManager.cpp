@@ -28,12 +28,12 @@ void ClearColor(Light* l){
 void LightManager::addLight(float l_spot[4]){
 	Light l;
 	if(l_spot[3] == 1.0){
-		l.l_type = POINT_LIGHT;
+		l.l_type = POINT_LIGHT;	
+		memcpy(l.l_pos, l_spot, sizeof(float) * 4);
 	}else {
 		l.l_type = DIR_LIGHT;
+		memcpy(l.l_dir, l_spot, sizeof(float) * 4);
 	}
-	memcpy(l.l_pos, l_spot, sizeof(float) * 4);
-	
 	ClearColor(&l);
 	lights[n_lights++] = l;
 }
@@ -57,11 +57,51 @@ void LightManager::setLightColor(int light_num, float amb[4], float dif[4], floa
 
 
 void LightManager::processSpotLight(int n, Light* l, VSMathLib* core){
-
+	float res[4];
+	char type_name[30];
+	strcpy(type_name, lightsIndex[n]);
+	strcat(type_name,l_type_glslname);
+	int type_loc = glGetUniformLocation(shader->getProgramIndex(), type_name);
+	glUniform1i(type_loc, l->l_type);
+		
+	char pos_name[30];
+	strcpy(pos_name, lightsIndex[n]);
+	strcat(pos_name,l_pos_glslname);	
+	int pos_loc = glGetUniformLocation(shader->getProgramIndex(), pos_name);
+	core->multMatrixPoint(VSMathLib::VIEW, l->l_pos, res);
+	glUniform4f(pos_loc, res[0], res[1], res[2], res[3]);
+	
+	char spot_name[30];
+	strcpy(spot_name, lightsIndex[n]);
+	strcat(spot_name,l_spotDir_glslname);	
+	int spot_loc = glGetUniformLocation(shader->getProgramIndex(), spot_name);	
+	core->multMatrixPoint(VSMathLib::VIEW, l->l_dir, res);
+	glUniform4f(spot_loc, res[0], res[1], res[2], res[3]);
+	
+	
+	char cut_name[30];
+	strcpy(cut_name, lightsIndex[n]);
+	strcat(cut_name,l_spotCutOff_glslname);	
+	int cut_loc = glGetUniformLocation(shader->getProgramIndex(), cut_name);
+	glUniform1f(cut_loc, l->l_spot_cut);
 	
 }
 void LightManager::processDirLight(int n, Light* l, VSMathLib* core){
+	float res[4];
+	core->multMatrixPoint(VSMathLib::VIEW, l->l_dir, res);
 	
+	char type_name[30];
+	strcpy(type_name, lightsIndex[n]);
+	strcat(type_name,l_type_glslname);	
+	int type_loc = glGetUniformLocation(shader->getProgramIndex(), type_name);
+	glUniform1i(type_loc, l->l_type);	
+	printf("#########DEBUG name:%s, pos:%d\n", type_name, type_loc);
+	char dir_name[30];
+	strcpy(dir_name, lightsIndex[n]);
+	strcat(dir_name,l_dir_glslname);
+	int pos_loc = glGetUniformLocation(shader->getProgramIndex(), dir_name);	
+	glUniform4f(pos_loc, l->l_dir[0], l->l_dir[1], l->l_dir[2], l->l_dir[3]);
+	printf("#########DEBUG name:%s, pos:%d\n", dir_name, pos_loc);
 	
 }
 void LightManager::processPointLight(int n, Light* l, VSMathLib* core){
@@ -74,15 +114,12 @@ void LightManager::processPointLight(int n, Light* l, VSMathLib* core){
 	strcat(type_name,l_type_glslname);
 	int type_loc = glGetUniformLocation(shader->getProgramIndex(), type_name);
 	glUniform1i(type_loc, l->l_type);
-	printf("########DEBUG String:%s, type_loc:%d\n", type_name, type_loc); 
 	
 	char pos_name[30];
 	strcpy(pos_name, lightsIndex[n]);
 	strcat(pos_name,l_pos_glslname);
 	int pos_loc = glGetUniformLocation(shader->getProgramIndex(), pos_name);	
-	glUniform4f(pos_loc, res[0], res[1], res[2], res[3]);
-	printf("########DEBUG String:%s, type_loc:%d\n", pos_name, pos_loc); 
-	
+	glUniform4f(pos_loc, res[0], res[1], res[2], res[3]);	
 	
 }
 
@@ -95,15 +132,17 @@ void LightManager::drawLight(VSMathLib* core){
 			switch(light.l_type){
 				case(SPOT_LIGHT):{
 					processSpotLight(l, &light, core);
+					printf("Processing spot light\n");
 					break;
 				}
 				case(DIR_LIGHT):{
 					processDirLight(l, &light, core);
+					printf("Processing dir light\n");
 					break;	
 				}
 				case(POINT_LIGHT):{
-					printf("processing point light\n");
 					processPointLight(l, &light, core);
+					printf("Processing point light\n");
 					break;
 				}
 				default:{
