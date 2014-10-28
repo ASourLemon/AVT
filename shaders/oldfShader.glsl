@@ -57,10 +57,14 @@ vec4 processSpotLights(){
 
 		// inside the cone?
 		if (dot(sd,ld) > spot_lights[l].l_spotCutOff) {
-			
+			float distance = length(DataIn.lightDir[index]);
 			vec3 n = normalize(DataIn.normal[index]);
 			
-			intensity = max(dot(n,ld), 0.0);
+			if(distance > 10.0){
+				intensity = 0.0;						//FIXME: Maybe? This is a simple attenuation
+			}else {
+				intensity = max(dot(n,ld), 0.0);
+			}
 			
 			if (intensity > 0.0) {
 				vec3 eye = normalize(vec3(DataIn.eye[index]));
