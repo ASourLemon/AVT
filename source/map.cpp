@@ -27,7 +27,7 @@ float Map::wallShininess = 100;
 Map::Map() {
 
 	body.createCube(1.0f);
-	water.createSphere(2.4, 10);
+	water.createSphere(2.4, 5);
 
 	deltaWater = 0.0f;
 	goingLeft = false;

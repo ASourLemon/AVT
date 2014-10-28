@@ -1,9 +1,11 @@
 #include "../include/lightManager.h"
 
-const char* l_posNames[] = { "l_pos[0]", "l_pos[1]", "l_pos[2]" , "l_pos[3]", "l_pos[4]", "l_pos[5]", "l_pos[6]", "l_pos[7]" };
-const char* l_spotDirNames[] = { "l_spotDir[0]", "l_spotDir[1]", "l_spotDir[2]" , "l_spotDir[3]", "l_spotDir[4]", "l_spotDir[5]", "l_spotDir[6]", "l_spotDir[7]" };
-const char* l_spotCutNames[] = { "l_spotCutOff[0]", "l_spotCutOff[1]", "l_spotCutOff[2]" , "l_spotCutOff[3]", "l_spotCutOff[4]", "l_spotCutOff[5]", "l_spotCutOff[6]", "l_spotCutOff[7]" };
-
+const char* lightsIndex[] = { "lights[0].", "lights[1].", "lights[2]." , "lights[3].", "lights[4].", "lights[5].", "lights[6].", "lights[7]." };
+const char* l_type_glslname = { "l_type" };
+const char* l_dir_glslname = {"l_dir"};
+const char* l_pos_glslname = {"l_pos"};
+const char* l_spotDir_glslname = {"l_spotDir"};
+const char* l_spotCutOff_glslname = {"l_spotCutOff"};
 
 LightManager::LightManager(){
 	this->lights_on = false;
@@ -25,8 +27,11 @@ void ClearColor(Light* l){
 //Add Spotlight
 void LightManager::addLight(float l_spot[4]){
 	Light l;
-	
-	l.l_type = l_spot[3];	//if(0)-directional_light elseif(1)-pointlight
+	if(l_spot[3] == 1.0){
+		l.l_type = POINT_LIGHT;
+	}else {
+		l.l_type = DIR_LIGHT;
+	}
 	memcpy(l.l_pos, l_spot, sizeof(float) * 4);
 	
 	ClearColor(&l);
@@ -34,7 +39,6 @@ void LightManager::addLight(float l_spot[4]){
 }
 void LightManager::addLight(float l_spot[4], float l_dir[4], float l_cut){
 	Light l;
-	
 	l.l_type = SPOT_LIGHT;
 	
 	memcpy(l.l_pos, l_spot, sizeof(float) * 4);
@@ -52,34 +56,64 @@ void LightManager::setLightColor(int light_num, float amb[4], float dif[4], floa
 }
 
 
+void LightManager::processSpotLight(int n, Light* l, VSMathLib* core){
+
+	
+}
+void LightManager::processDirLight(int n, Light* l, VSMathLib* core){
+	
+	
+}
+void LightManager::processPointLight(int n, Light* l, VSMathLib* core){
+	
+	float res[4];
+	core->multMatrixPoint(VSMathLib::VIEW, l->l_pos, res);
+	
+	char type_name[30];
+	strcpy(type_name, lightsIndex[n]);
+	strcat(type_name,l_type_glslname);
+	int type_loc = glGetUniformLocation(shader->getProgramIndex(), type_name);
+	glUniform1i(type_loc, l->l_type);
+	printf("########DEBUG String:%s, type_loc:%d\n", type_name, type_loc); 
+	
+	char pos_name[30];
+	strcpy(pos_name, lightsIndex[n]);
+	strcat(pos_name,l_pos_glslname);
+	int pos_loc = glGetUniformLocation(shader->getProgramIndex(), pos_name);	
+	glUniform4f(pos_loc, res[0], res[1], res[2], res[3]);
+	printf("########DEBUG String:%s, type_loc:%d\n", pos_name, pos_loc); 
+	
+	
+}
+
 void LightManager::drawLight(VSMathLib* core){
 	if(lights_on){
 		int l;
-		float res[4];
+		Light light;
 		for(l = 0; l < n_lights; ++l){
-			core->multMatrixPoint(VSMathLib::VIEW, lights[l].l_pos,res);   //lightPos definido em World Coord so is converted to eye space
-			//send spotPos
-			glProgramUniform4fv(shader->getProgramIndex(),
-					glGetUniformLocation(shader->getProgramIndex(), l_posNames[l]),
-					1,
-					res);
-			
-			//send spotDir
-			glProgramUniform4fv(shader->getProgramIndex(),
-					glGetUniformLocation(shader->getProgramIndex(), l_spotDirNames[l]),
-					1,
-					lights[l].l_dir);
-					
-			//send l_spot_cut
-			glProgramUniform1fv(shader->getProgramIndex(), 
-					glGetUniformLocation(shader->getProgramIndex(), l_spotCutNames[l]), 
-					1, 
-					&lights[l].l_spot_cut);
+			light = lights[l];
+			switch(light.l_type){
+				case(SPOT_LIGHT):{
+					processSpotLight(l, &light, core);
+					break;
+				}
+				case(DIR_LIGHT):{
+					processDirLight(l, &light, core);
+					break;	
+				}
+				case(POINT_LIGHT):{
+					printf("processing point light\n");
+					processPointLight(l, &light, core);
+					break;
+				}
+				default:{
+					printf("Light type:%d is not supported:(\n", light.l_type);
+				}
+			}
 			
 		}
 	}
 }
-
 
 void LightManager::lightsOff(){
 	lights_on = false;

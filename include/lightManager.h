@@ -8,9 +8,10 @@
 
 #define MAX_LIGHTS 8
 
-#define SPOT_LIGHT 0
 #define DIR_LIGHT 1
 #define POINT_LIGHT 2
+#define SPOT_LIGHT 0
+
 
 
 struct Light{
@@ -47,6 +48,11 @@ public:
 	void lightsOn();
 	inline bool isOn(){return lights_on;}
 	inline int getNumLights(){return n_lights;}
+
+private:
+	void processSpotLight(int n, Light* l, VSMathLib* core);
+	void processDirLight(int n, Light* l, VSMathLib* core);
+	void processPointLight(int n, Light* l, VSMathLib* core);
 };
 
 
