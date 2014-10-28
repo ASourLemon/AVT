@@ -8,6 +8,7 @@
 #include "../include/car.h"
 #include "../include/riverlog.h"
 #include "../include/turtle.h"
+#include "../include/lamp.h"
 
 namespace domain {
 
@@ -32,6 +33,8 @@ private:
 	Turtle* turtle1;
 	Turtle* turtle2;
 
+	Lamp* lamp1;
+
 public:
 	Game();
 	~Game();
@@ -40,9 +43,15 @@ public:
 	void add_drawable(Drawable* d);
 	void move_frog(int d);
 	void tick();
-	inline float getFrogX(){return frog->getX();}
-	inline float getFrogY(){return frog->getY();}
-	inline float getFrogZ(){return frog->getZ();}
+	inline float getFrogX() {
+		return frog->getX();
+	}
+	inline float getFrogY() {
+		return frog->getY();
+	}
+	inline float getFrogZ() {
+		return frog->getZ();
+	}
 	void setFrogT1(int i);
 	void setFrogT2(int i);
 	void setFrogT3(int i);
@@ -51,8 +60,6 @@ public:
 	float sqDistPointAABB(float x, float y, float z, BoxAABB *aabb);
 	bool testCircleAABB(BoxSphere *sphere, BoxAABB *aabb);
 };
-
-
 
 }
 #endif
