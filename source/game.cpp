@@ -26,13 +26,9 @@ Game::~Game() {
 
 void Game::init() {
 	frog = new Frog(10.0, 0.0, 1.0, 0.01, DIR_BACK);
-	//game_objects.push_back(frog);
 
 	map = new Map();
-	//game_objects.push_back(map);
 
-	//car1 = new Car(-4.0, 0.3, 6.0, DIR_LEFT, 0.2);
-	//cars.push_back(car1);
 	car2 = new Car(-6.0, 0.3, 4.0, DIR_LEFT, 0.2);
 	cars.push_back(car2);
 	car3 = new Car(-4.0, 0.3, 8.0, DIR_RIGHT, 0.2);
@@ -42,17 +38,22 @@ void Game::init() {
 
 	rlog1 = new Riverlog(2.0, -0.5, 17.0, 50, DIR_LEFT, 0.2);
 	riverlogs.push_back(rlog1);
-	//rlog2 = new Riverlog(7.0, -0.5, 19.0, 50, DIR_RIGHT, 0.2);
-	//riverlogs.push_back(rlog2);
 	rlog3 = new Riverlog(2.0, -0.5, 21.0, 50, DIR_LEFT, 0.2);
 	riverlogs.push_back(rlog3);
-	//rlog4 = new Riverlog(7.0, -0.5, 23.0, 50, DIR_RIGHT, 0.2);
-	//riverlogs.push_back(rlog4);
-	turtle1 = new Turtle(10.0, -.5, 19.0, DIR_RIGHT, 0.2);
-	turtles.push_back(turtle1);
 
-	turtle2 = new Turtle(10.0, -.5, 23.0, DIR_LEFT, 0.2);
-	turtles.push_back(turtle2);
+	Turtle *t;
+	t = new Turtle(5.0, -.5, 19.0, DIR_RIGHT, 0.2);
+	turtles.push_back(t);
+	t = new Turtle(10.0, -.5, 19.0, DIR_RIGHT, 0.2);
+	turtles.push_back(t);
+	t = new Turtle(15.0, -.5, 19.0, DIR_RIGHT, 0.2);
+	turtles.push_back(t);
+	t = new Turtle(15.0, -.5, 23.0, DIR_LEFT, 0.2);
+	turtles.push_back(t);
+	t = new Turtle(10.0, -.5, 23.0, DIR_LEFT, 0.2);
+	turtles.push_back(t);
+	t = new Turtle(5.0, -.5, 23.0, DIR_LEFT, 0.2);
+	turtles.push_back(t);
 
 	lamp1 = new Lamp(15.0f, 0.0f, 15.0f);
 	lamp2 = new Lamp(15.0f, 0.0f, 28.0f);
