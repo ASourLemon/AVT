@@ -41,7 +41,7 @@ GLuint VaoId, VboId[4];
 GLuint VertexShaderId, FragmentShaderId, ProgramId, ColorId;
 GLint UniformId, ProjectionID, ModelID, ViewID;
 GLint tex_loc;
-GLuint TextureArray[3];
+GLuint TextureArray[4];
 
 // Mouse Tracking Variables
 int startX, startY, tracking = 0;
@@ -539,10 +539,11 @@ void init(int argc, char* argv[]) {
 	setupCallbacks();
 	setupLight();
 	l_on = false;
-	glGenTextures(3, TextureArray);
+	glGenTextures(4, TextureArray);
 	TGA_Texture(TextureArray, "textures/lightwood.tga", 0);
 	TGA_Texture(TextureArray, "textures/road.tga", 1);
 	TGA_Texture(TextureArray, "textures/water.tga", 2);
+	TGA_Texture(TextureArray, "textures/grass.tga", 3);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);

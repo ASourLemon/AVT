@@ -3,21 +3,21 @@
 extern GLuint TextureArray[3];
 
 namespace domain {
-	
+
 float Map::roadAmb[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Map::roadDif[4] = { 0.3f, 0.3f, 0.3f, 1.0f };
 float Map::roadSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Map::roadShininess = 1;
 
-float Map::grassAmb[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+float Map::grassAmb[4] = { 0.05/3.0, 0.125/3.0, 0.05/3.0, 1.0f };
 float Map::grassDif[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
 float Map::grassSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Map::grassShininess = 1;
 
 float Map::waterAmb[4] = { 0.08f, 0.12f, 0.08f, 1.0f };
 float Map::waterDif[4] = { 0.4f, 0.6f, 0.4f, 1.0f };
-float Map::waterSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-float Map::waterShininess = 1;
+float Map::waterSpec[4] = { 0.0f, 0.0f, 0.1f, 1.0f };
+float Map::waterShininess = 10;
 
 float Map::wallAmb[4] = { 0.2f, 0.1f, 0.1f, 1.0f };
 float Map::wallDif[4] = { 1.2f, 0.6f, 0.8f, 1.0f };
@@ -34,7 +34,8 @@ Map::Map() {
 	win_x = 10.0f;
 	win_y = 0.0f;
 	win_z = 28.0f;
-	win_box = new BoxAABB(&win_x, &win_y, &win_z, 10.0f, 10.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	win_box = new BoxAABB(&win_x, &win_y, &win_z, 10.0f, 10.0f, 1.0f, 1.0f,
+			1.0f, 1.0f);
 }
 
 Map::~Map() {
@@ -124,6 +125,9 @@ void Map::draw(VSMathLib* core) {
 	body.setColor(VSResourceLib::SPECULAR, grassSpec);
 	body.setColor(VSResourceLib::SHININESS, &grassShininess);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[3]);
+
 	//top border
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(0.0, -1.0, 0.0);
@@ -145,12 +149,15 @@ void Map::draw(VSMathLib* core) {
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
+
 
 	/////////////////////////////////////////////////
 	///ROAD/////////////////////////////////////////
 	////////////////////////////////////////////////
 
-	body.setColor(VSResourceLib::DIFFUSE,roadDif);
+	body.setColor(VSResourceLib::DIFFUSE, roadDif);
 	body.setColor(VSResourceLib::AMBIENT, roadAmb);
 	body.setColor(VSResourceLib::SPECULAR, roadSpec);
 	body.setColor(VSResourceLib::SHININESS, &roadShininess);
@@ -160,10 +167,9 @@ void Map::draw(VSMathLib* core) {
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(-2.0, -1.0, 3.0);
-	core->scale(MAP0_W+5, 1, 10);
+	core->scale(MAP0_W + 5, 1, 10);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
-
 
 	/////////////////////////////////////////////////
 	///RIVER/////////////////////////////////////////
@@ -184,7 +190,7 @@ void Map::draw(VSMathLib* core) {
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(0.0, -2.0, 16.0);	//base translate
 	for (int l = 0.5; l < 10; l += 3) {
-		for (int c = -2; c <= MAP0_W+2; c += 2) {
+		for (int c = -2; c <= MAP0_W + 2; c += 2) {
 			core->pushMatrix(VSMathLib::MODEL);
 			if (l % 2 == 0) {
 				core->translate(c + deltaWater, -1.0, l);
