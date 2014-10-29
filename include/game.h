@@ -34,6 +34,11 @@ private:
 	Turtle* turtle2;
 
 	Lamp* lamp1;
+	Lamp* lamp2;
+	Lamp* lamp3;
+	Lamp* lamp4;
+	Lamp* lamp5;
+	Lamp* lamp6;
 
 	int frogLifes;
 	int points;

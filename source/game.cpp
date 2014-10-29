@@ -55,6 +55,11 @@ void Game::init() {
 	turtles.push_back(turtle2);
 
 	lamp1 = new Lamp(15.0f, 0.0f, 15.0f);
+	lamp2 = new Lamp(15.0f, 0.0f, 28.0f);
+	lamp3 = new Lamp(15.0f, 0.0f, 1.0f);
+	lamp4 = new Lamp(5.0f, 0.0f, 15.0f);
+	lamp5 = new Lamp(5.0f, 0.0f, 28.0f);
+	lamp6 = new Lamp(5.0f, 0.0f, 1.0f);
 
 	frog->setMaplimit(map->getMaplimit());
 	
@@ -80,6 +85,11 @@ void Game::draw(VSMathLib* core) {
 		turtles.at(i)->draw(core);
 
 	lamp1->draw(core);
+	lamp2->draw(core);
+	lamp3->draw(core);
+	lamp4->draw(core);
+	lamp5->draw(core);
+	lamp6->draw(core);
 
 }
 

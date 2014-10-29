@@ -2,14 +2,14 @@
 
 namespace domain {
 
-float Lamp::supportAmb[4] = { 0.1f, 0.4f, 0.1f, 1.0f };
-float Lamp::supportDif[4] = { 0.2f, 0.4f, 0.2f, 1.0f };
-float Lamp::supportSpec[4] = { 0.6f, 0.6f, 0.6f, 1.0f };
-float Lamp::supportShininess = 100;
+float Lamp::supportAmb[4] = { 64.0/1024.0, 64.0/1024.0, 64.0/1024.0, 1.0f };
+float Lamp::supportDif[4] = { 64.0/256.0, 64.0/256.0, 64.0/256.0, 1.0f };
+float Lamp::supportSpec[4] = { 64.0/256.0, 64.0/256.0, 64.0/256.0, 1.0f };
+float Lamp::supportShininess = 10;
 
-float Lamp::lampShadeAmb[4] = { 0.2f, 0.6f, 0.2f, 1.0f };
-float Lamp::lampShadeDif[4] = { 0.5f, 0.7f, 0.5f, 1.0f };
-float Lamp::lampShadeSpec[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
+float Lamp::lampShadeAmb[4] = { 0.25f, 0.25f, 153.0/1024.0, 1.0f };
+float Lamp::lampShadeDif[4] = { 1.0f, 1.0f, 153.0/256.0, 1.0f };
+float Lamp::lampShadeSpec[4] = { 1.0f, 1.0f, 153.0/256.0, 1.0f };
 float Lamp::lampShadeShininess = 100;
 
 Lamp::Lamp(float x, float y, float z) :
