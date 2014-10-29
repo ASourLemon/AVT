@@ -141,7 +141,7 @@ void LightManager::processMiningLight(int n, Light* l, VSMathLib* core){
 		dir[2] = -1.0;
 
 	}
-	dir[1] = 0.0;	
+	dir[1] = -0.2;	
 	dir[3] = 0.0;
 	float cut = 0.9;
 	char pos_name[30];

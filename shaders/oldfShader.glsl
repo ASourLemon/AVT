@@ -63,9 +63,9 @@ vec4 processSpotLights(){
 			intensity = max(dot(n,ld), 0.0);
 			//if(distance > 10.0)
 				float a, b, c;		//attenuation = 1/(a + bd + cd2) 
-				a = 2;
-				b = 1;
-				c = 0.5;
+				a = 0.7;
+				b = 0;
+				c = 0.07;
 				float attenuation = (1.0 / (a 
 										+ (b * distance) 
 										+ (c * distance * distance)));
@@ -126,12 +126,25 @@ vec4 processPointLights(){
 	vec3 l;
 	vec3 e;
 	float intensity;
+
+	float distance = length(DataIn.lightDir[index]);
+				float a, b, c;		//attenuation = 1/(a + bd + cd2) 
+				a = 0.7;
+				b = 0;
+				c = 0.07;
+				float attenuation = (1.0 / (a 
+										+ (b * distance) 
+										+ (c * distance * distance)));
+				if(distance>10)
+					attenuation = 0;
+
 	for(k = 0; k < MAX_POINT_LIGHTS; k++){
 		spec = vec4(0.0);
 		n = normalize(DataIn.normal[index]);
 		l = normalize(DataIn.lightDir[index]);
 		e = normalize(vec3(DataIn.eye[index]));
 		intensity = max(dot(n,l), 0.0);
+		intensity *=attenuation;
 		if (intensity > 0.0) {
 
 			vec3 h = normalize(l + e);
@@ -158,7 +171,6 @@ void main() {
 			
 		colorOut = processSpotLights();	
 		colorOut += processPointLights();
-		colorOut /= 2; //for a better effect
 	}
 	colorOut *= texel;
 }

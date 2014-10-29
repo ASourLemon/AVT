@@ -567,7 +567,7 @@ void setupLight() {
 	float l0_pos[4] = { 15.0f, 4.0f, 15.0f, 1.0f };
 	lightManager.addLight(l0_pos);
 
-	float l1_dir[4] = { 0.0f, 1.0f, 0.0f, 0.0f };
+	float l1_dir[4] = { 1.0f, 1.0f, -1.0f, 0.0f };
 	lightManager.addLight(l1_dir);
 	
 	float l2_cut = 0.2f;

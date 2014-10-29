@@ -4,24 +4,24 @@ extern GLuint TextureArray[3];
 
 namespace domain {
 	
-float Map::roadAmb[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
-float Map::roadDif[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
-float Map::roadSpec[4] = { 0.6f, 0.6f, 0.6f, 1.0f };
-float Map::roadShininess = 100;
+float Map::roadAmb[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+float Map::roadDif[4] = { 0.3f, 0.3f, 0.3f, 1.0f };
+float Map::roadSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+float Map::roadShininess = 1;
 
-float Map::grassAmb[4] = { 0.02f, 0.05f, 0.02f, 1.0f };
+float Map::grassAmb[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Map::grassDif[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
-float Map::grassSpec[4] = { 0.4f, 0.4f, 0.4f, 1.0f };
+float Map::grassSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Map::grassShininess = 1;
 
-float Map::waterAmb[4] = { 0.2f, 0.2f, 0.5f, 1.0f };
+float Map::waterAmb[4] = { 0.08f, 0.12f, 0.08f, 1.0f };
 float Map::waterDif[4] = { 0.4f, 0.6f, 0.4f, 1.0f };
-float Map::waterSpec[4] = { 0.7f, 0.7f, 0.7f, 1.0f };
+float Map::waterSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Map::waterShininess = 1;
 
-float Map::wallAmb[4] = { 0.4f, 0.3f, 0.2f, 1.0f };
-float Map::wallDif[4] = { 0.6f, 0.3f, 0.4f, 1.0f };
-float Map::wallSpec[4] = { 0.7f, 0.7f, 0.7f, 1.0f };
+float Map::wallAmb[4] = { 0.2f, 0.1f, 0.1f, 1.0f };
+float Map::wallDif[4] = { 1.2f, 0.6f, 0.8f, 1.0f };
+float Map::wallSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Map::wallShininess = 1;
 
 Map::Map() {
