@@ -22,6 +22,8 @@ Frog::Frog(float x, float y, float z, float speed, int direction) : _x(x), _y(y)
 	created = false;
 	//float center[3] = { this->x, this->y, this->z};
 	Sphere = new BoxSphere(&_x, &_y, &_z, 2.2*0.4);
+	beingCompressed = false;
+	compressed = 1.0;
 }
 
 Frog::~Frog(){
@@ -41,7 +43,7 @@ void Frog::draw(VSMathLib* core){
 		core->rotate(-90, 0 ,1, 0);
 	}
 
-	core->scale(0.2, 0.2, 0.2);
+	core->scale(0.2, 0.2 * compressed, 0.2);
 
 	//corpo
 	core->pushMatrix(VSMathLib::MODEL);

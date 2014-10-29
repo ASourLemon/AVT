@@ -29,7 +29,7 @@ private:
 	static float eyeSpec[4];
 	static float eyeShininess;
 	BoxSphere *Sphere;
-	
+
 protected:
 	VSResSurfRevLib body, head, eye;
 	bool created;
@@ -37,6 +37,8 @@ protected:
 	float _x, _y, _z, speed;
 	int direction;
 	int map_limit;
+	bool beingCompressed;
+	float compressed;
 	
 
 public:
@@ -45,9 +47,13 @@ public:
 	void draw(VSMathLib* core);
 	void move(int d);
 	void tick();
+	inline void setCompressed(bool compressed){ beingCompressed = compressed;}
+	inline void setCompressedR(float compressed){ this->compressed = compressed;}
+	inline bool isCompressed(){ return beingCompressed;}
 	inline float getX(){return _x;}
 	inline float getY(){return _y;}
 	inline float getZ(){return _z;}
+	inline float getCompress(){return compressed;}
 	inline int getDirection(){ return direction; }
 	inline void setX(float i){_x = i;}
 	inline void setY(float i){_y = i;}

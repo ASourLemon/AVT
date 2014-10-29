@@ -99,7 +99,7 @@ void Game::setFrogT4(int i) {
 void Game::tick() {
 	if(falling){
 		float d = 0.03;
-		distFalling += d;
+		distFalling += distFalling;
 		frog->setY(frog->getY() - d);
 
 		if(distFalling > 2.0){
@@ -108,11 +108,22 @@ void Game::tick() {
 			frog->setX(10.0);
 			frog->setY(0.0);
 			frog->setZ(1.0);
-			distFalling = 0.0;
+			distFalling = 0.03;
 		}
 
 	}
-
+	if(frog->isCompressed()){
+		printf("ran over\n");
+		if(frog->getCompress() > 0.0001){
+			frog->setCompressedR(frog->getCompress() - 0.04);
+		}else {
+			frog->setX(10.0);
+			frog->setY(0.0);
+			frog->setZ(1.0);
+			frog->setCompressedR(1.0);
+			frog->setCompressed(false);
+		}
+	}
 
 	//for (unsigned int i = 0; i < game_objects.size(); i++)
 	//game_objects.at(i)->tick();
@@ -180,6 +191,11 @@ void Game::tick() {
 			printf("SPLASH\n");
 			falling = true;
 
+		}
+	}
+	for (unsigned int i = 0; i < cars.size(); i++) {
+		if (testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())) {
+			frog->setCompressed(true);
 		}
 	}
 }
