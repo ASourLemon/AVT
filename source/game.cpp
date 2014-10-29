@@ -105,23 +105,14 @@ void Game::tick() {
 	for (unsigned int i = 0; i < turtles.size(); i++)
 		turtles.at(i)->tick();
 
-	for (unsigned int i = 0; i < cars.size(); i++) {
-		if (testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())
+	for (unsigned int i = 0; i < riverlogs.size(); i++) {
+		if (testCircleAABB(frog->get_Sphere(), riverlogs.at(i)->get_AABB())
 				== true) {
-			//frog->setX(10.0);
-			//frog->setY(0.0);
-			//frog->setZ(1.0);
+			frog->setX(10.0);
+			frog->setY(0.0);
+			frog->setZ(1.0);
 			//frog->tick();
 			std::cout << "COLIDE!!! " << std::endl;
-
-		} else {
-			float x = car2->get_AABB()->get_x();
-			float xmin = car2->get_AABB()->get_xmin();
-			float xmax = car2->get_AABB()->get_xmax();
-			std::cout << "x: " << x << " xmin: " << xmin << " xmax: " << xmax
-					<< std::endl;
-			float fx = frog->getX();
-			std::cout << "FROGx: " << fx << std::endl;
 		}
 	}
 }

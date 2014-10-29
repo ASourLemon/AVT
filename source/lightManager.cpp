@@ -121,7 +121,7 @@ void LightManager::processMiningLight(int n, Light* l, VSMathLib* core){
 	float pos[4];
 	float res[4];
 	pos[0] = frog->getX();
-	pos[1] = frog->getY();
+	pos[1] = frog->getY()+1;
 	pos[2] = frog->getZ();
 	pos[3] = 1.0f;	
 	float dir[4] = {0.0, 0.0, 1.0, 0.0};
