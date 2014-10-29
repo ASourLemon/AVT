@@ -113,21 +113,26 @@ void Frog::draw(VSMathLib* core){
 void Frog::move(int d){
 	switch(d){
 
-	case(DIR_FRONT):{
+	case(DIR_FRONT):{			
 		direction = DIR_FRONT;
-		deltaT=glutGet(GLUT_ELAPSED_TIME)-t1;
+		if(_z < 32.0 && _z > 0.0){
+			deltaT=glutGet(GLUT_ELAPSED_TIME)-t1;
 
-		_z+=speed*deltaT;
-		t1=glutGet(GLUT_ELAPSED_TIME);
+			_z+=speed*deltaT;
+			t1=glutGet(GLUT_ELAPSED_TIME);
+		}  
+
 		break;
 	}
 
-	case(DIR_BACK):{
+	case(DIR_BACK):{			
 		direction = DIR_BACK;
-		deltaT=glutGet(GLUT_ELAPSED_TIME)-t2;
+		if(_z < 32.0 && _z > 1.0){
+			deltaT=glutGet(GLUT_ELAPSED_TIME)-t2;
 
-		_z-=speed*deltaT;
-		t2=glutGet(GLUT_ELAPSED_TIME);
+			_z-=speed*deltaT;
+			t2=glutGet(GLUT_ELAPSED_TIME);
+		}
 		break;
 	}
 

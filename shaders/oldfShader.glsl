@@ -2,12 +2,8 @@
 
 const int MAX_SPOT_LIGHTS = 1;
 const int MAX_DIR_LIGHTS = 1;
-const int MAX_POINT_LIGHTS = 1;
+const int MAX_POINT_LIGHTS = 6;
 const int MAX_LIGHTS = MAX_SPOT_LIGHTS + MAX_DIR_LIGHTS + MAX_POINT_LIGHTS;
-
-const int SPOT_LIGHT = 0;
-const int DIR_LIGHT = 1;
-const int POINT_LIGHT = 2;
 
 out vec4 colorOut;
 
@@ -31,8 +27,8 @@ uniform vec4 point_lights[MAX_POINT_LIGHTS];
 
 
 in Data {
-	vec3 normal[MAX_LIGHTS];
-	vec4 eye[MAX_LIGHTS];
+	vec3 normal;
+	vec4 eye;
 	vec3 lightDir[MAX_SPOT_LIGHTS + MAX_POINT_LIGHTS];
 } DataIn;
 
@@ -58,7 +54,7 @@ vec4 processSpotLights(){
 		// inside the cone?
 		if (dot(sd,ld) > spot_lights[l].l_spotCutOff) {
 			float distance = length(DataIn.lightDir[index]);
-			vec3 n = normalize(DataIn.normal[index]);
+			vec3 n = normalize(DataIn.normal);
 			
 			intensity = max(dot(n,ld), 0.0);
 			//if(distance > 10.0)
@@ -74,7 +70,7 @@ vec4 processSpotLights(){
 			//
 			
 			if (intensity > 0.0) {
-				vec3 eye = normalize(vec3(DataIn.eye[index]));
+				vec3 eye = normalize(vec3(DataIn.eye));
 				vec3 h = normalize(ld + eye);
 				float intSpec = max(dot(h,n), 0.0);
 				spec = specular * pow(intSpec, shininess);
@@ -82,7 +78,7 @@ vec4 processSpotLights(){
 			}
 
 		}
-		finalColor = finalColor + max(intensity * diffuse + spec, ambient);	
+		finalColor = finalColor + max((intensity * diffuse + spec) * MAX_SPOT_LIGHTS, ambient);	
 		index++;
 	}
 	
@@ -97,8 +93,8 @@ vec4 processDirLights(){
 		vec4 spec = vec4(0.0);
 
 		// normalize both input vectors
-		vec3 n = normalize(DataIn.normal[index]);
-		vec3 e = normalize(vec3(DataIn.eye[index]));
+		vec3 n = normalize(DataIn.normal);
+		vec3 e = normalize(vec3(DataIn.eye));
 
 		float intensity = max(dot(n,vec3(dir_lights[k])), 0.0);
 
@@ -112,8 +108,7 @@ vec4 processDirLights(){
 		}
 		//vec4 color =  max(intensity *  diffuse, ambient);
 		//colorOut = texture(texUnit, DataIn.texCoord) * color + spec;
-		finalColor = finalColor + max(intensity *  diffuse + spec, ambient);
-		index++;
+		finalColor = finalColor + max((intensity *  diffuse + spec) * MAX_DIR_LIGHTS, ambient);
 	}
 	
 	return finalColor/MAX_DIR_LIGHTS;
@@ -127,22 +122,26 @@ vec4 processPointLights(){
 	vec3 e;
 	float intensity;
 
-	float distance = length(DataIn.lightDir[index]);
-				float a, b, c;		//attenuation = 1/(a + bd + cd2) 
-				a = 0.7;
-				b = 0;
-				c = 0.07;
-				float attenuation = (1.0 / (a 
-										+ (b * distance) 
-										+ (c * distance * distance)));
-				if(distance>10)
-					attenuation = 0;
-
 	for(k = 0; k < MAX_POINT_LIGHTS; k++){
+		
+		float distance = length(DataIn.lightDir[index]);
+		float a, b, c;		//attenuation = 1/(a + bd + cd2) 
+		a = 0.7;
+		b = 0;
+		c = 0.07;
+		float attenuation = (1.0 / 
+								  (a 
+								+ (b * distance) 
+								+ (c * distance * distance)));
+		if(distance>10)
+			attenuation = 0;
+
+		
+		
 		spec = vec4(0.0);
-		n = normalize(DataIn.normal[index]);
+		n = normalize(DataIn.normal);
 		l = normalize(DataIn.lightDir[index]);
-		e = normalize(vec3(DataIn.eye[index]));
+		e = normalize(vec3(DataIn.eye));
 		intensity = max(dot(n,l), 0.0);
 		intensity *=attenuation;
 		if (intensity > 0.0) {
@@ -152,7 +151,7 @@ vec4 processPointLights(){
 			spec = specular * pow(intSpec, shininess);
 		}
 			
-		finalColor = finalColor + max(intensity * diffuse + spec, ambient);
+		finalColor = finalColor + max((intensity * diffuse + spec )* MAX_POINT_LIGHTS , ambient);
 		index++;
 	}
 	

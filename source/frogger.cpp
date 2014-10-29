@@ -496,18 +496,30 @@ void setupSurfRev() {
 void setupLight() {
 	lightManager.init(&shader, game.getFrog());
 	
-	float l0_pos[4] = { 15.0f, 4.0f, 15.0f, 1.0f };
-	lightManager.addLight(l0_pos);
-
+	//Point lights
+	float p0_pos[4] = { 15.0f, 3.0f, 15.0f, 1.0f };
+	lightManager.addLight(p0_pos);
+	float p1_pos[4] = { 5.0f, 3.0f, 15.0f, 1.0f };
+	lightManager.addLight(p1_pos);
+	
+	float p2_pos[4] = { 15.0f, 3.0f, 1.0f, 1.0f };
+	lightManager.addLight(p2_pos);
+	float p3_pos[4] = { 5.0f, 3.0f, 1.0f, 1.0f };
+	lightManager.addLight(p3_pos);
+	
+	float p4_pos[4] = { 15.0f, 3.0f, 28.0f, 1.0f };
+	lightManager.addLight(p4_pos);
+	float p5_pos[4] = { 5.0f, 3.0f, 28.0f, 1.0f };
+	lightManager.addLight(p5_pos);
+	
+	//Dir light
 	float l1_dir[4] = { 1.0f, 1.0f, -1.0f, 0.0f };
 	lightManager.addLight(l1_dir);
 	
+	//Mining light
 	float l2_cut = 0.2f;
-	float l2_pos[4] = { 0.0f, 2.0f, 1.0f, 1.0f };	//<- capacete de mineiro - coordenadas da camara 
 	float l2_dir[4] = { 0.0f, 0.0f, 1.0f, 0.0f };
-	//lightManager.addLight(l2_pos, l2_dir, l2_cut);
 	lightManager.addLight(l2_dir, l2_cut);
-	
 
 	int n_lights = lightManager.getNumLights();
 	shader.setUniform("n_lights", &n_lights);
@@ -531,10 +543,6 @@ void init(int argc, char* argv[]) {
 	TGA_Texture(TextureArray, "textures/lightwood.tga", 0);
 	TGA_Texture(TextureArray, "textures/road.tga", 1);
 	TGA_Texture(TextureArray, "textures/water.tga", 2);
-
-	//FIXME: hardcode. right place?
-//		tex_loc = glGetUniformLocation(shader.getProgramIndex(), "texmap");
-//		glUniform1i(tex_loc, 0);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
