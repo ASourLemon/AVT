@@ -32,10 +32,10 @@ namespace domain {
 		void tick();
 		inline BoxAABB * get_AABB(){ return AABB; }
 		inline int getDirection(){ return direction; }
-		inline int getSpeed(){ return speed;}
-		inline int getX(){ return x;}
-		inline int getY(){ return y;}
-		inline int getZ(){ return z;}
+		inline float getSpeed(){ return speed;}
+		inline float getX(){ return x;}
+		inline float getY(){ return y;}
+		inline float getZ(){ return z;}
 	};
 
 }

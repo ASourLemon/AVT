@@ -38,6 +38,9 @@ public:
 	~Turtle();
 	void draw(VSMathLib* core);
 	void tick();
+	inline BoxAABB * get_AABB(){ return body_box;}
+	inline float getSpeed(){ return speed;};
+	inline int getDirection(){ return direction; }
 
 };
 
