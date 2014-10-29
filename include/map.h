@@ -38,6 +38,10 @@ protected:
 	VSResSurfRevLib water;
 	float deltaWater;
 	bool goingLeft;
+	BoxAABB *win_box;
+	float win_x;
+	float win_y;
+	float win_z;
 
 
 public:
@@ -46,6 +50,7 @@ public:
 	void draw(VSMathLib* core);
 	void tick();
 	int getMaplimit(){return MAP0_W;}
+	BoxAABB* getWinBox(){ return win_box;}
 };
 
 }

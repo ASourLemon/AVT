@@ -23,7 +23,7 @@ Game::~Game() {
 }
 
 void Game::init() {
-	frog = new Frog(10.0, 0.0, 1.0, 0.01, DIR_FRONT);
+	frog = new Frog(10.0, 0.0, 1.0, 0.01, DIR_BACK);
 	//game_objects.push_back(frog);
 
 	map = new Map();
@@ -98,6 +98,14 @@ void Game::tick() {
 	frog->tick();
 	map->tick();
 
+	if (testCircleAABB(frog->get_Sphere(), map->getWinBox())){
+		frog->setX(10.0);
+		frog->setY(0.0);
+		frog->setZ(1.0);
+		printf("Well done!\n");
+
+	}
+
 	for (unsigned int i = 0; i < cars.size(); i++)
 		cars.at(i)->tick();
 	for (unsigned int i = 0; i < riverlogs.size(); i++)
@@ -106,8 +114,7 @@ void Game::tick() {
 		turtles.at(i)->tick();
 
 	for (unsigned int i = 0; i < riverlogs.size(); i++) {
-		if (testCircleAABB(frog->get_Sphere(), riverlogs.at(i)->get_AABB())
-				== true) {
+		if (testCircleAABB(frog->get_Sphere(), riverlogs.at(i)->get_AABB())) {
 			frog->setX(10.0);
 			frog->setY(0.0);
 			frog->setZ(1.0);
@@ -115,6 +122,7 @@ void Game::tick() {
 			std::cout << "COLIDE!!! " << std::endl;
 		}
 	}
+
 }
 
 float Game::sqDistPointAABB(float x, float y, float z, BoxAABB *aabb) {

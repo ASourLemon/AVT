@@ -31,7 +31,10 @@ Map::Map() {
 
 	deltaWater = 0.0f;
 	goingLeft = false;
-
+	win_x = 10.0f;
+	win_y = 0.0f;
+	win_z = 28.0f;
+	win_box = new BoxAABB(&win_x, &win_y, &win_z, 10.0f, 10.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 Map::~Map() {

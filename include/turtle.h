@@ -31,6 +31,7 @@ protected:
 	float speed;
 	int direction;
 	bool created;
+	BoxAABB *body_box;
 
 public:
 	Turtle(float x, float y, float z, int direction, float velocity);
