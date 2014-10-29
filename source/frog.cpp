@@ -18,7 +18,7 @@ float Frog::eyeSpec[4] = { 0.4f, 0.4f, 0.4f, 1.0f };
 float Frog::eyeShininess = 100;
 
 
-Frog::Frog(float x, float y, float z, float speed, int direction) : _x(x), _y(y), _z(z), speed(speed), t1(0), t2(0), t3(0), t4(0), deltaT(0), direction(direction){
+Frog::Frog(float x, float y, float z, float speed, int direction) : _x(x), _y(y), _z(z), speed(speed), t(0), deltaT(0), direction(direction){
 	created = false;
 	//float center[3] = { this->x, this->y, this->z};
 	Sphere = new BoxSphere(&_x, &_y, &_z, 2.2*0.4);
@@ -115,11 +115,9 @@ void Frog::move(int d){
 
 	case(DIR_FRONT):{			
 		direction = DIR_FRONT;
-		if(_z < 32.0 && _z > 0.0){
-			deltaT=glutGet(GLUT_ELAPSED_TIME)-t1;
-
+		if(_z < 31.0){
+			deltaT=glutGet(GLUT_ELAPSED_TIME)-t;
 			_z+=speed*deltaT;
-			t1=glutGet(GLUT_ELAPSED_TIME);
 		}  
 
 		break;
@@ -127,11 +125,10 @@ void Frog::move(int d){
 
 	case(DIR_BACK):{			
 		direction = DIR_BACK;
-		if(_z < 32.0 && _z > 1.0){
-			deltaT=glutGet(GLUT_ELAPSED_TIME)-t2;
-
+		if(_z > 1.0){
+			
+			deltaT=glutGet(GLUT_ELAPSED_TIME)-t;
 			_z-=speed*deltaT;
-			t2=glutGet(GLUT_ELAPSED_TIME);
 		}
 		break;
 	}
@@ -139,10 +136,9 @@ void Frog::move(int d){
 	case(DIR_LEFT):{
 		direction = DIR_LEFT;
 		if(_x<map_limit-1){
-			deltaT=glutGet(GLUT_ELAPSED_TIME)-t3;
+			deltaT=glutGet(GLUT_ELAPSED_TIME)-t;
 
 			_x+=speed*deltaT;
-			t3=glutGet(GLUT_ELAPSED_TIME);
 		}
 		break;
 	}
@@ -150,11 +146,9 @@ void Frog::move(int d){
 	case(DIR_RIGHT):{
 		direction = DIR_RIGHT;
 		if(_x>1){
-			deltaT=glutGet(GLUT_ELAPSED_TIME)-t4;
+			deltaT=glutGet(GLUT_ELAPSED_TIME)-t;
 
 			_x-=speed*deltaT;
-			t4=glutGet(GLUT_ELAPSED_TIME);
-
 		}
 		break;
 	}

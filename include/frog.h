@@ -33,7 +33,7 @@ private:
 protected:
 	VSResSurfRevLib body, head, eye;
 	bool created;
-	int t1, t2, t3, t4, deltaT; //tempos para movimento
+	int t, deltaT; //tempos para movimento
 	float _x, _y, _z, speed;
 	int direction;
 	int map_limit;
@@ -58,10 +58,7 @@ public:
 	inline void setX(float i){_x = i;}
 	inline void setY(float i){_y = i;}
 	inline void setZ(float i){_z = i;}
-	inline void setT1(int i){t1 = i;}
-	inline void setT2(int i){t2 = i;}
-	inline void setT3(int i){t3 = i;}
-	inline void setT4(int i){t4 = i;}
+	inline void setT(int i){t = i;}
 	inline void setMaplimit(int i){map_limit = i;}
 
 	BoxSphere * get_Sphere(){return Sphere;}

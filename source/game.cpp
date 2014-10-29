@@ -98,17 +98,8 @@ void Game::move_frog(int d) {
 	frog->move(d);
 }
 
-void Game::setFrogT1(int i) {
-	frog->setT1(i);
-}
-void Game::setFrogT2(int i) {
-	frog->setT2(i);
-}
-void Game::setFrogT3(int i) {
-	frog->setT3(i);
-}
-void Game::setFrogT4(int i) {
-	frog->setT4(i);
+void Game::setFrogT(int i) {
+	frog->setT(i);
 }
 
 void Game::tick() {

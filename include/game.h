@@ -71,10 +71,7 @@ public:
 	inline int getFrogPoints(){ return points;};
 	inline int setFrogPoints(int p){ points = p;};
 	inline int setFrogLifes(int lifes){ frogLifes = lifes;};
-	void setFrogT1(int i);
-	void setFrogT2(int i);
-	void setFrogT3(int i);
-	void setFrogT4(int i);
+	void setFrogT(int i);
 
 	float sqDistPointAABB(float x, float y, float z, BoxAABB *aabb);
 	bool testCircleAABB(BoxSphere *sphere, BoxAABB *aabb);
