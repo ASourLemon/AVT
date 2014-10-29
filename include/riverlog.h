@@ -30,8 +30,12 @@ namespace domain {
 		~Riverlog();
 		void draw(VSMathLib* core);
 		void tick();
-		BoxAABB * get_AABB(){ return AABB; }
-
+		inline BoxAABB * get_AABB(){ return AABB; }
+		inline int getDirection(){ return direction; }
+		inline int getSpeed(){ return speed;}
+		inline int getX(){ return x;}
+		inline int getY(){ return y;}
+		inline int getZ(){ return z;}
 	};
 
 }

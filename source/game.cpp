@@ -2,6 +2,8 @@
 
 namespace domain {
 
+float delta = 0.0f;
+
 Game::Game() {
 
 }
@@ -115,11 +117,24 @@ void Game::tick() {
 
 	for (unsigned int i = 0; i < riverlogs.size(); i++) {
 		if (testCircleAABB(frog->get_Sphere(), riverlogs.at(i)->get_AABB())) {
-			frog->setX(10.0);
-			frog->setY(0.0);
-			frog->setZ(1.0);
-			//frog->tick();
-			std::cout << "COLIDE!!! " << std::endl;
+			float d = (float) riverlogs.at(i)->getSpeed() * 0.1;
+
+			if(riverlogs.at(i)->getDirection() == DIR_RIGHT){
+
+				frog->setX(frog->getX() - d);
+
+			}else if (riverlogs.at(i)->getDirection() == DIR_LEFT){
+
+				frog->setX(frog->getX() + d);
+
+			}else {
+
+			}
+			//frog->setX(10.0);
+			//frog->setY(0.0);
+			//frog->setZ(1.0);
+			frog->tick();
+			std::cout << "COLIDE!!! "<< riverlogs.at(i)->getDirection() << std::endl;
 		}
 	}
 
