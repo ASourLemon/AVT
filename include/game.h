@@ -35,6 +35,9 @@ private:
 
 	Lamp* lamp1;
 
+	int frogLifes;
+	int points;
+
 	bool beingCarried;
 	bool falling;
 	float distFalling;
@@ -59,6 +62,10 @@ public:
 	inline domain::Frog* getFrog(){
 		return frog;
 	}
+	inline int getFrogLifes(){ return frogLifes;};
+	inline int getFrogPoints(){ return points;};
+	inline int setFrogPoints(int p){ points = p;};
+	inline int setFrogLifes(int lifes){ frogLifes = lifes;};
 	void setFrogT1(int i);
 	void setFrogT2(int i);
 	void setFrogT3(int i);

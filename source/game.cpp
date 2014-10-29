@@ -57,6 +57,10 @@ void Game::init() {
 	lamp1 = new Lamp(15.0f, 0.0f, 15.0f);
 
 	frog->setMaplimit(map->getMaplimit());
+	
+	frogLifes = 3;
+	points = 0;
+	
 	beingCarried = false;
 	falling = false;
 	distFalling = 0.0;
@@ -97,13 +101,18 @@ void Game::setFrogT4(int i) {
 }
 
 void Game::tick() {
+	if(frogLifes == 0){
+		//printf("GAME OVER!\n");
+		return;
+	}
+	
 	if(falling){
 		float d = 0.12;
 		distFalling += d;
 		frog->setY(frog->getY() - d);
-		printf("falling: %f\n",distFalling);
 		if(distFalling > 2.0){
 			//dead
+			frogLifes--;
 			falling = false;
 			frog->setX(10.0);
 			frog->setY(0.0);
@@ -113,13 +122,13 @@ void Game::tick() {
 
 	}
 	if(frog->isCompressed()){
-		printf("ran over\n");
 		if(frog->getCompress() > 0.0001){
 			frog->setCompressedR(frog->getCompress() - 0.04);
 		}else {
 			frog->setX(10.0);
 			frog->setY(0.0);
 			frog->setZ(1.0);
+			frogLifes--;
 			frog->setCompressedR(1.0);
 			frog->setCompressed(false);
 		}
@@ -134,6 +143,7 @@ void Game::tick() {
 		frog->setX(10.0);
 		frog->setY(0.0);
 		frog->setZ(1.0);
+		points++;
 		printf("Well done!\n");
 
 	}
@@ -185,7 +195,6 @@ void Game::tick() {
 		}
 	}
 	if((frog->getZ() >= 16.5) && (frog->getZ() <= 23.5)){
-		printf("It's in the river\n");
 		//it's on water!
 		if(!beingCarried){
 			printf("SPLASH\n");

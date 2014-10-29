@@ -106,7 +106,7 @@ void renderScene(void) {
 		float fy = game.getFrogY();
 		float fz = game.getFrogZ();
 
-		printf("fx:%f, fy%f, fz%f\n", fx, fy, fz);
+		//printf("fx:%f, fy%f, fz%f\n", fx, fy, fz);
 
 		if (tracking == 1) {
 			core->lookAt(fx, fy + 3.5, fz - 2.5, fx + camX, (fy + camY * -0.5),
@@ -138,10 +138,13 @@ void renderScene(void) {
 /////////////////////////////////////////////////////////////////////// CALLBACKS
 ///////////////////////////////////////////////////////////////////////
 
-void display() {
+void display() {		
 	++FrameCount;
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	renderScene();
+	
+	if(game.getFrogLifes()){
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		renderScene();	
+	}
 }
 
 void reshape(int w, int h) {
@@ -179,8 +182,14 @@ void reshape(int w, int h) {
 void timer(int value) {
 	if (nTimer == FPS) {
 		std::ostringstream oss;
-		oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x"
-				<< WinY << ")";
+		int lifes = game.getFrogLifes();
+		int points = game.getFrogPoints();
+		if(lifes){
+			oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x" << WinY << ")" << "Lifes:" << lifes << "Points:" << points;
+		}else {
+			oss << CAPTION << ": G A M E   O V E R!!";
+		}
+
 		std::string s = oss.str();
 		glutSetWindow(WindowHandle);
 		glutSetWindowTitle(s.c_str());
@@ -258,7 +267,7 @@ void processMouseMotion(int xx, int yy) {
 			* cos(betaAux * 3.14f / 180.0f);
 	camY = rAux * sin(betaAux * 3.14f / 180.0f);
 
-	printf("camX:%f , camY:%f, camZ:%f\n", camX, camY, camZ);
+	//printf("camX:%f , camY:%f, camZ:%f\n", camX, camY, camZ);
 }
 
 void keyPressed(unsigned char key, int x, int y) {
@@ -311,12 +320,20 @@ void processKeys() {
 	if (keyStates['c']) {
 		if(lampOn){
 			lampOn = false;
-			printf("lamp off\n");
+			printf("Lamps off\n");
 		}else {
-			printf("lamp on\n");
+			printf("Lamps on\n");
 			lampOn = true;
 		}
 		keyStates['c'] = false;
+	}
+
+	if (keyStates['r']) {
+		if(!game.getFrogLifes()){
+			game.setFrogLifes(3);
+			game.setFrogPoints(0);
+		}
+		keyStates['r'] = false;
 	}
 
 	if (keyStates['q']) {
@@ -418,7 +435,6 @@ void setupCore() {
 	core->setUniformName(VSMathLib::PROJ_VIEW_MODEL, "m_pvm");
 	core->setUniformName(VSMathLib::NORMAL, "m_normal");
 	core->setUniformName(VSMathLib::VIEW_MODEL, "m_viewModel");
-	//Nao sabia onde por isto, a ideia �� isto ser feito apenas uma vez
 	keyStates = new bool[256];
 	for (int i = 0; i < 256; i++) {
 		keyStates[i] = false;
@@ -448,42 +464,8 @@ GLuint setupShaders() {
 	// Shader for models
 	shader.init();
 
-#define _DIF			0
-#define _DIF_AMB		1
-#define _DIF_AMB_SPEC	2	
-#define _PER_PIXEL		3
-#define _POINT			4	//lampada
-#define _SPOT			5	//cone
-#define _SPECIAL		6
-
-
-#define _LIGHT 6
-
-#if (_LIGHT == _DIF)
-	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdif.vert");
-	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/dirdif.frag");
-#elif (_LIGHT == _DIF_AMB)
-	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdifamb.vert");
-	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/dirdifamb.frag");
-#elif (_LIGHT == _DIF_AMB_SPEC)
-	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/dirdifambspec.vert");
-	shader.loadShader(VSShaderLib::FRAGMENT_SHADER,
-			"shaders/dirdifambspec.frag");
-#elif (_LIGHT == _PER_PIXEL)
-	shader.loadShader(VSShaderLib::VERTEX_SHADER,
-			"shaders/pixeldirdifambspec.vert");
-	shader.loadShader(VSShaderLib::FRAGMENT_SHADER,
-			"shaders/pixeldirdifambspec.frag");
-#elif (_LIGHT == _POINT)
-	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/pointlight.vert");
-	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/pointlight.frag");
-#elif(_LIGHT == _SPOT)
-	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/spotlight.vert");
-	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/spotlight.frag");
-#else
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/oldvShader.glsl");
 	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/oldfShader.glsl");
-#endif
 
 	// set semantics for the shader variables
 	shader.setProgramOutput(0, "outputF");
