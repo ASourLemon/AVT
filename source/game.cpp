@@ -98,17 +98,17 @@ void Game::setFrogT4(int i) {
 
 void Game::tick() {
 	if(falling){
-		float d = 0.03;
-		distFalling += distFalling;
+		float d = 0.12;
+		distFalling += d;
 		frog->setY(frog->getY() - d);
-
+		printf("falling: %f\n",distFalling);
 		if(distFalling > 2.0){
 			//dead
 			falling = false;
 			frog->setX(10.0);
 			frog->setY(0.0);
 			frog->setZ(1.0);
-			distFalling = 0.03;
+			distFalling = 0.0;
 		}
 
 	}
