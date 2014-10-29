@@ -60,11 +60,18 @@ vec4 processSpotLights(){
 			float distance = length(DataIn.lightDir[index]);
 			vec3 n = normalize(DataIn.normal[index]);
 			
-			if(distance > 10.0){
-				intensity = 0.0;						//FIXME: Maybe? This is a simple attenuation
-			}else {
-				intensity = max(dot(n,ld), 0.0);
-			}
+			intensity = max(dot(n,ld), 0.0);
+			//if(distance > 10.0)
+				float a, b, c;		//attenuation = 1/(a + bd + cd2) 
+				a = 2;
+				b = 1;
+				c = 0.5;
+				float attenuation = (1.0 / (a 
+										+ (b * distance) 
+										+ (c * distance * distance)));
+					
+				intensity *= attenuation;						//FIXME: Maybe? This is a simple attenuation
+			//
 			
 			if (intensity > 0.0) {
 				vec3 eye = normalize(vec3(DataIn.eye[index]));
