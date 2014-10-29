@@ -40,7 +40,7 @@ protected:
 	
 
 public:
-	Frog(float x, float y, float z, float speed);
+	Frog(float x, float y, float z, float speed, int direction);
 	~Frog();
 	void draw(VSMathLib* core);
 	void move(int d);
@@ -48,6 +48,7 @@ public:
 	inline float getX(){return _x;}
 	inline float getY(){return _y;}
 	inline float getZ(){return _z;}
+	inline int getDirection(){ return direction; }
 	inline void setX(float i){_x = i;}
 	inline void setY(float i){_y = i;}
 	inline void setZ(float i){_z = i;}

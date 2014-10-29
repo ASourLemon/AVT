@@ -123,10 +123,27 @@ void LightManager::processMiningLight(int n, Light* l, VSMathLib* core){
 	pos[0] = frog->getX();
 	pos[1] = frog->getY()+1;
 	pos[2] = frog->getZ();
-	pos[3] = 1.0f;	
-	float dir[4] = {0.0, 0.0, 1.0, 0.0};
-	float cut = 0.9;
+	pos[3] = 1.0f;
+	
+	int f_dir = frog->getDirection();
+	float dir[4];
+	if(f_dir == DIR_FRONT){
+		dir[0] = 0.0;
+		dir[2] = 1.0;
+	}else if(f_dir == DIR_LEFT) {
+		dir[0] = 1.0;
+		dir[2] = 0.0;
+	}else if(f_dir == DIR_RIGHT){
+		dir[0] = -1.0;
+		dir[2] = 0.0;
+	}else {
+		dir[0] = 0.0;
+		dir[2] = -1.0;
 
+	}
+	dir[1] = 0.0;	
+	dir[3] = 0.0;
+	float cut = 0.9;
 	char pos_name[30];
 	strcpy(pos_name, spotLIndex[n]);
 	strcat(pos_name,l_pos_glslname);	

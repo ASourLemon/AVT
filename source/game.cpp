@@ -23,7 +23,7 @@ Game::~Game() {
 }
 
 void Game::init() {
-	frog = new Frog(10.0, 0.0, 1.0, 0.01);
+	frog = new Frog(10.0, 0.0, 1.0, 0.01, DIR_FRONT);
 	//game_objects.push_back(frog);
 
 	map = new Map();

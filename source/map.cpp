@@ -76,7 +76,7 @@ void Map::draw(VSMathLib* core) {
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(MAP0_W, -1.0, 24.0);
-	core->scale(1.0, 3.0, 8.0);
+	core->scale(1.0, 3.5, 8.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
@@ -101,14 +101,14 @@ void Map::draw(VSMathLib* core) {
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(-1.0, -1.0, 24.0);
-	core->scale(1.0, 3.0, 8.0);
+	core->scale(1.0, 3.5, 8.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	//down
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(0.0, -1.0, MAP0_H);
-	core->scale(MAP0_W, 2.0, 1.0);
+	core->scale(MAP0_W, 3.5, 1.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
