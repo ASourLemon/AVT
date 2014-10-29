@@ -126,7 +126,6 @@ void Frog::move(int d){
 	case(DIR_BACK):{			
 		direction = DIR_BACK;
 		if(_z > 1.0){
-			
 			deltaT=glutGet(GLUT_ELAPSED_TIME)-t;
 			_z-=speed*deltaT;
 		}
@@ -137,7 +136,6 @@ void Frog::move(int d){
 		direction = DIR_LEFT;
 		if(_x<map_limit-1){
 			deltaT=glutGet(GLUT_ELAPSED_TIME)-t;
-
 			_x+=speed*deltaT;
 		}
 		break;
@@ -147,7 +145,6 @@ void Frog::move(int d){
 		direction = DIR_RIGHT;
 		if(_x>1){
 			deltaT=glutGet(GLUT_ELAPSED_TIME)-t;
-
 			_x-=speed*deltaT;
 		}
 		break;
