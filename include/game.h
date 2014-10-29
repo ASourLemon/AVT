@@ -35,6 +35,10 @@ private:
 
 	Lamp* lamp1;
 
+	bool beingCarried;
+	bool falling;
+	float distFalling;
+
 public:
 	Game();
 	~Game();

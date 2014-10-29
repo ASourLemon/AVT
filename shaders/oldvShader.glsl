@@ -39,6 +39,7 @@ in vec4 texCoord;
 
 out vec2 tex_coord;
 uniform bool isDay;
+uniform bool lampOn;
 
 void main () {
 	int k, i = 0;
@@ -63,15 +64,16 @@ void main () {
 			DataOut.eye[i] = vec4(-pos);
 			i++;
 		}
-		
-		//process point_lights
-		for(k = 0; k < MAX_POINT_LIGHTS; k++){
-			vec4 pos = m_viewModel * position;
-			DataOut.eye[i] = vec4(-pos);
-			DataOut.normal[i] = normalize(m_normal * normal);
-			DataOut.lightDir[i] = vec3(point_lights[k] - pos);
-			i++;
-		}	
+		if(lampOn){
+			//process point_lights
+			for(k = 0; k < MAX_POINT_LIGHTS; k++){
+				vec4 pos = m_viewModel * position;
+				DataOut.eye[i] = vec4(-pos);
+				DataOut.normal[i] = normalize(m_normal * normal);
+				DataOut.lightDir[i] = vec3(point_lights[k] - pos);
+				i++;
+			}	
+		}
 	}
 	gl_Position = m_pvm * position;	
 }

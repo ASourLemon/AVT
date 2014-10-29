@@ -58,13 +58,13 @@ namespace domain {
 
 		float d = speed * 0.1;
 		if (direction == DIR_LEFT){
-			if (this->x >= LEFT_X_LIMIT + LOG_HEIGHT){
+			if (this->x >= LEFT_X_LIMIT){
 				this->x = RIGHT_X_LIMIT - r;
 			}
 			this->x += d;
 		}
 		else if (direction == DIR_RIGHT){
-			if (this->x <= RIGHT_X_LIMIT - LOG_HEIGHT){
+			if (this->x <= RIGHT_X_LIMIT){
 				this->x = LEFT_X_LIMIT + r;
 			}
 			this->x -= d;

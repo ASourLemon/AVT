@@ -39,7 +39,7 @@ in Data {
 in vec2 tex_coord;
 uniform sampler2D texmap;
 uniform bool isDay;
-
+uniform bool lampOn;
 int index=0;
 
 vec4 processSpotLights(){
@@ -170,7 +170,10 @@ void main() {
 	}else {		
 			
 		colorOut = processSpotLights();	
-		colorOut += processPointLights();
+		if(lampOn){
+			colorOut += processPointLights();
+			colorOut /= 2; //for a better effect
+		}
 	}
 	colorOut *= texel;
 }

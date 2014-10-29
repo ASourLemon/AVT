@@ -9,8 +9,8 @@
 #include "BoxAABB.h"
 
 
-#define LEFT_X_LIMIT 17
-#define RIGHT_X_LIMIT -4
+#define LEFT_X_LIMIT 17.0f
+#define RIGHT_X_LIMIT -7.0f
 #define SPEED_INC 0.1f
 
 #define DIR_FRONT 0

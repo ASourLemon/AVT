@@ -57,6 +57,9 @@ void Game::init() {
 	lamp1 = new Lamp(15.0f, 0.0f, 15.0f);
 
 	frog->setMaplimit(map->getMaplimit());
+	beingCarried = false;
+	falling = false;
+	distFalling = 0.0;
 }
 
 void Game::draw(VSMathLib* core) {
@@ -94,6 +97,21 @@ void Game::setFrogT4(int i) {
 }
 
 void Game::tick() {
+	if(falling){
+		float d = 0.03;
+		distFalling += d;
+		frog->setY(frog->getY() - d);
+
+		if(distFalling > 2.0){
+			//dead
+			falling = false;
+			frog->setX(10.0);
+			frog->setY(0.0);
+			frog->setZ(1.0);
+		}
+
+	}
+
 
 	//for (unsigned int i = 0; i < game_objects.size(); i++)
 	//game_objects.at(i)->tick();
@@ -115,8 +133,12 @@ void Game::tick() {
 	for (unsigned int i = 0; i < turtles.size(); i++)
 		turtles.at(i)->tick();
 
+	bool log = false;
 	for (unsigned int i = 0; i < riverlogs.size(); i++) {
+
 		if (testCircleAABB(frog->get_Sphere(), riverlogs.at(i)->get_AABB())) {
+			log = true;
+			beingCarried = true;
 			float d = (float) riverlogs.at(i)->getSpeed() * 0.1;
 
 			if(riverlogs.at(i)->getDirection() == DIR_RIGHT){
@@ -129,6 +151,9 @@ void Game::tick() {
 
 			}
 		}
+	}
+	if(!log){
+		beingCarried = false;
 	}
 
 	for (unsigned int i = 0; i < turtles.size(); i++) {
@@ -146,7 +171,15 @@ void Game::tick() {
 			}
 		}
 	}
+	if((frog->getZ() >= 16.5) && (frog->getZ() <= 23.5)){
+		printf("It's in the river\n");
+		//it's on water!
+		if(!beingCarried){
+			printf("SPLASH\n");
+			falling = true;
 
+		}
+	}
 }
 
 float Game::sqDistPointAABB(float x, float y, float z, BoxAABB *aabb) {

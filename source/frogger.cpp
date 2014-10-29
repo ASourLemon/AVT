@@ -64,6 +64,7 @@ int nTimer = 0;
 
 LightManager lightManager;
 bool l_on;
+bool lampOn;
 
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// ERRORS
@@ -120,76 +121,13 @@ void renderScene(void) {
 
 		core->lookAt(10, 10, 15.0, 10, 0, 15.0, 0, 0, 1);
 	}
-	
-	
-	int type = POINT_LIGHT;	
-	
 
-	
-#define _MODE 1
+	int lampbool = glGetUniformLocation(shader.getProgramIndex(), "lampOn");
+	glUniform1i(lampbool, lampOn);
 
-	
-#if (_MODE == 0)
+	int daybool = glGetUniformLocation(shader.getProgramIndex(), "isDay");
+	glUniform1i(daybool, l_on);
 
-	type = DIR_LIGHT;	
-	float l0_dir[4] = { 1.0f, 1.0f, 1.0f, 0.0f };
-	float res[4];
-	core->multMatrixPoint(VSMathLib::VIEW, l0_dir, res);
-	shader.setBlockUniform("Lights", "l_dir", res);
-	
-#elif (_MODE == 1)
-	/*
-	type = POINT_LIGHT;	
-
-	float res1[4];
-	float l0_pos[4] = { 5.0f, 2.0f, 5.0f, 1.0f };
-	core->multMatrixPoint(VSMathLib::VIEW, l0_pos, res1);	
-	int loc4 = glGetUniformLocation(shader.getProgramIndex(), "lights[0].l_type");
-	int loc5 = glGetUniformLocation(shader.getProgramIndex(), "lights[0].l_pos");	
-	glUniform1i(loc4, type);
-	glUniform4f(loc5, res1[0], res1[1], res1[2], res1[3]);
-	
-	float l2_pos[4] = { 15.0f, 2.0f, 26.0f, 1.0f };
-	float l2_dir[4] = { 0.0f, -1.0f, 0.0f, 0.0f };
-	float l2_cut = 0.6;
-	
-	char name[20];
-	char* p1 = "lights[2]";
-	char* p2 = ".l_type";
-	strcpy(name, p1);
-	strcat(name, p2);
-	
-	int loc6 = glGetUniformLocation(shader.getProgramIndex(), name);		//int	
-	int loc7 = glGetUniformLocation(shader.getProgramIndex(), "lights[1].l_pos");		//4f
-	int loc8 = glGetUniformLocation(shader.getProgramIndex(), "lights[1].l_spotDir");	//4f
-	int loc9 = glGetUniformLocation(shader.getProgramIndex(), "lights[1].l_spotCutOff");//1f
-
-	type = SPOT_LIGHT;
-	glUniform1i(loc6, type);
-	core->multMatrixPoint(VSMathLib::VIEW, l2_pos, res1);
-	glUniform4f(loc7, res1[0], res1[1], res1[2], res1[3]);
-	core->multMatrixPoint(VSMathLib::VIEW, l2_dir, res1);
-	glUniform4f(loc8, res1[0], res1[1], res1[2], res1[3]);
-	glUniform1f(loc9, l2_cut);
-	
-	int n_lights = 2;
-	shader.setUniform("n_lights", &n_lights);*/
-	
-#else	
-	type = SPOT_LIGHT;	
-	float res[4];
-	float l2_pos[4] = { 10.0f, 2.0f, 10.0f, 1.0f };
-	float l2_dir[4] = { 0.0f, -1.0f, 0.0f, 0.0f };
-	float l2_cut = 0.6;
-	core->multMatrixPoint(VSMathLib::VIEW, l2_pos, res);
-	shader.setBlockUniform("Lights", "l_pos", res);
-	core->multMatrixPoint(VSMathLib::VIEW, l2_dir, res);
-	shader.setBlockUniform("Lights", "l_spotDir", res);	
-	shader.setBlockUniform("Lights", "l_spotCutOff", &l2_cut);	
-#endif
-
-
-	shader.setUniform("isDay", &l_on);
 	lightManager.drawLight(core);
 	glUseProgram(shader.getProgramIndex());
 	game.draw(core);
@@ -333,7 +271,7 @@ void keyUp(unsigned char key, int x, int y) {
 
 void processKeys() {
 
-	if (keyStates['c']) {
+	if (keyStates['0']) {
 		printf("Camera Spherical Coordinates (%f, %f, %f)\n", alpha, beta, r);
 
 	}
@@ -369,6 +307,18 @@ void processKeys() {
 		}
 		keyStates['n'] = false;
 	}
+
+	if (keyStates['c']) {
+		if(lampOn){
+			lampOn = false;
+			printf("lamp off\n");
+		}else {
+			printf("lamp on\n");
+			lampOn = true;
+		}
+		keyStates['c'] = false;
+	}
+
 	if (keyStates['q']) {
 		game.move_frog(0);
 	} else {
