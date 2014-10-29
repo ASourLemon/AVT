@@ -40,11 +40,11 @@ void Game::init() {
 	car4 = new Car(-6.0, 0.3, 10.0, DIR_RIGHT, 0.2);
 	cars.push_back(car4);
 
-	rlog1 = new Riverlog(2.0, -0.5, 17.0, 50, DIR_LEFT, 1.2);
+	rlog1 = new Riverlog(2.0, -0.5, 17.0, 50, DIR_LEFT, 0.2);
 	riverlogs.push_back(rlog1);
 	//rlog2 = new Riverlog(7.0, -0.5, 19.0, 50, DIR_RIGHT, 0.2);
 	//riverlogs.push_back(rlog2);
-	rlog3 = new Riverlog(2.0, -0.5, 21.0, 50, DIR_LEFT, 1.2);
+	rlog3 = new Riverlog(2.0, -0.5, 21.0, 50, DIR_LEFT, 0.2);
 	riverlogs.push_back(rlog3);
 	//rlog4 = new Riverlog(7.0, -0.5, 23.0, 50, DIR_RIGHT, 0.2);
 	//riverlogs.push_back(rlog4);
@@ -108,6 +108,7 @@ void Game::tick() {
 			frog->setX(10.0);
 			frog->setY(0.0);
 			frog->setZ(1.0);
+			distFalling = 0.0;
 		}
 
 	}
@@ -155,11 +156,12 @@ void Game::tick() {
 	if(!log){
 		beingCarried = false;
 	}
-
+	log = false;
 	for (unsigned int i = 0; i < turtles.size(); i++) {
 		if (testCircleAABB(frog->get_Sphere(), turtles.at(i)->get_AABB())) {
+			log = true;
+			beingCarried = true;
 			float d = (float) turtles.at(i)->getSpeed() * 0.1;
-
 			if(turtles.at(i)->getDirection() == DIR_RIGHT){
 
 				frog->setX(frog->getX() - d);
