@@ -11,7 +11,7 @@ Game::Game() {
 Game::~Game() {
 	delete frog;
 	delete map;
-	//delete car1;
+	delete car1;
 	delete car2;
 	delete car3;
 	delete car4;
@@ -28,12 +28,15 @@ void Game::init() {
 	frog = new Frog(10.0, 0.0, 1.0, 0.01, DIR_BACK);
 
 	map = new Map();
-
-	car2 = new Car(-6.0, 0.3, 4.0, DIR_LEFT, 0.2);
+	car1 = new Car(-6.0, 0.3, 4.0, DIR_LEFT, 0.5);
+	cars.push_back(car1);
+	
+	car2 = new Car(-6.0, 0.3, 6.0, DIR_LEFT, 1.2);
 	cars.push_back(car2);
-	car3 = new Car(-4.0, 0.3, 8.0, DIR_RIGHT, 0.2);
+	
+	car3 = new Car(-4.0, 0.3, 9.0, DIR_RIGHT, 1.2);
 	cars.push_back(car3);
-	car4 = new Car(-6.0, 0.3, 10.0, DIR_RIGHT, 0.2);
+	car4 = new Car(-6.0, 0.3, 11.0, DIR_RIGHT, 0.5);
 	cars.push_back(car4);
 
 	rlog1 = new Riverlog(2.0, -0.5, 17.0, 50, DIR_LEFT, 0.2);
@@ -98,22 +101,12 @@ void Game::move_frog(int d) {
 	frog->move(d);
 }
 
-void Game::setFrogT1(int i) {
-	frog->setT1(i);
-}
-void Game::setFrogT2(int i) {
-	frog->setT2(i);
-}
-void Game::setFrogT3(int i) {
-	frog->setT3(i);
-}
-void Game::setFrogT4(int i) {
-	frog->setT4(i);
+void Game::setFrogT(int i) {
+	frog->setT(i);
 }
 
 void Game::tick() {
 	if(frogLifes == 0){
-		//printf("GAME OVER!\n");
 		return;
 	}
 	

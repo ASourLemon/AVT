@@ -93,6 +93,12 @@ void Turtle::draw(VSMathLib* core) {
 
 void Turtle::tick() {
 	this->second_in_game += 0.01;	//After 100 calls, 1 second
+	
+	if(second_in_game >= 5.0){
+		speed += 0.5f;
+		second_in_game = 0.0;
+	}
+	
 	int r = rand() % 5;
 	float d = speed * 0.1;
 	if (direction == DIR_LEFT) {

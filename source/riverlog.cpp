@@ -51,7 +51,7 @@ namespace domain {
 	void Riverlog::tick(){
 		int r = rand() % 5;
 		this->second_in_game += 0.01f;	//After 100 calls, 1 second
-		if (second_in_game >= 5){
+		if (second_in_game >= 5.0){
 			this->speed += SPEED_INC;
 			second_in_game = 0.0f;
 		}

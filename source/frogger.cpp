@@ -335,12 +335,6 @@ void processKeys() {
 		}
 		keyStates['r'] = false;
 	}
-
-	if (keyStates['q']) {
-		game.move_frog(0);
-	} else {
-		game.setFrogT1(glutGet(GLUT_ELAPSED_TIME));
-	}
 	if (keyStates['w']) {
 		r+= 0.1;
 	}
@@ -349,21 +343,17 @@ void processKeys() {
 	}
 	if (keyStates['a']) {
 		game.move_frog(1);
-	} else {
-		game.setFrogT2(glutGet(GLUT_ELAPSED_TIME));
 	}
-
+	if (keyStates['q']) {
+		game.move_frog(0);
+	}
 	if (keyStates['o']) {
 		game.move_frog(2);
-	} else {
-		game.setFrogT3(glutGet(GLUT_ELAPSED_TIME));
 	}
-
 	if (keyStates['p']) {
 		game.move_frog(3);
-	} else {
-		game.setFrogT4(glutGet(GLUT_ELAPSED_TIME));
 	}
+	game.setFrogT(glutGet(GLUT_ELAPSED_TIME));
 }
 
 ///////////////////////////////////////////////////////////////////////
