@@ -76,10 +76,10 @@ void Lamp::draw(VSMathLib* core) {
 	core->translate(0.0f, SUPPORT_HEIGHT / 2, 0.0f);
 	core->scale(1.0f, SUPPORT_HEIGHT, 1.0f);
 		if(reflection == true){
-			glDepthMask(GL_FALSE); // Don't write to depth buffer
+			//glDepthMask(GL_FALSE); // Don't write to depth buffer
 			glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
 			glStencilMask(0x00); // Don't write anything to stencil buffer
-			glDepthMask(GL_TRUE); // Write to depth buffer
+			//glDepthMask(GL_TRUE); // Write to depth buffer
 			core->translate(0.0f, -1.0f, 0.0f);
 		}
 	support.render();
@@ -91,9 +91,9 @@ void Lamp::draw(VSMathLib* core) {
 	core->translate(0.0f, SUPPORT_HEIGHT + LAMP_SHADE_RADIUS, 0.0f);
 	core->scale(LAMP_SHADE_RADIUS, LAMP_SHADE_RADIUS, LAMP_SHADE_RADIUS);
 		if(reflection == true){
-			glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
-			glStencilMask(0x00); // Don't write anything to stencil buffer
-			glDepthMask(GL_TRUE); // Write to depth buffer
+			//glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
+			//glStencilMask(0x00); // Don't write anything to stencil buffer
+			//glDepthMask(GL_TRUE); // Write to depth buffer
 			core->translate(0.0f, -15.6f, 0.0f);
 		}
 	lampShade.render();
