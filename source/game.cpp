@@ -22,6 +22,13 @@ Game::~Game() {
 	delete turtle1;
 	delete turtle2;
 	delete lamp1;
+	delete lamp2;
+	delete lamp3;
+	delete lamp4;
+	delete lamp5;
+	delete lamp6;
+	delete lamp7;
+	delete lamp8;
 }
 
 void Game::init() {
@@ -41,7 +48,7 @@ void Game::init() {
 
 	rlog1 = new Riverlog(2.0, -0.5, 17.0, 50, DIR_LEFT, 0.2);
 	riverlogs.push_back(rlog1);
-	rlog3 = new Riverlog(2.0, -0.5, 21.0, 50, DIR_LEFT, 0.2);
+	rlog3 = new Riverlog(2.0, -0.5, 21.0, 50, DIR_RIGHT, 0.2);
 	riverlogs.push_back(rlog3);
 
 	Turtle *t;
@@ -58,12 +65,24 @@ void Game::init() {
 	t = new Turtle(5.0, -.5, 23.0, DIR_LEFT, 0.2);
 	turtles.push_back(t);
 
-	lamp1 = new Lamp(15.0f, 0.0f, 15.0f);
-	lamp2 = new Lamp(15.0f, 0.0f, 28.0f);
-	lamp3 = new Lamp(15.0f, 0.0f, 1.0f);
-	lamp4 = new Lamp(5.0f, 0.0f, 15.0f);
-	lamp5 = new Lamp(5.0f, 0.0f, 28.0f);
-	lamp6 = new Lamp(5.0f, 0.0f, 1.0f);
+	lamp1 = new Lamp(15.0f, 0.0f, 15.0f, false);
+	lamps.push_back(lamp1);
+	lamp2 = new Lamp(15.0f, 0.0f, 26.0f, false);
+	lamps.push_back(lamp2);
+	lamp3 = new Lamp(15.0f, 0.0f, 1.0f, false);
+	lamps.push_back(lamp3);
+	lamp4 = new Lamp(5.0f, 0.0f, 15.0f, false);
+	lamps.push_back(lamp4);
+	lamp5 = new Lamp(5.0f, 0.0f, 26.0f, false);
+	lamps.push_back(lamp5);
+	lamp6 = new Lamp(5.0f, 0.0f, 1.0f, false);
+	lamps.push_back(lamp6);
+
+	//Reflection lamps
+	lamp7 = new Lamp(15.0f, 0.0f, 15.0f, true);
+	lamp8 = new Lamp(5.0f, 0.0f, 15.0f, true);
+	lamp9 = new Lamp(15.0f, 0.0f, 26.0f, true);
+	lamp10 = new Lamp(5.0f, 0.0f, 26.0f, true);
 
 	frog->setMaplimit(map->getMaplimit());
 	
@@ -80,25 +99,37 @@ void Game::draw(VSMathLib* core) {
 	//for (unsigned int i = 0; i < game_objects.size(); i++)
 	//game_objects.at(i)->draw(core);
 	frog->draw(core);
+	
 	map->draw(core);
+	
+	//glDisable(GL_STENCIL_TEST);
+	//Normal lamps
+	for (unsigned int i = 0; i < lamps.size(); i++)
+		lamps.at(i)->draw(core);
+	/*lamp1->draw(core);
+	lamp2->draw(core);
+	lamp3->draw(core);
+	lamp4->draw(core);
+	lamp5->draw(core);
+	lamp6->draw(core);*/
+	
+	//Reflections lamps
+	lamp7->draw(core);
+	lamp8->draw(core);
+	lamp9->draw(core);
+	lamp10->draw(core);
+	
+	
 	for (unsigned int i = 0; i < cars.size(); i++)
 		cars.at(i)->draw(core);
 	for (unsigned int i = 0; i < riverlogs.size(); i++)
 		riverlogs.at(i)->draw(core);
 	for (unsigned int i = 0; i < turtles.size(); i++)
 		turtles.at(i)->draw(core);
-
-	lamp1->draw(core);
-	lamp2->draw(core);
-	lamp3->draw(core);
-	lamp4->draw(core);
-	lamp5->draw(core);
-	lamp6->draw(core);
-
 }
 
-void Game::move_frog(int d) {
-	frog->move(d);
+void Game::move_frog(int direction) {
+	frog->move(direction);
 }
 
 void Game::setFrogT(int i) {
@@ -160,6 +191,7 @@ void Game::tick() {
 		turtles.at(i)->tick();
 
 	bool log = false;
+	//Collision Frog vs Riverlogs
 	for (unsigned int i = 0; i < riverlogs.size(); i++) {
 
 		if (testCircleAABB(frog->get_Sphere(), riverlogs.at(i)->get_AABB())) {
@@ -182,6 +214,8 @@ void Game::tick() {
 		beingCarried = false;
 	}
 	log = false;
+
+	//Collision Frog vs Turtles
 	for (unsigned int i = 0; i < turtles.size(); i++) {
 		if (testCircleAABB(frog->get_Sphere(), turtles.at(i)->get_AABB())) {
 			log = true;
@@ -211,6 +245,13 @@ void Game::tick() {
 			frog->setCompressed(true);
 		}
 	}
+	//Collision Frog vs Lamps
+	/*for (unsigned int i = 0; i < lamps.size(); i++) {
+		if (testCircleAABB(frog->get_Sphere(), lamps.at(i)->get_AABB())) {
+			
+		}
+	}*/
+
 }
 
 float Game::sqDistPointAABB(float x, float y, float z, BoxAABB *aabb) {

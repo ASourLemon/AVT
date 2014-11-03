@@ -409,7 +409,7 @@ void setupGLUT(int argc, char* argv[]) {
 			GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 
 	glutInitWindowSize(WinX, WinY);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_STENCIL);
 	WindowHandle = glutCreateWindow(CAPTION);
 	if (WindowHandle < 1) {
 		std::cerr << "ERROR: Could not create a new rendering window."

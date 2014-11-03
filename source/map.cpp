@@ -9,7 +9,7 @@ float Map::roadDif[4] = { 0.3f, 0.3f, 0.3f, 1.0f };
 float Map::roadSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Map::roadShininess = 1;
 
-float Map::grassAmb[4] = { 0.05/3.0, 0.125/3.0, 0.05/3.0, 1.0f };
+float Map::grassAmb[4] = { 0.05f/3.0f, 0.125f/3.0f, 0.05f/3.0f, 1.0f };
 float Map::grassDif[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
 float Map::grassSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Map::grassShininess = 1;
@@ -24,10 +24,16 @@ float Map::wallDif[4] = { 1.2f, 0.6f, 0.8f, 1.0f };
 float Map::wallSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Map::wallShininess = 1;
 
+float Map::cubeAmb[4] = { 0.2f, 0.1f, 0.1f, 1.0f };
+float Map::cubeDif[4] = { 1.2f, 0.6f, 0.8f, 1.0f };
+float Map::cubeSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+float Map::cubeShininess = 1;
+
 Map::Map() {
 
 	body.createCube(1.0f);
-	water.createSphere(2.4, 5);
+	//water.createSphere(2.4f, 5);
+	water.createCube(2.0f);
 
 	deltaWater = 0.0f;
 	goingLeft = false;
@@ -137,15 +143,15 @@ void Map::draw(VSMathLib* core) {
 
 	//mid border
 	core->pushMatrix(VSMathLib::MODEL);
-	core->translate(0.0, -1.0, 13.0);
-	core->scale(MAP0_W, 1.0, 3.0);
+	core->translate(0.0, -0.4, 13.0);
+	core->scale(MAP0_W, 0.3, 3.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	//down border
 	core->pushMatrix(VSMathLib::MODEL);
-	core->translate(0.0, -1.0, 24.0);
-	core->scale(MAP0_W, 1, 8);
+	core->translate(0.0, -0.4, 24.0);
+	core->scale(MAP0_W, 0.3, 8);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
@@ -186,22 +192,32 @@ void Map::draw(VSMathLib* core) {
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[2]);
-
+	
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glStencilMask(0xFF); // Write to stencil buffer
+	glDepthMask(GL_FALSE);
+	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
+	
 	core->pushMatrix(VSMathLib::MODEL);
-	core->translate(0.0, -2.0, 16.0);	//base translate
-	for (int l = 0.5; l < 10; l += 3) {
+	core->translate(-2.0, -0.5, 16.0);	//base translate
+	for (int l = 0; l < 10; l += 3) {
 		for (int c = -2; c <= MAP0_W + 2; c += 2) {
 			core->pushMatrix(VSMathLib::MODEL);
-			if (l % 2 == 0) {
-				core->translate(c + deltaWater, -1.0, l);
+			/*if (l % 2 == 0) {
+				core->translate(c + deltaWater, -1.0f, l + 0.5f);
 			} else {
-				core->translate(c - deltaWater, -1.0, l);
-			}
+				core->translate(c - deltaWater, -1.0f, l + 0.5f);
+			}*/
+			core->scale(MAP0_W + 5, 0.1, 8.0);
 			water.render();
 			core->popMatrix(VSMathLib::MODEL);
 		}
 	}
 	core->popMatrix(VSMathLib::MODEL);
+	glDepthMask(GL_TRUE);
+	glDisable(GL_STENCIL_TEST);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);

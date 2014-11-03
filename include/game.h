@@ -18,6 +18,7 @@ private:
 	std::vector<Car*> cars;
 	std::vector<Riverlog*> riverlogs;
 	std::vector<Turtle*> turtles;
+	std::vector<Lamp*> lamps;
 	Frog* frog;
 	Map* map;
 	Car* car1;
@@ -39,6 +40,12 @@ private:
 	Lamp* lamp4;
 	Lamp* lamp5;
 	Lamp* lamp6;
+	
+	//Reflection Lamps
+	Lamp* lamp7;
+	Lamp* lamp8;
+	Lamp* lamp9;
+	Lamp* lamp10;
 
 	int frogLifes;
 	int points;
@@ -69,8 +76,8 @@ public:
 	}
 	inline int getFrogLifes(){ return frogLifes;};
 	inline int getFrogPoints(){ return points;};
-	inline int setFrogPoints(int p){ points = p;};
-	inline int setFrogLifes(int lifes){ frogLifes = lifes;};
+	inline void setFrogPoints(int p){ points = p;};
+	inline void setFrogLifes(int lifes){ frogLifes = lifes;};
 	void setFrogT(int i);
 
 	float sqDistPointAABB(float x, float y, float z, BoxAABB *aabb);

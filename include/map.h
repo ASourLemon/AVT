@@ -33,6 +33,11 @@ private:
 	static float wallSpec[4];
 	static float wallShininess;
 	
+	static float cubeAmb[4];
+	static float cubeDif[4];
+	static float cubeSpec[4];
+	static float cubeShininess;
+
 protected:
 	VSResSurfRevLib body;
 	VSResSurfRevLib water;
