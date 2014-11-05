@@ -114,11 +114,14 @@ void Game::draw(VSMathLib* core, VSShaderLib* shader) {
 	lamp5->draw(core);
 	lamp6->draw(core);*/
 	
+	int pos_loc = glGetUniformLocation(shader->getProgramIndex(), "vertex_moving");
+	glUniform1i(pos_loc, true);
 	//Reflections lamps
 	lamp7->draw(core, shader);
 	lamp8->draw(core, shader);
 	lamp9->draw(core, shader);
 	lamp10->draw(core, shader);
+	glUniform1i(pos_loc, false);
 	
 	
 	for (unsigned int i = 0; i < cars.size(); i++)

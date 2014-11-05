@@ -9,6 +9,7 @@ layout (std140) uniform Matrices {
 	mat4 m_pvm;
 	mat4 m_viewModel;
 	mat3 m_normal;
+	mat4 m_model;
 };
 
 struct Spot_Light{
@@ -21,7 +22,7 @@ uniform vec4 dir_lights[MAX_DIR_LIGHTS];
 uniform vec4 point_lights[MAX_POINT_LIGHTS];
 uniform float time;
 uniform bool tex_moving;
-
+uniform bool vertex_moving;
 
 
 // the data to be sent to the fragment shader
@@ -63,13 +64,13 @@ void main () {
 			}	
 		}
 	}
-	vec4 aux;		
-	aux = position;
-	if(position.y < -2.0){
+	vec4 aux = m_pvm * position; 
+	if(vertex_moving){
+            aux.x += sin(aux.y * 60.0 + time * 2.0) / 20.0;
+          //  aux.y = 0.3 - aux.y;
+        }
 
-		aux.x *= aux.x + sin(aux.y * 60.0 + time * 2.0) / 30.0;	
-	}
-	gl_Position = m_pvm * aux;	
+	gl_Position = aux ;	
 
 
 }

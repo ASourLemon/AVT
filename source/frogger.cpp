@@ -430,6 +430,7 @@ void setupCore() {
 	core->setUniformName(VSMathLib::PROJ_VIEW_MODEL, "m_pvm");
 	core->setUniformName(VSMathLib::NORMAL, "m_normal");
 	core->setUniformName(VSMathLib::VIEW_MODEL, "m_viewModel");
+	core->setUniformName(VSMathLib::MODEL, "m_model");
 	keyStates = new bool[256];
 	for (int i = 0; i < 256; i++) {
 		keyStates[i] = false;
