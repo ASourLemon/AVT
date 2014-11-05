@@ -32,6 +32,7 @@ Game::~Game() {
 }
 
 void Game::init() {
+
 	frog = new Frog(10.0, 0.0, 1.0, 0.01, DIR_BACK);
 
 	map = new Map();
@@ -94,18 +95,18 @@ void Game::init() {
 	distFalling = 0.0;
 }
 
-void Game::draw(VSMathLib* core) {
+void Game::draw(VSMathLib* core, VSShaderLib* shader) {
 
 	//for (unsigned int i = 0; i < game_objects.size(); i++)
 	//game_objects.at(i)->draw(core);
-	frog->draw(core);
+	frog->draw(core, shader);
 	
-	map->draw(core);
+	map->draw(core, shader);
 	
 	//glDisable(GL_STENCIL_TEST);
 	//Normal lamps
 	for (unsigned int i = 0; i < lamps.size(); i++)
-		lamps.at(i)->draw(core);
+		lamps.at(i)->draw(core, shader);
 	/*lamp1->draw(core);
 	lamp2->draw(core);
 	lamp3->draw(core);
@@ -114,18 +115,18 @@ void Game::draw(VSMathLib* core) {
 	lamp6->draw(core);*/
 	
 	//Reflections lamps
-	lamp7->draw(core);
-	lamp8->draw(core);
-	lamp9->draw(core);
-	lamp10->draw(core);
+	lamp7->draw(core, shader);
+	lamp8->draw(core, shader);
+	lamp9->draw(core, shader);
+	lamp10->draw(core, shader);
 	
 	
 	for (unsigned int i = 0; i < cars.size(); i++)
-		cars.at(i)->draw(core);
+		cars.at(i)->draw(core, shader);
 	for (unsigned int i = 0; i < riverlogs.size(); i++)
-		riverlogs.at(i)->draw(core);
+		riverlogs.at(i)->draw(core, shader);
 	for (unsigned int i = 0; i < turtles.size(); i++)
-		turtles.at(i)->draw(core);
+		turtles.at(i)->draw(core, shader);
 }
 
 void Game::move_frog(int direction) {

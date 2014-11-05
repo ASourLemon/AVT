@@ -52,7 +52,7 @@ protected:
 public:
 	Map();
 	~Map();
-	void draw(VSMathLib* core);
+	void draw(VSMathLib* core, VSShaderLib* shader);
 	void tick();
 	int getMaplimit(){return MAP0_W;}
 	BoxAABB* getWinBox(){ return win_box;}

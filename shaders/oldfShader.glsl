@@ -36,10 +36,13 @@ in vec2 tex_coord;
 uniform sampler2D texmap;
 uniform bool isDay;
 uniform bool lampOn;
+uniform float time;
+uniform bool tex_moving;
 int index=0;
 
 vec4 processSpotLights(){
-	vec4 finalColor =  vec4(0.0);;
+	vec4 finalColor =  vec4(0.0);
+
 	int l;
 	float intensity;
 	vec4 spec;
@@ -160,8 +163,13 @@ vec4 processPointLights(){
 }
 
 void main() {
+	vec4 texel;
 
-	vec4 texel = texture(texmap, tex_coord);  // texel from lighwood.tga
+	if(tex_moving)
+		texel = texture(texmap, vec2(tex_coord.x + sin(tex_coord.y * 60.0 + time * 2.0) / 30.0, 1.0 - tex_coord.y));  // texel from lighwood.tga
+	else
+		texel = texture(texmap, tex_coord);
+		 
 	if(isDay){
 		
 		colorOut = processDirLights();
@@ -172,6 +180,7 @@ void main() {
 		if(lampOn){
 			colorOut += processPointLights();
 			colorOut /= 2; //for a better effect
+				
 		}
 	}
 	colorOut *= texel;

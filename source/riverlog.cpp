@@ -36,7 +36,7 @@ namespace domain {
 
 	Riverlog::~Riverlog(){}
 
-	void Riverlog::draw(VSMathLib* core){
+	void Riverlog::draw(VSMathLib* core, VSShaderLib* shader){
 		if (x < -1 || x > 17)
 			return;
 

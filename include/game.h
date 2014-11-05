@@ -58,7 +58,7 @@ public:
 	Game();
 	~Game();
 	void init();
-	void draw(VSMathLib* core);
+	void draw(VSMathLib* core, VSShaderLib* shader);
 	void add_drawable(Drawable* d);
 	void move_frog(int d);
 	void tick();

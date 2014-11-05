@@ -31,7 +31,7 @@ protected:
 
 public:
 
-	virtual void draw(VSMathLib* core) = 0;
+	virtual void draw(VSMathLib* core, VSShaderLib* shader) = 0;
 	virtual void tick() = 0;
 
 };

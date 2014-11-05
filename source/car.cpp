@@ -40,7 +40,7 @@ Car::~Car() {
 	delete AABB;
 }
 
-void Car::draw(VSMathLib* core) {
+void Car::draw(VSMathLib* core, VSShaderLib* shader) {
 
 	std::list<VSResSurfRevLib>::iterator iter;
 	for (iter = components.begin(); iter != components.end(); iter++) {

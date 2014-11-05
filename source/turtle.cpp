@@ -48,7 +48,7 @@ Turtle::Turtle(float x, float y, float z, int direction, float velocity) :
 Turtle::~Turtle() {
 }
 
-void Turtle::draw(VSMathLib* core) {
+void Turtle::draw(VSMathLib* core, VSShaderLib* shader) {
 	
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(x, y, z);

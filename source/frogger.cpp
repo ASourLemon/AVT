@@ -128,9 +128,14 @@ void renderScene(void) {
 	int daybool = glGetUniformLocation(shader.getProgramIndex(), "isDay");
 	glUniform1i(daybool, l_on);
 
+	float time = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
+	shader.setUniform("time", &time);
+	bool tex_moving = false;
+	int pos_loc = glGetUniformLocation(shader.getProgramIndex(), "tex_moving");
+	glUniform1i(pos_loc, tex_moving);
 	lightManager.drawLight(core);
 	glUseProgram(shader.getProgramIndex());
-	game.draw(core);
+	game.draw(core, &shader);
 	glutSwapBuffers();
 }
 

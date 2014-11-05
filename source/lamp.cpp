@@ -64,7 +64,7 @@ Lamp::Lamp(float x, float y, float z, bool reflect) :
 Lamp::~Lamp() {
 }
 
-void Lamp::draw(VSMathLib* core) {
+void Lamp::draw(VSMathLib* core, VSShaderLib* shader) {
 	glEnable(GL_STENCIL_TEST);
 	
 	core->pushMatrix(VSMathLib::MODEL);

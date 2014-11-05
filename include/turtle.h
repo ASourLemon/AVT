@@ -36,7 +36,7 @@ protected:
 public:
 	Turtle(float x, float y, float z, int direction, float velocity);
 	~Turtle();
-	void draw(VSMathLib* core);
+	void draw(VSMathLib* core, VSShaderLib* shader);
 	void tick();
 	inline BoxAABB * get_AABB(){ return body_box;}
 	inline float getSpeed(){ return speed;};

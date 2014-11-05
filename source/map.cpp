@@ -47,7 +47,7 @@ Map::Map() {
 Map::~Map() {
 }
 
-void Map::draw(VSMathLib* core) {
+void Map::draw(VSMathLib* core, VSShaderLib* shader) {
 
 	body.setMaterialBlockName("Materials");
 	body.setColor(VSResourceLib::DIFFUSE, wallDif);
@@ -171,6 +171,7 @@ void Map::draw(VSMathLib* core) {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[1]);
 
+
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(-2.0, -1.0, 3.0);
 	core->scale(MAP0_W + 5, 1, 10);
@@ -180,7 +181,9 @@ void Map::draw(VSMathLib* core) {
 	/////////////////////////////////////////////////
 	///RIVER/////////////////////////////////////////
 	////////////////////////////////////////////////
-
+	bool moving = true;
+	int pos_loc = glGetUniformLocation(shader->getProgramIndex(), "tex_moving");
+	glUniform1i(pos_loc, moving);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
 
@@ -218,7 +221,8 @@ void Map::draw(VSMathLib* core) {
 	core->popMatrix(VSMathLib::MODEL);
 	glDepthMask(GL_TRUE);
 	glDisable(GL_STENCIL_TEST);
-
+	moving = false;
+	glUniform1i(pos_loc, moving);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
 }

@@ -41,7 +41,7 @@ protected:
 public:
 	Lamp(float x, float y, float z, bool reflect);
 	~Lamp();
-	void draw(VSMathLib* core);
+	void draw(VSMathLib* core, VSShaderLib* shader);
 	void tick();
 	BoxAABB * get_AABB(){ return AABB; }
 

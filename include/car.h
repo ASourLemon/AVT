@@ -38,7 +38,7 @@ namespace domain {
 	public:
 		Car(float x, float y, float z, int direction, float velocity);
 		~Car();
-		void draw(VSMathLib* core);
+		void draw(VSMathLib* core, VSShaderLib* shader);
 		void tick();
 		BoxAABB * get_AABB(){ return AABB; }
 

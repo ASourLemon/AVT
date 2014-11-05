@@ -28,7 +28,7 @@ namespace domain {
 	public:
 		Riverlog(float x, float y, float z, int quality, int direction, float velocity);
 		~Riverlog();
-		void draw(VSMathLib* core);
+		void draw(VSMathLib* core, VSShaderLib* shader);
 		void tick();
 		inline BoxAABB * get_AABB(){ return AABB; }
 		inline int getDirection(){ return direction; }

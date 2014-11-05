@@ -30,7 +30,7 @@ Frog::~Frog(){
 	delete Sphere;
 }
 
-void Frog::draw(VSMathLib* core){
+void Frog::draw(VSMathLib* core, VSShaderLib* shader){
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(_x, _y, _z);

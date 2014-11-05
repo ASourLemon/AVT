@@ -44,7 +44,7 @@ protected:
 public:
 	Frog(float x, float y, float z, float speed, int direction);
 	~Frog();
-	void draw(VSMathLib* core);
+	void draw(VSMathLib* core, VSShaderLib* shader);
 	void move(int d);
 	void tick();
 	inline void setCompressed(bool compressed){ beingCompressed = compressed;}

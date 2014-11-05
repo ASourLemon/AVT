@@ -19,6 +19,8 @@ struct Spot_Light{
 uniform Spot_Light spot_lights[MAX_SPOT_LIGHTS];
 uniform vec4 dir_lights[MAX_DIR_LIGHTS];
 uniform vec4 point_lights[MAX_POINT_LIGHTS];
+uniform float time;
+uniform bool tex_moving;
 
 
 
@@ -61,5 +63,13 @@ void main () {
 			}	
 		}
 	}
-	gl_Position = m_pvm * position;	
+	vec4 aux;		
+	aux = position;
+	if(position.y < -2.0){
+
+		aux.x *= aux.x + sin(aux.y * 60.0 + time * 2.0) / 30.0;	
+	}
+	gl_Position = m_pvm * aux;	
+
+
 }
