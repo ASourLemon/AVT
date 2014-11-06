@@ -22,7 +22,7 @@ uniform vec4 dir_lights[MAX_DIR_LIGHTS];
 uniform vec4 point_lights[MAX_POINT_LIGHTS];
 uniform float time;
 uniform bool tex_moving;
-uniform bool vertex_moving;
+//uniform bool vertex_moving;
 
 
 // the data to be sent to the fragment shader
@@ -65,10 +65,12 @@ void main () {
 		}
 	}
 	vec4 aux = m_pvm * position; 
-	if(vertex_moving){
-            aux.x += sin(aux.y * 60.0 + time * 2.0) / 20.0;
-          //  aux.y = 0.3 - aux.y;
-        }
+	
+	//FIX ME (Reflection distortions)
+	//if(vertex_moving){
+       // aux.x += sin(aux.y * 80.0 + time * 2.0) / 20.0;
+		//aux.z += 1.0 - aux.z;
+    //}
 
 	gl_Position = aux ;	
 

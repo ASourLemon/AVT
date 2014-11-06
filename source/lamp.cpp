@@ -2,25 +2,25 @@
 
 namespace domain {
 
-float Lamp::supportAmb[4] = { 64.0/1024.0, 64.0/1024.0, 64.0/1024.0, 1.0f };
-float Lamp::supportDif[4] = { 64.0/256.0, 64.0/256.0, 64.0/256.0, 1.0f };
-float Lamp::supportSpec[4] = { 64.0/256.0, 64.0/256.0, 64.0/256.0, 1.0f };
+float Lamp::supportAmb[4] = { 0.0625f, 0.0625f, 0.0625f, 1.0f };
+float Lamp::supportDif[4] = { 0.25f, 0.25f, 0.25f, 1.0f };
+float Lamp::supportSpec[4] = { 0.25f, 0.25f, 0.25f, 1.0f };
 float Lamp::supportShininess = 10;
 
-float Lamp::lampShadeAmb[4] = { 0.25f, 0.25f, 153.0/1024.0, 1.0f };
-float Lamp::lampShadeDif[4] = { 1.0f, 1.0f, 153.0/256.0, 1.0f };
-float Lamp::lampShadeSpec[4] = { 1.0f, 1.0f, 153.0/256.0, 1.0f };
+float Lamp::lampShadeAmb[4] = { 0.25f, 0.25f, 0.15f, 1.0f };
+float Lamp::lampShadeDif[4] = { 1.0f, 1.0f, 0.6f, 1.0f };
+float Lamp::lampShadeSpec[4] = { 1.0f, 1.0f, 0.6f, 1.0f };
 float Lamp::lampShadeShininess = 100;
 
-//Reflections Color FIX ME
-float Lamp::RsupportAmb[4] = { 64.0/1024.0, 64.0/1024.0, 64.0/1024.0, 1.0f };
-float Lamp::RsupportDif[4] = { 64.0/256.0, 64.0/256.0, 64.0/256.0, 1.0f };
-float Lamp::RsupportSpec[4] = { 64.0/256.0, 64.0/256.0, 64.0/256.0, 1.0f };
+//Reflections Color
+float Lamp::RsupportAmb[4] = {  0.0625f,  0.0625f,  0.0625f, 0.5f };
+float Lamp::RsupportDif[4] = {  0.25f,  0.25f,  0.25f, 0.5f };
+float Lamp::RsupportSpec[4] = {  0.25f,  0.25f,  0.25f, 0.5f };
 float Lamp::RsupportShininess = 10;
-//FIX ME
-float Lamp::RlampShadeAmb[4] = { 0.25f, 0.25f, 153.0/1024.0, 1.0f };
-float Lamp::RlampShadeDif[4] =  { 1.0f, 1.0f, 153.0/256.0, 1.0f };
-float Lamp::RlampShadeSpec[4] = { 1.0f, 1.0f, 153.0/256.0, 1.0f };
+
+float Lamp::RlampShadeAmb[4] = { 0.25f, 0.25f, 0.15f, 0.5f };
+float Lamp::RlampShadeDif[4] =  { 1.0f, 1.0f, 0.6f, 0.5f };
+float Lamp::RlampShadeSpec[4] = { 1.0f, 1.0f, 0.6f, 0.5f };
 float Lamp::RlampShadeShininess = 100;
 
 Lamp::Lamp(float x, float y, float z, bool reflect) :
@@ -73,14 +73,14 @@ void Lamp::draw(VSMathLib* core, VSShaderLib* shader) {
 	//support
 	core->pushMatrix(VSMathLib::MODEL);
 	float SUPPORT_HEIGHT = 3.0f;
-	core->translate(0.0f, SUPPORT_HEIGHT / 2, 0.0f);
+	core->translate(0.0f, 1.5f, 0.0f);
 	core->scale(1.0f, SUPPORT_HEIGHT, 1.0f);
 		if(reflection == true){
-			//glDepthMask(GL_FALSE); // Don't write to depth buffer
+			glDepthMask(GL_FALSE); // Don't write to depth buffer
 			glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
 			glStencilMask(0x00); // Don't write anything to stencil buffer
 			//glDepthMask(GL_TRUE); // Write to depth buffer
-			core->translate(0.0f, -1.0f, 0.0f);
+			core->translate(0.0f, -1.1f, 0.0f);
 		}
 	support.render();
 	core->popMatrix(VSMathLib::MODEL);
@@ -94,13 +94,14 @@ void Lamp::draw(VSMathLib* core, VSShaderLib* shader) {
 			//glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
 			//glStencilMask(0x00); // Don't write anything to stencil buffer
 			//glDepthMask(GL_TRUE); // Write to depth buffer
-			core->translate(0.0f, -15.6f, 0.0f);
+			core->translate(0.0f, -17.5f, 0.0f);
 		}
 	lampShade.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	//end
 	core->popMatrix(VSMathLib::MODEL);
+	glDepthMask(GL_TRUE);
 	glDisable(GL_STENCIL_TEST);
 }
 

@@ -107,21 +107,18 @@ void Game::draw(VSMathLib* core, VSShaderLib* shader) {
 	//Normal lamps
 	for (unsigned int i = 0; i < lamps.size(); i++)
 		lamps.at(i)->draw(core, shader);
-	/*lamp1->draw(core);
-	lamp2->draw(core);
-	lamp3->draw(core);
-	lamp4->draw(core);
-	lamp5->draw(core);
-	lamp6->draw(core);*/
 	
-	int pos_loc = glGetUniformLocation(shader->getProgramIndex(), "vertex_moving");
-	glUniform1i(pos_loc, true);
-	//Reflections lamps
+	//int pos_loc = glGetUniformLocation(shader->getProgramIndex(), "vertex_moving");
+	//glUniform1i(pos_loc, true);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//Reflection lamps
 	lamp7->draw(core, shader);
 	lamp8->draw(core, shader);
 	lamp9->draw(core, shader);
 	lamp10->draw(core, shader);
-	glUniform1i(pos_loc, false);
+	glEnable(GL_BLEND);
+	//glUniform1i(pos_loc, false);
 	
 	
 	for (unsigned int i = 0; i < cars.size(); i++)

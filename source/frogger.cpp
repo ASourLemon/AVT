@@ -133,6 +133,7 @@ void renderScene(void) {
 	bool tex_moving = false;
 	int pos_loc = glGetUniformLocation(shader.getProgramIndex(), "tex_moving");
 	glUniform1i(pos_loc, tex_moving);
+	
 	lightManager.drawLight(core);
 	glUseProgram(shader.getProgramIndex());
 	game.draw(core, &shader);

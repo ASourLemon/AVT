@@ -196,6 +196,7 @@ void Map::draw(VSMathLib* core, VSShaderLib* shader) {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[2]);
 	
+	glClear(GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
