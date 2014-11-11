@@ -18,24 +18,23 @@ float Turtle::legSpec[4] = { 0.7f, 0.7f, 0.7f, 1.0f };
 float Turtle::legShininess = 100;
 
 Turtle::Turtle(float x, float y, float z, int direction, float velocity) :
-		x(x), y(y), z(z), direction(direction), speed(velocity) {
-	created = false;
+		x(x), y(y), z(z), speed(velocity), direction(direction), created(false)  {
 	
-	body.createSphere(0.8, TURTLE_DIVISIONS);
+	body.createSphere(0.8f, TURTLE_DIVISIONS);
 	body.setMaterialBlockName("Materials");
 	body.setColor(VSResourceLib::DIFFUSE, bodyDif);
 	body.setColor(VSResourceLib::AMBIENT, bodyAmb);
 	body.setColor(VSResourceLib::SPECULAR, bodySpec);
 	body.setColor(VSResourceLib::SHININESS, &bodyShininess);
 	
-	leg.createSphere(0.9, TURTLE_DIVISIONS);
+	leg.createSphere(0.9f, TURTLE_DIVISIONS);
 	leg.setMaterialBlockName("Materials");
 	leg.setColor(VSResourceLib::DIFFUSE, legDif);
 	leg.setColor(VSResourceLib::AMBIENT, legAmb);
 	leg.setColor(VSResourceLib::SPECULAR, legSpec);
 	leg.setColor(VSResourceLib::SHININESS, &legShininess);
 	
-	head.createSphere(0.3, TURTLE_DIVISIONS);
+	head.createSphere(0.3f, TURTLE_DIVISIONS);
 	head.setMaterialBlockName("Materials");
 	head.setColor(VSResourceLib::DIFFUSE, headDif);
 	head.setColor(VSResourceLib::AMBIENT, headAmb);
@@ -46,6 +45,7 @@ Turtle::Turtle(float x, float y, float z, int direction, float velocity) :
 }
 
 Turtle::~Turtle() {
+	delete body_box;
 }
 
 void Turtle::draw(VSMathLib* core, VSShaderLib* shader) {
@@ -55,33 +55,33 @@ void Turtle::draw(VSMathLib* core, VSShaderLib* shader) {
 	
 	//body
 	core->pushMatrix(VSMathLib::MODEL);
-	core->translate(0.0, 0.15, 0.0);
-	core->scale(1.0, 0.3, 1.0);
+	core->translate(0.0f, 0.15f, 0.0f);
+	core->scale(1.0f, 0.3f, 1.0f);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 	
 	//legs
 	core->pushMatrix(VSMathLib::MODEL);	
-	core->rotate(45.0, 0, 1, 0);	
-	core->scale(1.2, 0.1, 0.2);
+	core->rotate(45.0f, 0.0f, 1.0f, 0.0f);	
+	core->scale(1.2f, 0.1f, 0.2f);
 	leg.render();
 	core->popMatrix(VSMathLib::MODEL);
 	
 	core->pushMatrix(VSMathLib::MODEL);	
-	core->rotate(-45.0, 0, 1, 0);
-	core->scale(1.2, 0.1, 0.2);
+	core->rotate(-45.0f, 0.0f, 1.0f, 0.0f);
+	core->scale(1.2f, 0.1f, 0.2f);
 	leg.render();
 	core->popMatrix(VSMathLib::MODEL);
 	
 	//head
 	core->pushMatrix(VSMathLib::MODEL);	
 	if(direction == DIR_RIGHT){
-		core->translate(-0.6, 0.0, 0.0);	
+		core->translate(-0.6f, 0.0f, 0.0f);	
 	}else if(direction == DIR_LEFT){
-		core->translate(0.6, 0.0, 0.0);
+		core->translate(0.6f, 0.0f, 0.0f);
 	}
 
-	core->scale(1.4, 0.4, 1.0);
+	core->scale(1.4f, 0.4f, 1.0f);
 	head.render();
 	core->popMatrix(VSMathLib::MODEL);
 	
@@ -92,7 +92,7 @@ void Turtle::draw(VSMathLib* core, VSShaderLib* shader) {
 }
 
 void Turtle::tick() {
-	this->second_in_game += 0.01;	//After 100 calls, 1 second
+	this->second_in_game += 0.01f;	//After 100 calls, 1 second
 	
 	if(second_in_game >= 5.0){
 		speed += 0.5f;

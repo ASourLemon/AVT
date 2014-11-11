@@ -29,22 +29,17 @@ float Map::cubeDif[4] = { 1.2f, 0.6f, 0.8f, 1.0f };
 float Map::cubeSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Map::cubeShininess = 1;
 
-Map::Map() {
+Map::Map() : deltaWater(0.0f), goingLeft(false), win_x(10.0f), win_y(0.0f), win_z(28.0f) {
 
 	body.createCube(1.0f);
 	//water.createSphere(2.4f, 5);
 	water.createCube(2.0f);
-
-	deltaWater = 0.0f;
-	goingLeft = false;
-	win_x = 10.0f;
-	win_y = 0.0f;
-	win_z = 28.0f;
 	win_box = new BoxAABB(&win_x, &win_y, &win_z, 10.0f, 10.0f, 1.0f, 1.0f,
 			1.0f, 1.0f);
 }
 
 Map::~Map() {
+	delete win_box;
 }
 
 void Map::draw(VSMathLib* core, VSShaderLib* shader) {

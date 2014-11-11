@@ -32,11 +32,11 @@ private:
 
 protected:
 	VSResSurfRevLib body, head, eye;
-	bool created;
 	int t, deltaT; //tempos para movimento
 	float _x, _y, _z, speed;
 	int direction;
 	int map_limit;
+	bool created;
 	bool beingCompressed;
 	float compressed;
 	
@@ -47,14 +47,17 @@ public:
 	void draw(VSMathLib* core, VSShaderLib* shader);
 	void move(int d);
 	void tick();
+	
 	inline void setCompressed(bool compressed){ beingCompressed = compressed;}
 	inline void setCompressedR(float compressed){ this->compressed = compressed;}
 	inline bool isCompressed(){ return beingCompressed;}
+	
 	inline float getX(){return _x;}
 	inline float getY(){return _y;}
 	inline float getZ(){return _z;}
 	inline float getCompress(){return compressed;}
 	inline int getDirection(){ return direction; }
+	
 	inline void setX(float i){_x = i;}
 	inline void setY(float i){_y = i;}
 	inline void setZ(float i){_z = i;}

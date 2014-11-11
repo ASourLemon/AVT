@@ -33,6 +33,10 @@ private:
 
 	Turtle* turtle1;
 	Turtle* turtle2;
+	Turtle* turtle3;
+	Turtle* turtle4;
+	Turtle* turtle5;
+	Turtle* turtle6;
 
 	Lamp* lamp1;
 	Lamp* lamp2;

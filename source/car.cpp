@@ -19,8 +19,8 @@ float Car::tireShininess = 100;
 
 
 Car::Car(float x, float y, float z, int direction, float velocity) :
-		_x(x), _y(y), _z(z), direction(direction), speed(velocity) {
-	created = false;
+		_x(x), _y(y), _z(z), speed(velocity), direction(direction), created(false) {
+
 	VSResSurfRevLib load;
 	load.createCube(1);
 

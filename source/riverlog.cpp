@@ -15,7 +15,8 @@ namespace domain {
 	float Riverlog::logShininess = 100;
 
 
-	Riverlog::Riverlog(float x, float y, float z, int quality, int direction, float velocity) : x(x), y(y), z(z), direction(direction), speed(velocity) {
+	Riverlog::Riverlog(float x, float y, float z, int quality, int direction, float velocity) : 
+			x(x), y(y), z(z), speed(velocity), direction(direction)  {
 
 
 		body.createCylinder(LOG_HEIGHT, LOG_RADIOS, quality);
@@ -34,7 +35,9 @@ namespace domain {
 
 	}
 
-	Riverlog::~Riverlog(){}
+	Riverlog::~Riverlog(){
+		delete AABB;
+	}
 
 	void Riverlog::draw(VSMathLib* core, VSShaderLib* shader){
 		if (x < -1 || x > 17)

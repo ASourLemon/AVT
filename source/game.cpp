@@ -4,8 +4,8 @@ namespace domain {
 
 float delta = 0.0f;
 
-Game::Game() {
-
+Game::Game() : frogLifes(3), points(0), beingCarried(false), falling(false), distFalling(0.0) {
+	
 }
 
 Game::~Game() {
@@ -21,6 +21,10 @@ Game::~Game() {
 	//delete rlog4;
 	delete turtle1;
 	delete turtle2;
+	delete turtle3;
+	delete turtle4;
+	delete turtle5;
+	delete turtle6;
 	delete lamp1;
 	delete lamp2;
 	delete lamp3;
@@ -49,22 +53,22 @@ void Game::init() {
 
 	rlog1 = new Riverlog(2.0, -0.5, 17.0, 50, DIR_LEFT, 0.2);
 	riverlogs.push_back(rlog1);
-	rlog3 = new Riverlog(2.0, -0.5, 21.0, 50, DIR_RIGHT, 0.2);
+	rlog3 = new Riverlog(2.0, -0.5, 21.0, 50, DIR_LEFT, 0.2);
 	riverlogs.push_back(rlog3);
 
-	Turtle *t;
-	t = new Turtle(5.0, -.5, 19.0, DIR_RIGHT, 0.2);
-	turtles.push_back(t);
-	t = new Turtle(10.0, -.5, 19.0, DIR_RIGHT, 0.2);
-	turtles.push_back(t);
-	t = new Turtle(15.0, -.5, 19.0, DIR_RIGHT, 0.2);
-	turtles.push_back(t);
-	t = new Turtle(15.0, -.5, 23.0, DIR_LEFT, 0.2);
-	turtles.push_back(t);
-	t = new Turtle(10.0, -.5, 23.0, DIR_LEFT, 0.2);
-	turtles.push_back(t);
-	t = new Turtle(5.0, -.5, 23.0, DIR_LEFT, 0.2);
-	turtles.push_back(t);
+	
+	turtle1 = new Turtle(5.0, -.5, 19.0, DIR_RIGHT, 0.2);
+	turtles.push_back(turtle1);
+	turtle2 = new Turtle(10.0, -.5, 19.0, DIR_RIGHT, 0.2);
+	turtles.push_back(turtle2);
+	turtle3 = new Turtle(15.0, -.5, 19.0, DIR_RIGHT, 0.2);
+	turtles.push_back(turtle3);
+	turtle4 = new Turtle(15.0, -.5, 23.0, DIR_RIGHT, 0.2);
+	turtles.push_back(turtle4);
+	turtle5 = new Turtle(10.0, -.5, 23.0, DIR_RIGHT, 0.2);
+	turtles.push_back(turtle5);
+	turtle6 = new Turtle(5.0, -.5, 23.0, DIR_RIGHT, 0.2);
+	turtles.push_back(turtle6);
 
 	lamp1 = new Lamp(15.0f, 0.0f, 15.0f, false);
 	lamps.push_back(lamp1);
@@ -86,13 +90,7 @@ void Game::init() {
 	lamp10 = new Lamp(5.0f, 0.0f, 26.0f, true);
 
 	frog->setMaplimit(map->getMaplimit());
-	
-	frogLifes = 3;
-	points = 0;
-	
-	beingCarried = false;
-	falling = false;
-	distFalling = 0.0;
+		
 }
 
 void Game::draw(VSMathLib* core, VSShaderLib* shader) {

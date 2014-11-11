@@ -18,12 +18,13 @@ float Frog::eyeSpec[4] = { 0.4f, 0.4f, 0.4f, 1.0f };
 float Frog::eyeShininess = 100;
 
 
-Frog::Frog(float x, float y, float z, float speed, int direction) : _x(x), _y(y), _z(z), speed(speed), t(0), deltaT(0), direction(direction){
-	created = false;
+Frog::Frog(float x, float y, float z, float speed, int direction) : 
+			_x(x), _y(y), _z(z), speed(speed), t(0), deltaT(0), direction(direction), created(false), beingCompressed(false), 
+				compressed(1.0){
+	
 	//float center[3] = { this->x, this->y, this->z};
 	Sphere = new BoxSphere(&_x, &_y, &_z, 2.2*0.4);
-	beingCompressed = false;
-	compressed = 1.0;
+
 }
 
 Frog::~Frog(){

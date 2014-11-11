@@ -24,9 +24,7 @@ float Lamp::RlampShadeSpec[4] = { 1.0f, 1.0f, 0.6f, 0.5f };
 float Lamp::RlampShadeShininess = 100;
 
 Lamp::Lamp(float x, float y, float z, bool reflect) :
-		x(x), y(y), z(z) {
-	created = false;
-	reflection = reflect;
+		x(x), y(y), z(z), created(false), reflection(reflect)  {
 
 	if(reflection == false)
 		AABB = new BoxAABB(&this->x, &this->y, &this->z, 0.15f, 0.15f, 0.7f, 0.7f, 0.15f, 0.15f);

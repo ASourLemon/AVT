@@ -8,12 +8,8 @@ const char* l_pos_glslname = {"l_pos"};
 const char* l_spotDir_glslname = {"l_spotDir"};
 const char* l_spotCutOff_glslname = {"l_spotCutOff"};
 
-LightManager::LightManager(){
-	this->lights_on = false;
-	this->n_lights = 0;
-	this->n_dirs = 0;
-	this->n_spots = 0;
-	this->n_points = 0;
+LightManager::LightManager() :  n_lights(0), n_spots(0), n_dirs(0), n_points(0), lights_on(false){
+	
 }
 
 void LightManager::init(VSShaderLib* shader, domain::Frog* frog){
