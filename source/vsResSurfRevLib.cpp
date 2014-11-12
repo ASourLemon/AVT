@@ -84,17 +84,17 @@ void VSResSurfRevLib::createCylinder(float height, float radius, int sides) {
 
 void VSResSurfRevLib::createRectangle(float height, float width) {
 	float vertices[] = {
-		-width, 0.0f, -height, 1.0f,
-		-width, 0.0f, height, 1.0f,
-		width, 0.0f, height, 1.0f,
-		width, 0.0f, -height, 1.0f
+		-width/2, -height/2, 0.0f, 1.0f,
+		-width/2, height/2, 0.0f, 1.0f,
+		width/2, height/2, 0.0f, 1.0f,
+		width/2, -height/2, 0.0f, 1.0f
 	};
 
 	float normals[] = {
-		0.0f, -1.0f, 0.0f,
-		0.0f, -1.0f, 0.0f,
-		0.0f, -1.0f, 0.0f,
-		0.0f, -1.0f, 0.0f
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f
 	};
 
 	float texCoords[] = {
@@ -105,7 +105,7 @@ void VSResSurfRevLib::createRectangle(float height, float width) {
 	};
 
 	unsigned int faceIndex[] = {
-		2,1,0,3,2,0
+		0,1,2,0,2,3
 	};
 
 	glGenVertexArrays(1, &mMyMesh.vao);
