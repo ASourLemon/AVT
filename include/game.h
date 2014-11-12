@@ -9,6 +9,7 @@
 #include "../include/riverlog.h"
 #include "../include/turtle.h"
 #include "../include/lamp.h"
+#include "../include/Tree.h"
 
 namespace domain {
 
@@ -25,6 +26,8 @@ private:
 	Car* car2;
 	Car* car3;
 	Car* car4;
+
+	Tree* tree;
 
 	Riverlog* rlog1;
 	//Riverlog* rlog2;

@@ -9,6 +9,7 @@ Game::Game() : frogLifes(3), points(0), beingCarried(false), falling(false), dis
 }
 
 Game::~Game() {
+	delete tree;
 	delete frog;
 	delete map;
 	delete car1;
@@ -42,10 +43,10 @@ void Game::init() {
 	map = new Map();
 	car1 = new Car(-6.0, 0.3, 4.0, DIR_LEFT, 0.5);
 	cars.push_back(car1);
-	
+
 	car2 = new Car(-6.0, 0.3, 6.0, DIR_LEFT, 1.2);
 	cars.push_back(car2);
-	
+
 	car3 = new Car(-4.0, 0.3, 9.0, DIR_RIGHT, 1.2);
 	cars.push_back(car3);
 	car4 = new Car(-6.0, 0.3, 11.0, DIR_RIGHT, 0.5);
@@ -56,7 +57,7 @@ void Game::init() {
 	rlog3 = new Riverlog(2.0, -0.5, 21.0, 50, DIR_LEFT, 0.2);
 	riverlogs.push_back(rlog3);
 
-	
+
 	turtle1 = new Turtle(5.0, -.5, 19.0, DIR_RIGHT, 0.2);
 	turtles.push_back(turtle1);
 	turtle2 = new Turtle(10.0, -.5, 19.0, DIR_RIGHT, 0.2);
@@ -90,22 +91,26 @@ void Game::init() {
 	lamp10 = new Lamp(5.0f, 0.0f, 26.0f, true);
 
 	frog->setMaplimit(map->getMaplimit());
+
+	tree = new Tree();
 		
 }
 
 void Game::draw(VSMathLib* core, VSShaderLib* shader) {
 
+	tree->draw(core, shader);
+
 	//for (unsigned int i = 0; i < game_objects.size(); i++)
 	//game_objects.at(i)->draw(core);
 	frog->draw(core, shader);
-	
+
 	map->draw(core, shader);
-	
+
 	//glDisable(GL_STENCIL_TEST);
 	//Normal lamps
 	for (unsigned int i = 0; i < lamps.size(); i++)
 		lamps.at(i)->draw(core, shader);
-	
+
 	//int pos_loc = glGetUniformLocation(shader->getProgramIndex(), "vertex_moving");
 	//glUniform1i(pos_loc, true);
 	glEnable(GL_BLEND);
@@ -117,8 +122,8 @@ void Game::draw(VSMathLib* core, VSShaderLib* shader) {
 	lamp10->draw(core, shader);
 	glEnable(GL_BLEND);
 	//glUniform1i(pos_loc, false);
-	
-	
+
+
 	for (unsigned int i = 0; i < cars.size(); i++)
 		cars.at(i)->draw(core, shader);
 	for (unsigned int i = 0; i < riverlogs.size(); i++)

@@ -41,7 +41,7 @@ GLuint VaoId, VboId[4];
 GLuint VertexShaderId, FragmentShaderId, ProgramId, ColorId;
 GLint UniformId, ProjectionID, ModelID, ViewID;
 GLint tex_loc;
-GLuint TextureArray[4];
+GLuint TextureArray[5];
 
 // Mouse Tracking Variables
 int startX, startY, tracking = 0;
@@ -133,7 +133,7 @@ void renderScene(void) {
 	bool tex_moving = false;
 	int pos_loc = glGetUniformLocation(shader.getProgramIndex(), "tex_moving");
 	glUniform1i(pos_loc, tex_moving);
-	
+
 	lightManager.drawLight(core);
 	glUseProgram(shader.getProgramIndex());
 	game.draw(core, &shader);
@@ -144,12 +144,12 @@ void renderScene(void) {
 /////////////////////////////////////////////////////////////////////// CALLBACKS
 ///////////////////////////////////////////////////////////////////////
 
-void display() {		
+void display() {
 	++FrameCount;
-	
-	if(game.getFrogLifes()){
+
+	if (game.getFrogLifes()) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		renderScene();	
+		renderScene();
 	}
 }
 
@@ -190,9 +190,10 @@ void timer(int value) {
 		std::ostringstream oss;
 		int lifes = game.getFrogLifes();
 		int points = game.getFrogPoints();
-		if(lifes){
-			oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x" << WinY << ")" << "Lifes:" << lifes << "Points:" << points;
-		}else {
+		if (lifes) {
+			oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x"
+					<< WinY << ")" << "Lifes:" << lifes << "Points:" << points;
+		} else {
 			oss << CAPTION << ": G A M E   O V E R!!";
 		}
 
@@ -200,13 +201,13 @@ void timer(int value) {
 		glutSetWindow(WindowHandle);
 		glutSetWindowTitle(s.c_str());
 		FrameCount = 0;
-		nTimer = 0;	
+		nTimer = 0;
 	}
 	nTimer++;
 	game.tick();
 
 	processKeys();
-	
+
 	glutPostRedisplay();
 	glutTimerFunc(1000 / FPS, timer, 0);
 }
@@ -324,10 +325,10 @@ void processKeys() {
 	}
 
 	if (keyStates['c']) {
-		if(lampOn){
+		if (lampOn) {
 			lampOn = false;
 			printf("Lamps off\n");
-		}else {
+		} else {
 			printf("Lamps on\n");
 			lampOn = true;
 		}
@@ -335,17 +336,17 @@ void processKeys() {
 	}
 
 	if (keyStates['r']) {
-		if(!game.getFrogLifes()){
+		if (!game.getFrogLifes()) {
 			game.setFrogLifes(3);
 			game.setFrogPoints(0);
 		}
 		keyStates['r'] = false;
 	}
 	if (keyStates['w']) {
-		r+= 0.1;
+		r += 0.1;
 	}
 	if (keyStates['s']) {
-		r-= 0.1;
+		r -= 0.1;
 	}
 	if (keyStates['a']) {
 		game.move_frog(1);
@@ -492,27 +493,27 @@ void setupSurfRev() {
 
 void setupLight() {
 	lightManager.init(&shader, game.getFrog());
-	
+
 	//Point lights
 	float p0_pos[4] = { 15.0f, 3.0f, 15.0f, 1.0f };
 	lightManager.addLight(p0_pos);
 	float p1_pos[4] = { 5.0f, 3.0f, 15.0f, 1.0f };
 	lightManager.addLight(p1_pos);
-	
+
 	float p2_pos[4] = { 15.0f, 3.0f, 1.0f, 1.0f };
 	lightManager.addLight(p2_pos);
 	float p3_pos[4] = { 5.0f, 3.0f, 1.0f, 1.0f };
 	lightManager.addLight(p3_pos);
-	
+
 	float p4_pos[4] = { 15.0f, 3.0f, 28.0f, 1.0f };
 	lightManager.addLight(p4_pos);
 	float p5_pos[4] = { 5.0f, 3.0f, 28.0f, 1.0f };
 	lightManager.addLight(p5_pos);
-	
+
 	//Dir light
 	float l1_dir[4] = { 1.0f, 1.0f, -1.0f, 0.0f };
 	lightManager.addLight(l1_dir);
-	
+
 	//Mining light
 	float l2_cut = 0.2f;
 	float l2_dir[4] = { 0.0f, 0.0f, 1.0f, 0.0f };
@@ -536,11 +537,12 @@ void init(int argc, char* argv[]) {
 	setupCallbacks();
 	setupLight();
 	l_on = false;
-	glGenTextures(4, TextureArray);
+	glGenTextures(5, TextureArray);
 	TGA_Texture(TextureArray, "textures/lightwood.tga", 0);
 	TGA_Texture(TextureArray, "textures/road.tga", 1);
 	TGA_Texture(TextureArray, "textures/water.tga", 2);
 	TGA_Texture(TextureArray, "textures/grass.tga", 3);
+	TGA_Texture(TextureArray, "textures/tree.tga", 4);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
