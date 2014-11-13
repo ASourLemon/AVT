@@ -94,6 +94,8 @@ void checkOpenGLError(std::string error) {
 ///////////////////////////////////////////////////////////////////////
 
 void renderScene(void) {
+	int start = glutGet(GLUT_ELAPSED_TIME);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	core->loadIdentity(VSMathLib::VIEW);
@@ -138,6 +140,7 @@ void renderScene(void) {
 	glUseProgram(shader.getProgramIndex());
 	game.draw(core, &shader);
 	glutSwapBuffers();
+	printf("Render time: %d\n", glutGet(GLUT_ELAPSED_TIME) - start);
 }
 
 ///////////////////////////////////////////////////////////////////////

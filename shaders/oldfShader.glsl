@@ -143,15 +143,16 @@ vec4 processPointLights(){
 		a = 0.7;
 		b = 0;
 		c = 0.07;
-		float attenuation = (1.0 / 
-								  (a 
-								+ (b * distance) 
-								+ (c * distance * distance)));
-		if(distance>10)
-			attenuation = 0;
+		float attenuation;
 
-		
-		
+		if(distance>10) {
+			attenuation = 0;
+		}else {
+			attenuation = (1.0 / 
+							  (a 
+							+ (b * distance) 
+							+ (c * distance * distance)));
+		}
 		spec = vec4(0.0);
 		n = normalize(DataIn.normal);
 		l = normalize(DataIn.lightDir[index]);
