@@ -5,17 +5,17 @@ namespace domain {
 float Turtle::bodyAmb[4] = { 0.1f, 0.4f, 0.1f, 1.0f };
 float Turtle::bodyDif[4] = { 0.2f, 0.4f, 0.2f, 1.0f };
 float Turtle::bodySpec[4] = { 0.6f, 0.6f, 0.6f, 1.0f };
-float Turtle::bodyShininess = 100;
+float Turtle::bodyShininess = 10;
 
 float Turtle::headAmb[4] = { 0.2f, 0.6f, 0.2f, 1.0f };
 float Turtle::headDif[4] = { 0.5f, 0.7f, 0.5f, 1.0f };
 float Turtle::headSpec[4] = { 0.8f, 0.8f, 0.8f, 1.0f };
-float Turtle::headShininess = 100;
+float Turtle::headShininess = 10;
 
 float Turtle::legAmb[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
 float Turtle::legDif[4] = { 0.4f, 0.6f, 0.4f, 1.0f };
 float Turtle::legSpec[4] = { 0.7f, 0.7f, 0.7f, 1.0f };
-float Turtle::legShininess = 100;
+float Turtle::legShininess = 10;
 
 Turtle::Turtle(float x, float y, float z, int direction, float velocity) :
 		x(x), y(y), z(z), speed(velocity), direction(direction), created(false)  {

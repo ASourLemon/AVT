@@ -40,6 +40,17 @@ uniform float time;
 uniform bool tex_moving;
 int index=0;
 
+
+vec4 processFog(){
+	vec4 fogColor = vec4(0.6f, 0.6f, 0.6f, 1.0f);
+	float distance = distance(vec4(0.0), DataIn.eye);
+	float density = 0.1f;
+	//float fogAmount = exp(-distance * density);
+	float fogAmount = -distance * density;
+	
+	return mix(fogColor, colorOut, fogAmount);
+}
+
 vec4 processSpotLights(){
 	vec4 finalColor =  vec4(0.0);
 
@@ -81,11 +92,11 @@ vec4 processSpotLights(){
 			}
 
 		}
-		finalColor = finalColor + max((intensity * diffuse + spec) * MAX_SPOT_LIGHTS, ambient);	
+		finalColor = finalColor + max(intensity * diffuse + spec, 0);	
 		index++;
 	}
 	
-	return finalColor/MAX_SPOT_LIGHTS;
+	return finalColor;
 }
 vec4 processDirLights(){
 	int k;
@@ -111,10 +122,10 @@ vec4 processDirLights(){
 		}
 		//vec4 color =  max(intensity *  diffuse, ambient);
 		//colorOut = texture(texUnit, DataIn.texCoord) * color + spec;
-		finalColor = finalColor + max((intensity *  diffuse + spec) * MAX_DIR_LIGHTS, ambient);
+		finalColor = finalColor + max(intensity *  diffuse + spec, 0);
 	}
 	
-	return finalColor/MAX_DIR_LIGHTS;
+	return finalColor;
 }
 vec4 processPointLights(){
 	int k;
@@ -154,12 +165,12 @@ vec4 processPointLights(){
 			spec = specular * pow(intSpec, shininess);
 		}
 			
-		finalColor = finalColor + max((intensity * diffuse + spec )* MAX_POINT_LIGHTS , ambient);
+		finalColor = finalColor + max(intensity * diffuse + spec, 0);
 		index++;
 	}
 	
 	
-	return finalColor/MAX_POINT_LIGHTS;
+	return finalColor;
 }
 
 void main() {
@@ -179,9 +190,11 @@ void main() {
 		colorOut = processSpotLights();	
 		if(lampOn){
 			colorOut += processPointLights();
-			colorOut /= 2; //for a better effect
-				
+
 		}
-	}
-	colorOut *= texel;
+	}	
+	colorOut = max(colorOut, ambient * 0.5);	
+	colorOut *= texel;	
+	//colorOut = processFog();
+
 }
