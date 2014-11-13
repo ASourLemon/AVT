@@ -32,7 +32,6 @@ float Map::cubeShininess = 1;
 Map::Map() : deltaWater(0.0f), goingLeft(false), win_x(10.0f), win_y(0.0f), win_z(28.0f) {
 
 	body.createCube(1.0f);
-	//water.createSphere(2.4f, 5);
 	water.createCube(2.0f);
 	win_box = new BoxAABB(&win_x, &win_y, &win_z, 10.0f, 10.0f, 1.0f, 1.0f,
 			1.0f, 1.0f);
@@ -201,19 +200,8 @@ void Map::draw(VSMathLib* core, VSShaderLib* shader) {
 	
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(-2.0, -0.5, 16.0);	//base translate
-	for (int l = 0; l < 10; l += 3) {
-		for (int c = -2; c <= MAP0_W + 2; c += 2) {
-			core->pushMatrix(VSMathLib::MODEL);
-			/*if (l % 2 == 0) {
-				core->translate(c + deltaWater, -1.0f, l + 0.5f);
-			} else {
-				core->translate(c - deltaWater, -1.0f, l + 0.5f);
-			}*/
-			core->scale(MAP0_W + 5, 0.1, 8.0);
-			water.render();
-			core->popMatrix(VSMathLib::MODEL);
-		}
-	}
+	core->scale(MAP0_W + 5, 0.1, 8.0);
+	water.render();
 	core->popMatrix(VSMathLib::MODEL);
 	glDepthMask(GL_TRUE);
 	glDisable(GL_STENCIL_TEST);

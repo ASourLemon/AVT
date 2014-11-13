@@ -70,15 +70,6 @@ void Car::draw(VSMathLib* core, VSShaderLib* shader) {
 	driver.render();
 	core->popMatrix(VSMathLib::MODEL);
 
-	/*core->pushMatrix(VSMathLib::MODEL);
-	if (direction == DIR_RIGHT)
-		core->translate(x - 0.7f, y, z);
-	else
-		core->translate(x , y, z);
-	core->scale(5.0f, 1.0f, 1.0f);
-	driver.render();
-	core->popMatrix(VSMathLib::MODEL);*/
-
 	tire.setMaterialBlockName("Materials");
 	tire.setColor(VSResourceLib::SPECULAR, tireSpec);
 	tire.setColor(VSResourceLib::DIFFUSE, tireDif);
