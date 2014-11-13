@@ -3,13 +3,14 @@ DONE - PerspectiveCamera implementado, o objetivo é colocar primeira as cameras 
 - 3 cameras + 1 ponteiro para active camera (game::setActiveCamera, actCam.load() )
      - Adiar a ortogonal
 DONE - Pode se fazer retrieve da camera ativa no Game
-- A Tree irá usar essa informação para implementar o billboard
+DONE - A Tree irá usar essa informação para implementar o billboard
 - Fix camera movement
 - Reorganizar codigo de inicializacoes do frogger.cpp
 - Listas de objetos...
 - Blender + Assimp
 DONE - Game singleton
-- O blender está buggy. Sapo e candeeiros por vezes ficam translúcidos.
+- O blending está buggy. Sapo e candeeiros por vezes ficam translúcidos.
+- Meter blending nos billboards
 
 === MIGUEL ===
 
