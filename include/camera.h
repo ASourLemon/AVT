@@ -1,9 +1,11 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
+#include <string.h>
+
 namespace domain {
 class Camera {
-private:
+protected:
 	float pos[3];
 	float up[3];
 	float at[3];

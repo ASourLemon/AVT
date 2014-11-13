@@ -15,6 +15,7 @@ namespace domain {
 
 class Game {
 private:
+	static Game *_instance;
 	std::vector<Drawable*> game_objects;
 	std::vector<Car*> cars;
 	std::vector<Riverlog*> riverlogs;
@@ -64,6 +65,7 @@ private:
 public:
 	Game();
 	~Game();
+	static Game *getInstance();
 	void init();
 	void draw(VSMathLib* core, VSShaderLib* shader);
 	void add_drawable(Drawable* d);
