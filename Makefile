@@ -11,7 +11,7 @@ CFLAGS= -std=c++11 -g -Wall -ansi -I$(IDIR) -Llib
 
 OUT_DIRS= obj bin
 _DEPS = *.h	##ADD .h's here
-_OBJ = Tree.o frogger.o BoxAABB.o lamp.o BoxSphere.o turtle.o lightManager.o vsMathLib.o vsShaderLib.o vsResSurfRevLib.o vsResourceLib.o vsLogLib.o  map.o riverlog.o game.o car.o frog.o TGA.o			##ADD .o's here
+_OBJ = PerspectiveCamera.o Camera.o Tree.o frogger.o BoxAABB.o lamp.o BoxSphere.o turtle.o lightManager.o vsMathLib.o vsShaderLib.o vsResSurfRevLib.o vsResourceLib.o vsLogLib.o  map.o riverlog.o game.o car.o frog.o TGA.o			##ADD .o's here
 
 
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))

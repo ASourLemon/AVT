@@ -18,9 +18,7 @@ namespace domain {
 		delete car3;
 		delete car4;
 		delete rlog1;
-		//delete rlog2;
 		delete rlog3;
-		//delete rlog4;
 		delete turtle1;
 		delete turtle2;
 		delete turtle3;
@@ -40,6 +38,12 @@ namespace domain {
 	void Game::init() {
 
 		frog = new Frog(10.0, 0.0, 1.0, 0.01, DIR_BACK);
+
+		float pos[3] = {1.0f, 1.0f, 2.0f};
+		float up[3] = {0.0f, 1.0f, 0.0f};
+		float at[3] = {1.0f, 1.0f, 5.0f};
+		frogCam = new PerspectiveCamera(pos, up, at, 0.1f, 20.0f, 45.0f, 1.3f);
+		activeCam = frogCam;
 
 		map = new Map();
 		car1 = new Car(-6.0, 0.3, 4.0, DIR_LEFT, 0.5);
@@ -138,6 +142,7 @@ namespace domain {
 			riverlogs.at(i)->draw(core, shader);
 		for (unsigned int i = 0; i < turtles.size(); i++)
 			turtles.at(i)->draw(core, shader);
+
 	}
 
 	void Game::move_frog(int direction) {
@@ -267,6 +272,8 @@ namespace domain {
 			}
 			}*/
 
+		activeCam->update(); //FIXME: actualizar as outras tambem
+
 	}
 
 	float Game::sqDistPointAABB(float x, float y, float z, BoxAABB *aabb) {
@@ -322,6 +329,10 @@ namespace domain {
 		float r = sphere->get_raio();
 
 		return sqDist <= r * r;
+	}
+
+	void Game::loadCamera() {
+		activeCam->load();
 	}
 
 }

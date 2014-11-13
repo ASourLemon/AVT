@@ -9,11 +9,11 @@ protected:
 	float pos[3];
 	float up[3];
 	float at[3];
-	float near;
-	float far;
+	float nearVal;
+	float farVal;
 
 public:
-	Camera(float pos[3], float up[3], float at[3], float near, float far);
+	Camera(float pos[3], float up[3], float at[3], float nearVal, float farVal);
 	virtual ~Camera();
 	virtual void update() = 0;
 	virtual void load() = 0;

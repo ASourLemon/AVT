@@ -1,14 +1,15 @@
 === JOAO ===
-- PerspectiveCamera implementado, o objetivo é colocar primeira as cameras no Game
+DONE - PerspectiveCamera implementado, o objetivo é colocar primeira as cameras no Game
 - 3 cameras + 1 ponteiro para active camera (game::setActiveCamera, actCam.load() )
      - Adiar a ortogonal
-- Pode se fazer retrieve da camera ativa no Game
+DONE - Pode se fazer retrieve da camera ativa no Game
 - A Tree irá usar essa informação para implementar o billboard
 - Fix camera movement
 - Reorganizar codigo de inicializacoes do frogger.cpp
 - Listas de objetos...
 - Blender + Assimp
-- Game singleton
+DONE - Game singleton
+- O blender está buggy. Sapo e candeeiros por vezes ficam translúcidos.
 
 === MIGUEL ===
 

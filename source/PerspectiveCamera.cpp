@@ -1,6 +1,6 @@
 #include "../include/PerspectiveCamera.h"
 #include "../include/game.h"
-#include "../include/VSMathLib.h"
+#include "../include/vsMathLib.h"
 
 namespace domain {
 
@@ -20,8 +20,11 @@ namespace domain {
 
 	void PerspectiveCamera::update() {
 		pos[0] = Game::getInstance()->getFrogX();
-		pos[1] = Game::getInstance()->getFrogY();
-		pos[2] = Game::getInstance()->getFrogZ();
+		pos[1] = Game::getInstance()->getFrogY()+1.0;
+		pos[2] = Game::getInstance()->getFrogZ()-1.0;
+		at[0] = Game::getInstance()->getFrogX();
+		at[1] = Game::getInstance()->getFrogY()+0.5;
+		at[2] = Game::getInstance()->getFrogZ()+5.0;
 	}
 
 	void PerspectiveCamera::load() {

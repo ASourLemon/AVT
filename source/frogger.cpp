@@ -55,7 +55,7 @@ VSMathLib* core;
 VSResSurfRevLib mySurfRev;
 
 VSShaderLib shader, shaderF;
-domain::Game game;
+domain::Game *game = domain::Game::getInstance();
 
 int CAM_TYPE = 0;
 void processKeys();
@@ -104,9 +104,9 @@ void renderScene(void) {
 
 	if (CAM_TYPE == CAM_FROG) {
 
-		float fx = game.getFrogX();
-		float fy = game.getFrogY();
-		float fz = game.getFrogZ();
+		float fx = game->getFrogX();
+		float fy = game->getFrogY();
+		float fz = game->getFrogZ();
 
 		//printf("fx:%f, fy%f, fz%f\n", fx, fy, fz);
 
@@ -115,8 +115,9 @@ void renderScene(void) {
 					(fz + camZ * 0.5), 0, 1, 0);
 
 		} else {
-			core->lookAt(fx + camX, fy + camY * -0.5 + 2.5, fz - camZ, fx, fy,
-					fz, 0, 1, 0);
+//			core->lookAt(fx + camX, fy + camY * -0.5 + 2.5, fz - camZ, fx, fy,
+//					fz, 0, 1, 0);
+			game->loadCamera();
 		}
 
 	} else {
@@ -138,7 +139,7 @@ void renderScene(void) {
 
 	lightManager.drawLight(core);
 	glUseProgram(shader.getProgramIndex());
-	game.draw(core, &shader);
+	game->draw(core, &shader);
 	glutSwapBuffers();
 	printf("Render time: %d\n", glutGet(GLUT_ELAPSED_TIME) - start);
 }
@@ -150,7 +151,7 @@ void renderScene(void) {
 void display() {
 	++FrameCount;
 
-	if (game.getFrogLifes()) {
+	if (game->getFrogLifes()) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		renderScene();
 	}
@@ -182,7 +183,7 @@ void reshape(int w, int h) {
 
 	} else {
 
-		core->perspective(125.0f, ratio, 0.6f, 40.0f);
+		core->perspective(125.0f, ratio, 0.1f, 40.0f);
 	}
 	WinX = w;
 	WinY = h;
@@ -191,8 +192,8 @@ void reshape(int w, int h) {
 void timer(int value) {
 	if (nTimer == FPS) {
 		std::ostringstream oss;
-		int lifes = game.getFrogLifes();
-		int points = game.getFrogPoints();
+		int lifes = game->getFrogLifes();
+		int points = game->getFrogPoints();
 		if (lifes) {
 			oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x"
 					<< WinY << ")" << "Lifes:" << lifes << "Points:" << points;
@@ -207,7 +208,7 @@ void timer(int value) {
 		nTimer = 0;
 	}
 	nTimer++;
-	game.tick();
+	game->tick();
 
 	processKeys();
 
@@ -339,9 +340,9 @@ void processKeys() {
 	}
 
 	if (keyStates['r']) {
-		if (!game.getFrogLifes()) {
-			game.setFrogLifes(3);
-			game.setFrogPoints(0);
+		if (!game->getFrogLifes()) {
+			game->setFrogLifes(3);
+			game->setFrogPoints(0);
 		}
 		keyStates['r'] = false;
 	}
@@ -352,18 +353,18 @@ void processKeys() {
 		r -= 0.1;
 	}
 	if (keyStates['a']) {
-		game.move_frog(1);
+		game->move_frog(1);
 	}
 	if (keyStates['q']) {
-		game.move_frog(0);
+		game->move_frog(0);
 	}
 	if (keyStates['o']) {
-		game.move_frog(2);
+		game->move_frog(2);
 	}
 	if (keyStates['p']) {
-		game.move_frog(3);
+		game->move_frog(3);
 	}
-	game.setFrogT(glutGet(GLUT_ELAPSED_TIME));
+	game->setFrogT(glutGet(GLUT_ELAPSED_TIME));
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -400,7 +401,7 @@ void setupGLEW() {
 		std::cerr << "ERROR glewInit: " << glewGetString(result) << std::endl;
 		exit(EXIT_FAILURE);
 	}
-	GLenum err_code = glGetError();
+	// GLenum err_code = glGetError();
 	printf("Vendor: %s\n", glGetString(GL_VENDOR));
 	printf("Renderer: %s\n", glGetString(GL_RENDERER));
 	printf("Version: %s\n", glGetString(GL_VERSION));
@@ -485,7 +486,7 @@ GLuint setupShaders() {
 
 void setupSurfRev() {
 
-	game.init();
+	game->init();
 	// some GL settings
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -495,7 +496,7 @@ void setupSurfRev() {
 }
 
 void setupLight() {
-	lightManager.init(&shader, game.getFrog());
+	lightManager.init(&shader, game->getFrog());
 
 	//Point lights
 	float p0_pos[4] = { 15.0f, 3.0f, 15.0f, 1.0f };
