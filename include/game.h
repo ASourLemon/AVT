@@ -57,6 +57,7 @@ public:
 	float sqDistPointAABB(float x, float y, float z, BoxAABB *aabb);
 	bool testCircleAABB(BoxSphere *sphere, BoxAABB *aabb);
 	void loadCamera();
+	Camera *getActiveCamera() { return activeCam; }
 
 private:
 	Game();

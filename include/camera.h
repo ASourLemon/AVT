@@ -15,6 +15,8 @@ protected:
 public:
 	Camera(float pos[3], float up[3], float at[3], float nearVal, float farVal);
 	virtual ~Camera();
+	float* getPos();
+	float* getAtVector();
 	virtual void update() = 0;
 	virtual void load() = 0;
 
