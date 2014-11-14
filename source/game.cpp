@@ -10,7 +10,9 @@ namespace domain {
 	}
 
 	Game::~Game() {
-		delete tree;
+		delete tree1;
+		delete tree2;
+		delete tree3;
 		delete frog;
 		delete map;
 		delete car1;
@@ -97,7 +99,9 @@ namespace domain {
 
 		frog->setMaplimit(map->getMaplimit());
 
-		tree = new Tree();
+		tree1 = new Tree(3.0f, 15.0f);
+		tree2 = new Tree((17.0-3.0)/2.0+3.0, 15.0f);
+		tree3 = new Tree(17.0f, 15.0f);
 
 	}
 
@@ -140,7 +144,10 @@ namespace domain {
 		lamp10->draw(core, shader);
 		//glUniform1i(pos_loc, false);
 
-		tree->draw(core, shader);
+		tree1->draw(core, shader);
+		tree2->draw(core, shader);
+		tree3->draw(core, shader);
+
 		glDisable(GL_BLEND);
 	}
 

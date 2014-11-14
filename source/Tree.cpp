@@ -7,12 +7,13 @@ extern GLuint TextureArray[3];
 
 namespace domain {
 
-float Tree::cubeAmb[4] = { 0.0f, 0.4f, 0.0f, 1.0f };
-float Tree::cubeDif[4] = { 0.0f, 0.6f, 0.0f, 1.0f };
+float Tree::cubeAmb[4] = { 0.2f, 0.2f, 0.2f, 1.0f };
+float Tree::cubeDif[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 float Tree::cubeSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Tree::cubeShininess = 1;
 
-Tree::Tree() {
+Tree::Tree(float x, float z) :
+		_x(x), _z(z) {
 	rectangle.createRectangle(4.5f, 3.0f);
 }
 
@@ -31,40 +32,38 @@ void Tree::draw(VSMathLib* core, VSShaderLib* shader) {
 	glBindTexture(GL_TEXTURE_2D, TextureArray[4]);
 
 	core->pushMatrix(VSMathLib::MODEL);
-	core->translate(3.0f, 4.5/2, 7.0f);
+	core->translate(_x, 4.5 / 2, _z);
 
 	// TODO: This would be a such more nice code if we had used class Vec3
 	float *objToCam = Game::getInstance()->getActiveCamera()->getPos();
 	// float *look_at = Game::getInstance()->getActiveCamera()->getAtVector();
 	// FIXME: Names and comment above. THIS IS NOT LOOK AT FROM CAMERA...
 	// IT IS THE LOOK AT AS IF WE WERE ON THE FIRST POSITION, LOOKING TO THE BILLBOARD
-	float look_at[3] = {0, 0, -1};
+	float look_at[3] = { 0, 0, -1 };
 	// FIXME: Hard coded, these will later be variables, not constants
-	const float TREE_X = 3.0f;
-	const float TREE_Z = 7.0f;
-	objToCam[0] -= TREE_X;
+	objToCam[0] -= _x;
 	objToCam[1] = 0;
-	objToCam[2] -= TREE_Z;
+	objToCam[2] -= _z;
 	VSMathLib::normalize(objToCam);
 	VSMathLib::normalize(look_at);
 	float cos_alpha = VSMathLib::dotProduct(look_at, objToCam);
 	float up_aux[3];
 	VSMathLib::crossProduct(look_at, objToCam, up_aux);
-	printf("UP AUX = (%f, %f, %f)\n", up_aux[0], up_aux[1], up_aux[2]);
-	core->rotate(acos(cos_alpha)*180.0/3.14, up_aux[0], up_aux[1], up_aux[2]);
+	core->rotate(acos(cos_alpha) * 180.0 / 3.14, up_aux[0], up_aux[1],
+			up_aux[2]);
 
 	delete objToCam;
 
 	/*
-	TODO: Implement this pseudocode ---> IMPLEMENTED ABOVE, BUT STILL NOT WORKING AS INTENDED
+	 TODO: Implement this pseudocode ---> IMPLEMENTED ABOVE, BUT STILL NOT WORKING AS INTENDED
 
-	objTocam = CamPos - ObjPos;
-	objToCam.y = 0;
-	normalize(objToCam);
-	cos_alpha = dot(lookAt, objToCam);
-	upAux = crossProduct(lookAt, objToCam);
-	core->rotate(arcos(cos_alpha)*180/PI, upAux.x, upAux.y, upAux.z);
-	*/
+	 objTocam = CamPos - ObjPos;
+	 objToCam.y = 0;
+	 normalize(objToCam);
+	 cos_alpha = dot(lookAt, objToCam);
+	 upAux = crossProduct(lookAt, objToCam);
+	 core->rotate(arcos(cos_alpha)*180/PI, upAux.x, upAux.y, upAux.z);
+	 */
 	glDisable(GL_CULL_FACE);
 	rectangle.render();
 	glEnable(GL_CULL_FACE);

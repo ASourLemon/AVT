@@ -78,7 +78,9 @@ private:
 	Car* car3;
 	Car* car4;
 
-	Tree* tree;
+	Tree* tree1;
+	Tree* tree2;
+	Tree* tree3;
 
 	Riverlog* rlog1;
 	Riverlog* rlog3;
