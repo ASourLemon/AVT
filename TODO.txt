@@ -9,8 +9,12 @@ DONE - A Tree irá usar essa informação para implementar o billboard
 - Listas de objetos...
 - Blender + Assimp
 DONE - Game singleton
-- O blending está buggy. Sapo e candeeiros por vezes ficam translúcidos.
-- Meter blending nos billboards
+DONE - O blending está buggy. Sapo e candeeiros por vezes ficam translúcidos.
+DONE - Meter blending nos billboards
+- Lens flare
+- rename material tree
+- objetos estaticos / dinamicos
+- Ver Materials file (txt) (VERY SUPER EXTREMELY LOW PRIORITY)
 
 === MIGUEL ===
 
