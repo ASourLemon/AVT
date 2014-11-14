@@ -109,9 +109,6 @@ namespace domain {
 	}
 
 	void Game::draw(VSMathLib* core, VSShaderLib* shader) {
-
-		tree->draw(core, shader);
-
 		//for (unsigned int i = 0; i < game_objects.size(); i++)
 		//game_objects.at(i)->draw(core);
 		frog->draw(core, shader);
@@ -123,6 +120,15 @@ namespace domain {
 		for (unsigned int i = 0; i < lamps.size(); i++)
 			lamps.at(i)->draw(core, shader);
 
+
+		for (unsigned int i = 0; i < cars.size(); i++)
+			cars.at(i)->draw(core, shader);
+		for (unsigned int i = 0; i < riverlogs.size(); i++)
+			riverlogs.at(i)->draw(core, shader);
+		for (unsigned int i = 0; i < turtles.size(); i++)
+			turtles.at(i)->draw(core, shader);
+
+
 		//int pos_loc = glGetUniformLocation(shader->getProgramIndex(), "vertex_moving");
 		//glUniform1i(pos_loc, true);
 		glEnable(GL_BLEND);
@@ -132,17 +138,10 @@ namespace domain {
 		lamp8->draw(core, shader);
 		lamp9->draw(core, shader);
 		lamp10->draw(core, shader);
-		glEnable(GL_BLEND);
 		//glUniform1i(pos_loc, false);
 
-
-		for (unsigned int i = 0; i < cars.size(); i++)
-			cars.at(i)->draw(core, shader);
-		for (unsigned int i = 0; i < riverlogs.size(); i++)
-			riverlogs.at(i)->draw(core, shader);
-		for (unsigned int i = 0; i < turtles.size(); i++)
-			turtles.at(i)->draw(core, shader);
-
+		tree->draw(core, shader);
+		glDisable(GL_BLEND);
 	}
 
 	void Game::move_frog(int direction) {
