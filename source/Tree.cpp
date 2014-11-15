@@ -1,7 +1,7 @@
 #include "../include/Tree.h"
 #include <string.h>
-#include "game.h"
-#include "camera.h"
+#include "../include/game.h"
+#include "../include/camera.h"
 
 extern GLuint TextureArray[3];
 
