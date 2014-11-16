@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <sstream>
 #include <string>
+#include <iomanip>
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -26,7 +27,7 @@
 
 int WinX = 640, WinY = 480;
 int WindowHandle = 0;
-unsigned int FrameCount = 0;
+float FrameCount = 0;
 
 #define FPS 60
 #define VERTEX_COORD_ATTRIB_ORIGINAL 0
@@ -94,8 +95,6 @@ void checkOpenGLError(std::string error) {
 ///////////////////////////////////////////////////////////////////////
 
 void renderScene(void) {
-	int start = glutGet(GLUT_ELAPSED_TIME);
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	core->loadIdentity(VSMathLib::VIEW);
@@ -141,7 +140,7 @@ void renderScene(void) {
 	glUseProgram(shader.getProgramIndex());
 	game->draw(core, &shader);
 	glutSwapBuffers();
-	printf("Render time: %d\n", glutGet(GLUT_ELAPSED_TIME) - start);
+
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -149,11 +148,15 @@ void renderScene(void) {
 ///////////////////////////////////////////////////////////////////////
 
 void display() {
-	++FrameCount;
 
 	if (game->getFrogLifes()) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		int start = glutGet(GLUT_ELAPSED_TIME);
 		renderScene();
+		float frameTime = ((float) (glutGet(GLUT_ELAPSED_TIME) - start) / 1000);
+		FrameCount = ((float) 1 / frameTime);
+		//printf("FPS : %.1f, frameTime: %.5f\n", FrameCount, frameTime);
 	}
 }
 
@@ -190,24 +193,19 @@ void reshape(int w, int h) {
 }
 
 void timer(int value) {
-	if (nTimer == FPS) {
-		std::ostringstream oss;
-		int lifes = game->getFrogLifes();
-		int points = game->getFrogPoints();
-		if (lifes) {
-			oss << CAPTION << ": " << FrameCount << " FPS @ (" << WinX << "x"
-					<< WinY << ")" << "Lifes:" << lifes << "Points:" << points;
-		} else {
-			oss << CAPTION << ": G A M E   O V E R!!";
-		}
-
-		std::string s = oss.str();
-		glutSetWindow(WindowHandle);
-		glutSetWindowTitle(s.c_str());
-		FrameCount = 0;
-		nTimer = 0;
+	std::ostringstream oss;
+	int lifes = game->getFrogLifes();
+	int points = game->getFrogPoints();
+	if (lifes) {
+		oss << CAPTION << ": " << std::setprecision(3) << FrameCount << " FPS @ (" << WinX << "x"
+				<< WinY << ")" << "Lifes:" << lifes << "Points:" << points;
+	} else {
+		oss << CAPTION << ": G A M E   O V E R!!";
 	}
-	nTimer++;
+
+	std::string s = oss.str();
+	glutSetWindow(WindowHandle);
+	glutSetWindowTitle(s.c_str());
 	game->tick();
 
 	processKeys();
