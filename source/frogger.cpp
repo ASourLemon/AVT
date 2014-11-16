@@ -197,7 +197,7 @@ void timer(int value) {
 	int lifes = game->getFrogLifes();
 	int points = game->getFrogPoints();
 	if (lifes) {
-		oss << CAPTION << ": " << std::setprecision(3) << FrameCount << " FPS @ (" << WinX << "x"
+		oss << CAPTION << ": " << std::setprecision(4) << FrameCount << " FPS @ (" << WinX << "x"
 				<< WinY << ")" << "Lifes:" << lifes << "Points:" << points;
 	} else {
 		oss << CAPTION << ": G A M E   O V E R!!";
