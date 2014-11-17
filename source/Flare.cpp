@@ -1,4 +1,5 @@
 #include "../include/Flare.h"
+extern int WinX, WinY;
 
 namespace domain {
 
@@ -20,6 +21,18 @@ Flare::~Flare() {
 }
 
 void Flare::draw(VSMathLib* core, VSShaderLib* shader) {
+	int lx, ly;
+	int cx, cy;
+	cx = WinX/2;
+	cy = WinY/2;
+	float maxflaredist = sqrt(cx^2 + cy^2); 
+	float flaredist = sqrt((lx - cx)^2 + (ly - cy)^2);
+	float distancescale = (maxflaredist - flaredist)/maxflaredist;
+	
+	float dx = cx + (cx - lx);
+	float dy = cy + (cy - ly);
+	
+	
 	/*
 	 TODO: Implement this pseudo-code
 

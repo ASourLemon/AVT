@@ -39,7 +39,7 @@ private:
 	Light lights[MAX_LIGHTS];
 	VSShaderLib* shader;
 	domain::Frog* frog;
-
+	
 
 public:
 	LightManager();
@@ -53,6 +53,7 @@ public:
 	void lightsOn();
 	inline bool isOn(){return lights_on;}
 	inline int getNumLights(){return n_lights;}
+	
 
 private:
 	void processSpotLight(int n, Light* l, VSMathLib* core);

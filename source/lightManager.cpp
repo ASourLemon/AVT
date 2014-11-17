@@ -25,7 +25,6 @@ void ClearColor(Light* l){
 	memcpy(l->l_spec, whiteColor, sizeof(float) * 4);
 }
 
-//Add Spotlight
 void LightManager::addLight(float l_spot[4]){
 	Light l;
 	if(l_spot[3] == 1.0){
