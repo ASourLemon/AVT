@@ -11,6 +11,7 @@
 #include "../include/lamp.h"
 #include "../include/Tree.h"
 #include "../include/PerspectiveCamera.h"
+#include "../include/ParticleManager.h"
 
 namespace domain {
 
@@ -23,7 +24,7 @@ public:
 	void draw(VSMathLib* core, VSShaderLib* shader);
 	void add_drawable(Drawable* d);
 	void move_frog(int d);
-	void tick();
+	void tick(VSMathLib* core);
 	inline float getFrogX() {
 		return frog->getX();
 	}
@@ -58,6 +59,7 @@ public:
 	bool testCircleAABB(BoxSphere *sphere, BoxAABB *aabb);
 	void loadCamera();
 	Camera *getActiveCamera() { return activeCam; }
+	void UpdateParticles(VSMathLib* core, float elaped);
 
 private:
 	Game();
@@ -71,6 +73,12 @@ private:
 
 	PerspectiveCamera* frogCam;
 	Camera* activeCam;
+
+	std::vector<ParticleManager*> Particletemp;
+	std::list<ParticleManager*> *list_particle_system_I, *list_particle_system_A;
+
+	bool _burst;
+	float lastTime;
 
 	Map* map;
 	Car* car1;

@@ -23,7 +23,7 @@ Frog::Frog(float x, float y, float z, float speed, int direction) :
 				compressed(1.0){
 	
 	//float center[3] = { this->x, this->y, this->z};
-	Sphere = new BoxSphere(&_x, &_y, &_z, 2.2*0.4);
+	Sphere = new BoxSphere(&_x, &_y, &_z, 2.2f*0.4f);
 
 }
 
@@ -44,7 +44,7 @@ void Frog::draw(VSMathLib* core, VSShaderLib* shader){
 		core->rotate(-90, 0 ,1, 0);
 	}
 
-	core->scale(0.2, 0.2 * compressed, 0.2);
+	core->scale(0.2f, 0.2f * compressed, 0.2f);
 
 	//corpo
 	core->pushMatrix(VSMathLib::MODEL);
@@ -54,10 +54,10 @@ void Frog::draw(VSMathLib* core, VSShaderLib* shader){
 	body.setColor(VSResourceLib::AMBIENT, bodyAmbient);
 	body.setColor(VSResourceLib::SHININESS, &bodyShininess);
 	if (!created) {
-		body.createSphere(2.2, FROG_DIVISIONS);
+		body.createSphere(2.2f, FROG_DIVISIONS);
 	}
-	core->scale(1.0, 0.8, 1.0);
-	core->rotate(35.0, 1.0, 0.0, 0.0);
+	core->scale(1.0f, 0.8f, 1.0f);
+	core->rotate(35.0f, 1.0f, 0.0f, 0.0f);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
@@ -70,10 +70,10 @@ void Frog::draw(VSMathLib* core, VSShaderLib* shader){
 	//cabeca
 	core->pushMatrix(VSMathLib::MODEL);
 	if (!created) {
-		head.createSphere(1.5, 9.0);
+		head.createSphere(1.5f, 9.0f);
 	}
-	core->translate(0.0, 1.6, -1.8);
-	core->scale(0.8, 0.8, 1.0);
+	core->translate(0.0f, 1.6f, -1.8f);
+	core->scale(0.8f, 0.8f, 1.0f);
 	head.render();
 	core->popMatrix(VSMathLib::MODEL);
 
@@ -88,7 +88,7 @@ void Frog::draw(VSMathLib* core, VSShaderLib* shader){
 	//olhos - 1
 	core->pushMatrix(VSMathLib::MODEL);
 	if (!created) {
-		eye.createSphere(0.6, 9.0);
+		eye.createSphere(0.6f, 9.0f);
 		created = true;
 	}
 	core->translate(0.4, 2.8, -1.5);
@@ -98,6 +98,7 @@ void Frog::draw(VSMathLib* core, VSShaderLib* shader){
 	core->popMatrix(VSMathLib::MODEL);
 	//olhos - 2
 	core->pushMatrix(VSMathLib::MODEL);
+	
 	core->translate(-0.4, 2.8, -1.5);
 	core->scale(0.7, 1.0, 0.7);
 	core->rotate(-100, 0, 1, 0);

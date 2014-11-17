@@ -100,6 +100,7 @@ void checkOpenGLError(std::string error) {
 void renderScene(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+<<<<<<< HEAD
 	int lifes = game->getFrogLifes();
 	
 	////////////////////////////////////////////////////////////
@@ -124,6 +125,23 @@ void renderScene(void) {
 	//			core->lookAt(fx + camX, fy + camY * -0.5 + 2.5, fz - camZ, fx, fy, fz, 0, 1, 0);
 				game->loadCamera();
 			}
+=======
+	core->loadIdentity(VSMathLib::VIEW);
+	core->loadIdentity(VSMathLib::MODEL);
+	// set camera
+
+	if (CAM_TYPE == CAM_FROG) {
+
+		float fx = game->getFrogX();
+		float fy = game->getFrogY();
+		float fz = game->getFrogZ();
+
+		//printf("fx:%f, fy%f, fz%f\n", fx, fy, fz);
+
+		if (tracking == 1) {
+			core->lookAt(fx, fy + 3.5, fz - 2.5, fx + camX, (fy + camY * -0.5),
+					(fz + camZ * 0.5f), 0.0f, 1.0f, 0.0f);
+>>>>>>> c27d3ce004833066ea52d15b8f27d8cb29ce6705
 
 		} else {
 			core->lookAt(10, 10, 15.0, 10, 0, 15.0, 0, 0, 1);
@@ -175,6 +193,12 @@ void renderScene(void) {
 	}
 
 
+	float time = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
+	shader.setUniform("time", &time);
+	bool tex_moving = false;
+	int pos_loc = glGetUniformLocation(shader.getProgramIndex(), "tex_moving");
+	glUniform1i(pos_loc, tex_moving);
+
 	glutSwapBuffers();
 }
 
@@ -225,8 +249,8 @@ void reshape(int w, int h) {
 }
 
 void timer(int value) {
-	
-	std::ostringstream oss;
+
+	/*std::ostringstream oss;
 	int lifes = game->getFrogLifes();
 	int points = game->getFrogPoints();
 	if (lifes) {
@@ -238,8 +262,10 @@ void timer(int value) {
 
 	std::string s = oss.str();
 	glutSetWindow(WindowHandle);
-	glutSetWindowTitle(s.c_str());
-	game->tick();
+	glutSetWindowTitle(s.c_str());*/
+
+	//std::cout << FrameCount << std::endl;
+	game->tick(core);
 
 	processKeys();
 
@@ -380,10 +406,10 @@ void processKeys() {
 		keyStates['r'] = false;
 	}
 	if (keyStates['w']) {
-		r += 0.1;
+		r += 0.1f;
 	}
 	if (keyStates['s']) {
-		r -= 0.1;
+		r -= 0.1f;
 	}
 	if (keyStates['a']) {
 		game->move_frog(1);

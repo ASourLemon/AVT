@@ -5,8 +5,9 @@ namespace domain {
 	Game *Game::_instance = 0;
 	float delta = 0.0f;
 
-	Game::Game() : frogLifes(3), points(0), beingCarried(false), falling(false), distFalling(0.0) {
+	Game::Game() : frogLifes(3), points(0), beingCarried(false), falling(false), distFalling(0.0), _burst(true) {
 
+		lastTime = glutGet( GLUT_ELAPSED_TIME);
 	}
 
 	Game::~Game() {
@@ -35,11 +36,13 @@ namespace domain {
 		delete lamp6;
 		delete lamp7;
 		delete lamp8;
+		delete list_particle_system_I;
+		delete list_particle_system_A;
 	}
 
 	void Game::init() {
 
-		frog = new Frog(10.0, 0.0, 1.0, 0.01, DIR_BACK);
+		frog = new Frog(10.0f, 0.0f, 1.0f, 0.01f, DIR_BACK);
 
 		float pos[3] = {1.0f, 1.0f, 2.0f};
 		float up[3] = {0.0f, 1.0f, 0.0f};
@@ -48,34 +51,34 @@ namespace domain {
 		activeCam = frogCam;
 
 		map = new Map();
-		car1 = new Car(-6.0, 0.3, 4.0, DIR_LEFT, 0.5);
+		car1 = new Car(-6.0f, 0.3f, 4.0f, DIR_LEFT, 0.5f);
 		cars.push_back(car1);
 
-		car2 = new Car(-6.0, 0.3, 6.0, DIR_LEFT, 1.2);
+		car2 = new Car(-6.0f, 0.3f, 6.0f, DIR_LEFT, 1.2f);
 		cars.push_back(car2);
 
-		car3 = new Car(-4.0, 0.3, 9.0, DIR_RIGHT, 1.2);
+		car3 = new Car(-4.0f, 0.3f, 9.0f, DIR_RIGHT, 1.2f);
 		cars.push_back(car3);
-		car4 = new Car(-6.0, 0.3, 11.0, DIR_RIGHT, 0.5);
+		car4 = new Car(-6.0f, 0.3f, 11.0f, DIR_RIGHT, 0.5f);
 		cars.push_back(car4);
 
-		rlog1 = new Riverlog(2.0, -0.5, 17.0, 50, DIR_LEFT, 0.2);
+		rlog1 = new Riverlog(2.0f, -0.5f, 17.0f, 50.0f, DIR_LEFT, 0.2f);
 		riverlogs.push_back(rlog1);
-		rlog3 = new Riverlog(2.0, -0.5, 21.0, 50, DIR_LEFT, 0.2);
+		rlog3 = new Riverlog(2.0f, -0.5f, 21.0f, 50.0f, DIR_LEFT, 0.2f);
 		riverlogs.push_back(rlog3);
 
 
-		turtle1 = new Turtle(5.0, -.5, 19.0, DIR_RIGHT, 0.2);
+		turtle1 = new Turtle(5.0f, -.5f, 19.0f, DIR_RIGHT, 0.2f);
 		turtles.push_back(turtle1);
-		turtle2 = new Turtle(10.0, -.5, 19.0, DIR_RIGHT, 0.2);
+		turtle2 = new Turtle(10.0f, -.5f, 19.0f, DIR_RIGHT, 0.2f);
 		turtles.push_back(turtle2);
-		turtle3 = new Turtle(15.0, -.5, 19.0, DIR_RIGHT, 0.2);
+		turtle3 = new Turtle(15.0f, -.5, 19.0f, DIR_RIGHT, 0.2f);
 		turtles.push_back(turtle3);
-		turtle4 = new Turtle(15.0, -.5, 23.0, DIR_RIGHT, 0.2);
+		turtle4 = new Turtle(15.0f, -.5f, 23.0f, DIR_RIGHT, 0.2f);
 		turtles.push_back(turtle4);
-		turtle5 = new Turtle(10.0, -.5, 23.0, DIR_RIGHT, 0.2);
+		turtle5 = new Turtle(10.0f, -.5f, 23.0f, DIR_RIGHT, 0.2f);
 		turtles.push_back(turtle5);
-		turtle6 = new Turtle(5.0, -.5, 23.0, DIR_RIGHT, 0.2);
+		turtle6 = new Turtle(5.0f, -.5f, 23.0f, DIR_RIGHT, 0.2f);
 		turtles.push_back(turtle6);
 
 		lamp1 = new Lamp(15.0f, 0.0f, 15.0f, false);
@@ -102,6 +105,15 @@ namespace domain {
 		tree1 = new Tree(3.0f, 15.0f);
 		tree2 = new Tree((17.0-3.0)/2.0+3.0, 15.0f);
 		tree3 = new Tree(17.0f, 15.0f);
+
+		list_particle_system_I = new std::list<ParticleManager*>;
+		list_particle_system_A = new std::list<ParticleManager*>;
+
+		//cria 50 sistemas de particulas
+		for(int x=0; x<5; x++){
+			list_particle_system_I->push_back( new ParticleManager(_burst));
+		}
+
 
 	}
 
@@ -159,13 +171,18 @@ namespace domain {
 		frog->setT(i);
 	}
 
-	void Game::tick() {
+	void Game::tick(VSMathLib* core) {
+
+		float now    = glutGet( GLUT_ELAPSED_TIME);
+		float elaped = now - lastTime;
+		lastTime   = now;
+
 		if (frogLifes == 0){
 			return;
 		}
 
 		if (falling){
-			float d = 0.12;
+			float d = 0.12f;
 			distFalling += d;
 			frog->setY(frog->getY() - d);
 			if (distFalling > 2.0){
@@ -221,7 +238,7 @@ namespace domain {
 			if (testCircleAABB(frog->get_Sphere(), riverlogs.at(i)->get_AABB())) {
 				log = true;
 				beingCarried = true;
-				float d = (float)riverlogs.at(i)->getSpeed() * 0.1;
+				float d = (float)riverlogs.at(i)->getSpeed() * 0.1f;
 
 				if (riverlogs.at(i)->getDirection() == DIR_RIGHT){
 
@@ -245,7 +262,7 @@ namespace domain {
 			if (testCircleAABB(frog->get_Sphere(), turtles.at(i)->get_AABB())) {
 				log = true;
 				beingCarried = true;
-				float d = (float)turtles.at(i)->getSpeed() * 0.1;
+				float d = (float)turtles.at(i)->getSpeed() * 0.1f;
 				if (turtles.at(i)->getDirection() == DIR_RIGHT){
 
 					frog->setX(frog->getX() - d);
@@ -266,9 +283,12 @@ namespace domain {
 
 			}
 		}
+		//Collision Frog vs Cars
 		for (unsigned int i = 0; i < cars.size(); i++) {
 			if (testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())) {
 				frog->setCompressed(true);
+				list_particle_system_I->front()->activar(frog->getX(),frog->getY(), list_particle_system_A, list_particle_system_I);
+				break;
 			}
 		}
 		//Collision Frog vs Lamps
@@ -277,13 +297,28 @@ namespace domain {
 
 			}
 			}*/
+		//Update dos sistemas de particulas
+		core->pushMatrix(VSMathLib::MODEL);
+		for(std::list<ParticleManager*>::iterator x=list_particle_system_A->begin(); x!=list_particle_system_A->end(); x++){
+
+			if(!(*x)->get_activeParticles().empty()){
+					(*x)->Update(elaped);
+					(*x)->Draw(core);
+			}
+			else Particletemp.push_back(*x);
+		}
+		core->popMatrix(VSMathLib::MODEL);
+		for(std::vector<ParticleManager*>::iterator i=Particletemp.begin(); i!=Particletemp.end(); i++)
+			(*i)->desactivar(list_particle_system_A, list_particle_system_I);
+		Particletemp.clear();
+		//UpdateParticles(core, elaped);
 
 		activeCam->update(); //FIXME: actualizar as outras tambem
 
 	}
 
 	float Game::sqDistPointAABB(float x, float y, float z, BoxAABB *aabb) {
-		float sqDist = 0.0;
+		float sqDist = 0.0f;
 		float v;
 		float minX, minY, minZ, maxX, maxY, maxZ;
 
@@ -340,5 +375,11 @@ namespace domain {
 	void Game::loadCamera() {
 		activeCam->load();
 	}
+
+	void UpdateParticles(VSMathLib* core, float elaped){
+		
+	
+	}
+
 
 }
