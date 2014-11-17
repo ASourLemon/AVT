@@ -285,7 +285,7 @@ namespace domain {
 		}
 		//Collision Frog vs Cars
 		for (unsigned int i = 0; i < cars.size(); i++) {
-			if (testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())) {
+			if (!frog->isCompressed() && testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())) {
 				frog->setCompressed(true);
 				list_particle_system_I->front()->activar(frog->getX(),frog->getY(), list_particle_system_A, list_particle_system_I);
 				break;

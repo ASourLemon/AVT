@@ -1,0 +1,60 @@
+#include "../include/Flare.h"
+
+namespace domain {
+
+float Flare::flareAmb[4] = {  0.0625f,  0.0625f,  0.0625f, 0.5f };
+float Flare::flareDif[4] = {  0.25f,  0.25f,  0.25f, 0.5f };
+float Flare::flareSpec[4] = {  0.25f,  0.25f,  0.25f, 0.5f };
+float Flare::flareShininess = 10;
+
+Flare::Flare() {
+
+		support.setMaterialBlockName("Materials");
+		support.setColor(VSResourceLib::DIFFUSE, flareDif);
+		support.setColor(VSResourceLib::AMBIENT, flareAmb);
+		support.setColor(VSResourceLib::SPECULAR, flareSpec);
+		support.setColor(VSResourceLib::SHININESS, &flareShininess);
+}
+
+Flare::~Flare() {
+}
+
+void Flare::draw(VSMathLib* core, VSShaderLib* shader) {
+	/*
+	 TODO: Implement this pseudo-code
+
+	 lx, ly -> projected light on screen
+	 cx, cy -> center of flare
+
+	 maxflaredist = sqrt(cx^2 + cy^2);
+	 flaredist = sqrt((lx - cx)^2 + (ly - cy)^2);
+
+	 distancescale = (maxflaredist - flaredist)/maxflaredist);
+
+	 dx = cx + (cx - lx);
+	 dy = cy + (cy - ly);
+
+     // TODO: Note: Element colours and textures is not done yet!
+	 for each element in flare {
+	 	px = (1 - element.distance)*lx + element.distance*dx;
+	 	py = (1 - element.distance)*ly + element.distance*dy;
+
+	 	width = element.size * distancescale * flare.scale;
+
+	 	if (width > flare.maxsize) {
+	 		width = flare.maxsize;
+	 	}
+
+	 	height = width * aspectratio;
+
+	 	alpha = element.alpha * distancescale
+
+	 	drawrectangle( element.texture, element.colour, alpha, px, py, dith, height);
+	 }
+	 */
+}
+
+void Flare::tick() {
+}
+
+} /* namespace domain */
