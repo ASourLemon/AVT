@@ -11,33 +11,9 @@ namespace domain {
 	}
 
 	Game::~Game() {
-		delete tree1;
-		delete tree2;
-		delete tree3;
-		delete frog;
-		delete map;
-		delete car1;
-		delete car2;
-		delete car3;
-		delete car4;
-		delete rlog1;
-		delete rlog3;
-		delete turtle1;
-		delete turtle2;
-		delete turtle3;
-		delete turtle4;
-		delete turtle5;
-		delete turtle6;
-		delete lamp1;
-		delete lamp2;
-		delete lamp3;
-		delete lamp4;
-		delete lamp5;
-		delete lamp6;
-		delete lamp7;
-		delete lamp8;
-		delete list_particle_system_I;
-		delete list_particle_system_A;
+		for(unsigned int i = 0 ; i < game_objects.size() ; i++) {
+			delete game_objects.at(i);
+		}
 	}
 
 	void Game::init() {
@@ -51,48 +27,68 @@ namespace domain {
 		activeCam = frogCam;
 
 		map = new Map();
-		car1 = new Car(-6.0f, 0.3f, 4.0f, DIR_LEFT, 0.5f);
-		cars.push_back(car1);
+		Drawable *d = map;
+		game_objects.push_back(d);
 
-		car2 = new Car(-6.0f, 0.3f, 6.0f, DIR_LEFT, 1.2f);
-		cars.push_back(car2);
+		Car *c = new Car(-6.0f, 0.3f, 4.0f, DIR_LEFT, 0.5f);
+		cars.push_back(c);
+		game_objects.push_back(c);
+		c = new Car(-6.0f, 0.3f, 6.0f, DIR_LEFT, 1.2f);
+		cars.push_back(c);
+		game_objects.push_back(c);
+		c = new Car(-4.0f, 0.3f, 9.0f, DIR_RIGHT, 1.2f);
+		cars.push_back(c);
+		game_objects.push_back(c);
+		c = new Car(-6.0f, 0.3f, 11.0f, DIR_RIGHT, 0.5f);
+		cars.push_back(c);
+		game_objects.push_back(c);
 
-		car3 = new Car(-4.0f, 0.3f, 9.0f, DIR_RIGHT, 1.2f);
-		cars.push_back(car3);
-		car4 = new Car(-6.0f, 0.3f, 11.0f, DIR_RIGHT, 0.5f);
-		cars.push_back(car4);
 
-		rlog1 = new Riverlog(2.0f, -0.5f, 17.0f, 50.0f, DIR_LEFT, 0.2f);
-		riverlogs.push_back(rlog1);
-		rlog3 = new Riverlog(2.0f, -0.5f, 21.0f, 50.0f, DIR_LEFT, 0.2f);
-		riverlogs.push_back(rlog3);
+		Riverlog *r = new Riverlog(2.0f, -0.5f, 17.0f, 50.0f, DIR_LEFT, 0.2f);
+		riverlogs.push_back(r);
+		game_objects.push_back(r);
+		r = new Riverlog(2.0f, -0.5f, 21.0f, 50.0f, DIR_LEFT, 0.2f);
+		riverlogs.push_back(r);
+		game_objects.push_back(r);
 
 
-		turtle1 = new Turtle(5.0f, -.5f, 19.0f, DIR_RIGHT, 0.2f);
-		turtles.push_back(turtle1);
-		turtle2 = new Turtle(10.0f, -.5f, 19.0f, DIR_RIGHT, 0.2f);
-		turtles.push_back(turtle2);
-		turtle3 = new Turtle(15.0f, -.5, 19.0f, DIR_RIGHT, 0.2f);
-		turtles.push_back(turtle3);
-		turtle4 = new Turtle(15.0f, -.5f, 23.0f, DIR_RIGHT, 0.2f);
-		turtles.push_back(turtle4);
-		turtle5 = new Turtle(10.0f, -.5f, 23.0f, DIR_RIGHT, 0.2f);
-		turtles.push_back(turtle5);
-		turtle6 = new Turtle(5.0f, -.5f, 23.0f, DIR_RIGHT, 0.2f);
-		turtles.push_back(turtle6);
+		Turtle *t = new Turtle(5.0f, -.5f, 19.0f, DIR_RIGHT, 0.2f);
+		turtles.push_back(t);
+		game_objects.push_back(t);
+		t = new Turtle(10.0f, -.5f, 19.0f, DIR_RIGHT, 0.2f);
+		turtles.push_back(t);
+		game_objects.push_back(t);
+		t = new Turtle(15.0f, -.5, 19.0f, DIR_RIGHT, 0.2f);
+		turtles.push_back(t);
+		game_objects.push_back(t);
+		t = new Turtle(15.0f, -.5f, 23.0f, DIR_RIGHT, 0.2f);
+		turtles.push_back(t);
+		game_objects.push_back(t);
+		t = new Turtle(10.0f, -.5f, 23.0f, DIR_RIGHT, 0.2f);
+		turtles.push_back(t);
+		game_objects.push_back(t);
+		t = new Turtle(5.0f, -.5f, 23.0f, DIR_RIGHT, 0.2f);
+		turtles.push_back(t);
+		game_objects.push_back(t);
 
-		lamp1 = new Lamp(15.0f, 0.0f, 15.0f, false);
-		lamps.push_back(lamp1);
-		lamp2 = new Lamp(15.0f, 0.0f, 26.0f, false);
-		lamps.push_back(lamp2);
-		lamp3 = new Lamp(15.0f, 0.0f, 1.0f, false);
-		lamps.push_back(lamp3);
-		lamp4 = new Lamp(5.0f, 0.0f, 15.0f, false);
-		lamps.push_back(lamp4);
-		lamp5 = new Lamp(5.0f, 0.0f, 26.0f, false);
-		lamps.push_back(lamp5);
-		lamp6 = new Lamp(5.0f, 0.0f, 1.0f, false);
-		lamps.push_back(lamp6);
+        Lamp *l = new Lamp(15.0f, 0.0f, 15.0f, false);
+		lamps.push_back(l);
+		game_objects.push_back(l);
+		l = new Lamp(15.0f, 0.0f, 26.0f, false);
+		lamps.push_back(l);
+		game_objects.push_back(l);
+		l = new Lamp(15.0f, 0.0f, 1.0f, false);
+		lamps.push_back(l);
+		game_objects.push_back(l);
+		l = new Lamp(5.0f, 0.0f, 15.0f, false);
+		lamps.push_back(l);
+		game_objects.push_back(l);
+		l = new Lamp(5.0f, 0.0f, 26.0f, false);
+		lamps.push_back(l);
+		game_objects.push_back(l);
+		l = new Lamp(5.0f, 0.0f, 1.0f, false);
+		lamps.push_back(l);
+		game_objects.push_back(l);
 
 		//Reflection lamps
 		lamp7 = new Lamp(15.0f, 0.0f, 15.0f, true);
@@ -102,9 +98,12 @@ namespace domain {
 
 		frog->setMaplimit(map->getMaplimit());
 
-		tree1 = new Tree(3.0f, 15.0f);
-		tree2 = new Tree((17.0-3.0)/2.0+3.0, 15.0f);
-		tree3 = new Tree(17.0f, 15.0f);
+		Tree *tree = new Tree(3.0f, 15.0f);
+		game_objects.push_back(tree);
+		tree = new Tree((17.0-3.0)/2.0+3.0, 15.0f);
+		game_objects.push_back(tree);
+		tree = new Tree(17.0f, 15.0f);
+		game_objects.push_back(tree);
 
 		list_particle_system_I = new std::list<ParticleManager*>;
 		list_particle_system_A = new std::list<ParticleManager*>;
@@ -125,41 +124,19 @@ namespace domain {
 	}
 
 	void Game::draw(VSMathLib* core, VSShaderLib* shader) {
-		//for (unsigned int i = 0; i < game_objects.size(); i++)
-		//game_objects.at(i)->draw(core);
 		frog->draw(core, shader);
 
-		map->draw(core, shader);
-
-		//glDisable(GL_STENCIL_TEST);
-		//Normal lamps
-		for (unsigned int i = 0; i < lamps.size(); i++)
-			lamps.at(i)->draw(core, shader);
-
-
-		for (unsigned int i = 0; i < cars.size(); i++)
-			cars.at(i)->draw(core, shader);
-		for (unsigned int i = 0; i < riverlogs.size(); i++)
-			riverlogs.at(i)->draw(core, shader);
-		for (unsigned int i = 0; i < turtles.size(); i++)
-			turtles.at(i)->draw(core, shader);
-
-
-		//int pos_loc = glGetUniformLocation(shader->getProgramIndex(), "vertex_moving");
-		//glUniform1i(pos_loc, true);
-		glEnable(GL_BLEND);		
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		for(unsigned int i = 0; i < game_objects.size() ; i++) {
+			game_objects.at(i)->draw(core, shader);
+		}
 
 		//Reflection lamps
+		glEnable(GL_BLEND);		
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		lamp7->draw(core, shader);
 		lamp8->draw(core, shader);
 		lamp9->draw(core, shader);
 		lamp10->draw(core, shader);
-		//glUniform1i(pos_loc, false);
-
-		tree1->draw(core, shader);
-		tree2->draw(core, shader);
-		tree3->draw(core, shader);
 		glDisable(GL_BLEND);
 	}
 
@@ -210,10 +187,10 @@ namespace domain {
 			}
 		}
 
-		//for (unsigned int i = 0; i < game_objects.size(); i++)
-		//game_objects.at(i)->tick();
 		frog->tick();
-		map->tick();
+		for(unsigned int i = 0; i < game_objects.size() ; i++) {
+			game_objects.at(i)->tick();
+		}
 
 		if (testCircleAABB(frog->get_Sphere(), map->getWinBox())){
 			frog->setX(10.0);
@@ -223,13 +200,6 @@ namespace domain {
 			printf("Well done!\n");
 
 		}
-
-		for (unsigned int i = 0; i < cars.size(); i++)
-			cars.at(i)->tick();
-		for (unsigned int i = 0; i < riverlogs.size(); i++)
-			riverlogs.at(i)->tick();
-		for (unsigned int i = 0; i < turtles.size(); i++)
-			turtles.at(i)->tick();
 
 		bool log = false;
 		//Collision Frog vs Riverlogs

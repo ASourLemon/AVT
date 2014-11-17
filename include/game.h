@@ -81,31 +81,6 @@ private:
 	float lastTime;
 
 	Map* map;
-	Car* car1;
-	Car* car2;
-	Car* car3;
-	Car* car4;
-
-	Tree* tree1;
-	Tree* tree2;
-	Tree* tree3;
-
-	Riverlog* rlog1;
-	Riverlog* rlog3;
-
-	Turtle* turtle1;
-	Turtle* turtle2;
-	Turtle* turtle3;
-	Turtle* turtle4;
-	Turtle* turtle5;
-	Turtle* turtle6;
-
-	Lamp* lamp1;
-	Lamp* lamp2;
-	Lamp* lamp3;
-	Lamp* lamp4;
-	Lamp* lamp5;
-	Lamp* lamp6;
 
 	//Reflection Lamps
 	Lamp* lamp7;
