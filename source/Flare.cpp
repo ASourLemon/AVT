@@ -21,6 +21,7 @@ Flare::~Flare() {
 }
 
 void Flare::draw(VSMathLib* core, VSShaderLib* shader) {
+	float aspectratio = 1;
 	int lx, ly;
 	int cx, cy;
 	cx = WinX/2;
@@ -32,6 +33,20 @@ void Flare::draw(VSMathLib* core, VSShaderLib* shader) {
 	float dx = cx + (cx - lx);
 	float dy = cy + (cy - ly);
 	
+	for(int i = 0; i < 4; i++){
+		int px = (1 - element.distance)*lx + element.distance*dx;
+		int py = (1 - element.distance)*ly + element.distance*dy;
+			
+		float width = element.size * distancescale * flare.scale;
+
+	 	if (width > flare.maxsize) {
+	 		width = flare.maxsize;
+	 	}
+
+	 	float height = width * aspectratio;
+
+	 	float alpha = element.alpha * distancescale;
+	}
 	
 	/*
 	 TODO: Implement this pseudo-code
