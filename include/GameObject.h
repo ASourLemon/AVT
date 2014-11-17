@@ -2,7 +2,11 @@
 #define INCLUDE_GAMEOBJECT_H_
 
 class GameObject {
-private
+public:
+	virtual ~GameObject();
+	virtual void draw() = 0;
+	virtual void update(float time) = 0;
+protected:
 	Vec3 _position;
 };
 

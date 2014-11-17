@@ -21,7 +21,7 @@ Flare::~Flare() {
 }
 
 void Flare::draw(VSMathLib* core, VSShaderLib* shader) {
-	float aspectratio = 1;
+/*	float aspectratio = 1;
 	int lx, ly;
 	int cx, cy;
 	cx = WinX/2;
@@ -47,7 +47,7 @@ void Flare::draw(VSMathLib* core, VSShaderLib* shader) {
 
 	 	float alpha = element.alpha * distancescale;
 	}
-	
+*/	
 	/*
 	 TODO: Implement this pseudo-code
 
