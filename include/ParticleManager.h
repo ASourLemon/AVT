@@ -19,7 +19,7 @@ namespace domain{
 		void Reset();
 
 		void desactivar(std::list<ParticleManager*> *A, std::list<ParticleManager*> *I);
-		void activar(float x, float y, std::list<ParticleManager*> *A, std::list<ParticleManager*> *I);
+		void activar(float x, float y, float z, std::list<ParticleManager*> *A, std::list<ParticleManager*> *I);
 
 		std::list<Particle*> get_activeParticles(){return *activeParticles;}
 	private:
@@ -30,7 +30,7 @@ namespace domain{
 		int	Max_Particles;
 		bool respawnParticles;
 
-		float _x, _y;
+		float _x, _y, _z;
 
 	};
 

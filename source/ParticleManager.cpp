@@ -28,7 +28,7 @@ void ParticleManager::Draw(VSMathLib* core){
 
 	for(std::list<Particle*>::iterator x=activeParticles->begin(); x!=activeParticles->end(); x++){
 		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(_x, _y, 0.0f);
+		core->translate(_x, _y, _z);
 		(*x)->Draw(core);
 		core->popMatrix(VSMathLib::MODEL);
 
@@ -74,11 +74,12 @@ void ParticleManager::desactivar(std::list<ParticleManager*> *A, std::list<Parti
 	A->remove(this);
 }
 
-void ParticleManager::activar(float x, float y, std::list<ParticleManager*> *A, std::list<ParticleManager*> *I){
+void ParticleManager::activar(float x, float y, float z, std::list<ParticleManager*> *A, std::list<ParticleManager*> *I){
 
 
 	_x = x ;
 	_y = y;
+	_z = z;
 	
 	A->push_back(this);
 	I->remove(this);

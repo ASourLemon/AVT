@@ -257,7 +257,7 @@ namespace domain {
 		for (unsigned int i = 0; i < cars.size(); i++) {
 			if (!frog->isCompressed() && testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())) {
 				frog->setCompressed(true);
-				list_particle_system_I->front()->activar(frog->getX(),frog->getY(), list_particle_system_A, list_particle_system_I);
+				list_particle_system_I->front()->activar(frog->getX(),frog->getY(), frog->getZ(), list_particle_system_A, list_particle_system_I);
 				break;
 			}
 		}
