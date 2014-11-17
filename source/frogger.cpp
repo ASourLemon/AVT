@@ -111,7 +111,7 @@ void renderScene(void) {
 
 		if (tracking == 1) {
 			core->lookAt(fx, fy + 3.5, fz - 2.5, fx + camX, (fy + camY * -0.5),
-					(fz + camZ * 0.5), 0, 1, 0);
+					(fz + camZ * 0.5f), 0.0f, 1.0f, 0.0f);
 
 		} else {
 //			core->lookAt(fx + camX, fy + camY * -0.5 + 2.5, fz - camZ, fx, fy,
@@ -130,7 +130,7 @@ void renderScene(void) {
 	int daybool = glGetUniformLocation(shader.getProgramIndex(), "isDay");
 	glUniform1i(daybool, l_on);
 
-	float time = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
+	float time = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
 	shader.setUniform("time", &time);
 	bool tex_moving = false;
 	int pos_loc = glGetUniformLocation(shader.getProgramIndex(), "tex_moving");
@@ -156,7 +156,7 @@ void display() {
 		renderScene();
 		float frameTime = ((float) (glutGet(GLUT_ELAPSED_TIME) - start) / 1000);
 		FrameCount = ((float) 1 / frameTime);
-		//printf("FPS : %.1f, frameTime: %.5f\n", FrameCount, frameTime);
+		printf("FPS : %.1f, frameTime: %.5f\n", FrameCount, frameTime);
 	}
 }
 
@@ -193,7 +193,7 @@ void reshape(int w, int h) {
 }
 
 void timer(int value) {
-	std::ostringstream oss;
+	/*std::ostringstream oss;
 	int lifes = game->getFrogLifes();
 	int points = game->getFrogPoints();
 	if (lifes) {
@@ -205,8 +205,10 @@ void timer(int value) {
 
 	std::string s = oss.str();
 	glutSetWindow(WindowHandle);
-	glutSetWindowTitle(s.c_str());
-	game->tick();
+	glutSetWindowTitle(s.c_str());*/
+
+	//std::cout << FrameCount << std::endl;
+	game->tick(core);
 
 	processKeys();
 
@@ -345,10 +347,10 @@ void processKeys() {
 		keyStates['r'] = false;
 	}
 	if (keyStates['w']) {
-		r += 0.1;
+		r += 0.1f;
 	}
 	if (keyStates['s']) {
-		r -= 0.1;
+		r -= 0.1f;
 	}
 	if (keyStates['a']) {
 		game->move_frog(1);

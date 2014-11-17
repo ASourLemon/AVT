@@ -3,7 +3,6 @@
 
 #include <stdlib.h>
 #include <list>
-#include <stdlib.h>
 #include <math.h>
 #include "vsMathLib.h"
 #include "vsResSurfRevLib.h"
