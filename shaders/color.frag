@@ -13,10 +13,8 @@ void main()
 {
 	vec4 col=selected?vec4(1,0,0,1):vec4(1);
 	outputF = texture(texmap, DataIn.texCoord.st)*col;
-	//if(selected){
-	//	outputF = vec4(1.0f);
-	//}else {
-	//	outputF = vec4(0.5f);
-	//}
+	if (outputF.a < 0.5) {
+		discard;
+	}
 		
 } 

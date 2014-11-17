@@ -118,17 +118,14 @@ void renderScene(void) {
 			//printf("fx:%f, fy%f, fz%f\n", fx, fy, fz);
 
 			if (tracking == 1) {
-				printf("cm0\n");
 				core->lookAt(fx, fy + 3.5, fz - 2.5, fx + camX, (fy + camY * -0.5), (fz + camZ * 0.5), 0, 1, 0);
 
 			} else {
-				printf("cm1\n");
 	//			core->lookAt(fx + camX, fy + camY * -0.5 + 2.5, fz - camZ, fx, fy, fz, 0, 1, 0);
 				game->loadCamera();
 			}
 
 		} else {
-				printf("cm2\n");
 			core->lookAt(10, 10, 15.0, 10, 0, 15.0, 0, 0, 1);
 		}
 
@@ -170,9 +167,11 @@ void renderScene(void) {
 		strcat(hud, "Points:");
 		sprintf(buf, "%d\0", points);
 		strcat(hud, buf);
-		fontM.DrawString(&shader, 0.0f, 0.0f, hud, true);	
+		fontM.DrawString(&shaderF, 0.0f, 0.0f, hud, false);	
+		
 	}else {
-		fontM.DrawString(&shader, 0.0f, 0.0f, "GAME OVER!", true);	
+		
+		fontM.DrawString(&shaderF, WinX/2, WinY/2, "GAME OVER!", true);	
 	}
 
 
@@ -226,6 +225,7 @@ void reshape(int w, int h) {
 }
 
 void timer(int value) {
+	
 	std::ostringstream oss;
 	int lifes = game->getFrogLifes();
 	int points = game->getFrogPoints();
@@ -494,7 +494,7 @@ GLuint setupShaders() {
 	shaderF.prepareProgram();
 
 	// add sampler uniforms
-	shaderF.setUniform("texUnit", 0);
+	//shaderF.setUniform("texUnit", 0);
 	fontM.Init();
 
 	printf("InfoLog for Font Shader\n%s\n\n", shaderF.getAllInfoLogs().c_str());
@@ -507,7 +507,7 @@ GLuint setupShaders() {
 	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/oldfShader.glsl");
 
 	// set semantics for the shader variables
-	shader.setProgramOutput(0, "outputF");
+	shader.setProgramOutput(0, "colorOut");
 	shader.setVertexAttribName(VSShaderLib::VERTEX_COORD_ATTRIB, "position");
 	shader.setVertexAttribName(VSShaderLib::NORMAL_ATTRIB, "normal");
 	shader.setVertexAttribName(VSShaderLib::TEXTURE_COORD_ATTRIB, "texCoord");

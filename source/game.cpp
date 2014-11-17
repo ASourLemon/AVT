@@ -135,8 +135,9 @@ namespace domain {
 
 		//int pos_loc = glGetUniformLocation(shader->getProgramIndex(), "vertex_moving");
 		//glUniform1i(pos_loc, true);
-		glEnable(GL_BLEND);
+		glEnable(GL_BLEND);		
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		//Reflection lamps
 		lamp7->draw(core, shader);
 		lamp8->draw(core, shader);
@@ -147,7 +148,6 @@ namespace domain {
 		tree1->draw(core, shader);
 		tree2->draw(core, shader);
 		tree3->draw(core, shader);
-
 		glDisable(GL_BLEND);
 	}
 

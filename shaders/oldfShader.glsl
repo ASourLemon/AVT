@@ -44,9 +44,9 @@ int index=0;
 vec4 processFog(){
 	vec4 fogColor = vec4(0.6f, 0.6f, 0.6f, 1.0f);
 	float distance = distance(vec4(0.0), DataIn.eye);
-	float density = 0.1f;
-	//float fogAmount = exp(-distance * density);
-	float fogAmount = -distance * density;
+	float density = 0.09f;
+	float fogAmount = exp2(-distance * density);
+	//float fogAmount = -(distance/100.0f) * density;
 	
 	return mix(fogColor, colorOut, fogAmount);
 }
@@ -182,6 +182,10 @@ void main() {
 	else
 		texel = texture(texmap, tex_coord);
 		 
+	if(texel.a == 0.0f){
+		discard;
+	}
+	
 	if(isDay){
 		
 		colorOut = processDirLights();
@@ -196,6 +200,6 @@ void main() {
 	}	
 	colorOut = max(colorOut, ambient * 0.5);	
 	colorOut *= texel;	
-	//colorOut = processFog();
+	colorOut = processFog();
 
 }
