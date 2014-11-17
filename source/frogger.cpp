@@ -1,12 +1,13 @@
 ///////////////////////////////////////////////////////////////////////
 //
 // 
-// (c) 2014 by Jo���o Madeiras Pereira
+// (c) 2014 by João, Miguel and Nelson
 //
 ///////////////////////////////////////////////////////////////////////
 
 #include <iostream>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sstream>
 #include <string>
 #include <iomanip>
@@ -22,6 +23,7 @@
 #include "../include/vsResSurfRevLib.h"
 #include "../include/lightManager.h"
 #include "../include/TGA.h"
+#include "../include/FontMapper.h"
 
 #define CAPTION "Frogger 3D"
 
@@ -42,7 +44,7 @@ GLuint VaoId, VboId[4];
 GLuint VertexShaderId, FragmentShaderId, ProgramId, ColorId;
 GLint UniformId, ProjectionID, ModelID, ViewID;
 GLint tex_loc;
-GLuint TextureArray[5];
+GLuint TextureArray[7];
 
 // Mouse Tracking Variables
 int startX, startY, tracking = 0;
@@ -54,6 +56,7 @@ float camX = 0.0, camY = 0.0, camZ = 2.0;
 
 VSMathLib* core;
 VSResSurfRevLib mySurfRev;
+FontMapper fontM;
 
 VSShaderLib shader, shaderF;
 domain::Game *game = domain::Game::getInstance();
@@ -97,12 +100,16 @@ void checkOpenGLError(std::string error) {
 void renderScene(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+	
+	////////////////////////////////////////////////////////////
+	///////////////Draw models/////////////////////////////////
+	//////////////////////////////////////////////////////////
 	core->loadIdentity(VSMathLib::VIEW);
 	core->loadIdentity(VSMathLib::MODEL);
+	
 	// set camera
-
 	if (CAM_TYPE == CAM_FROG) {
-
 		float fx = game->getFrogX();
 		float fy = game->getFrogY();
 		float fz = game->getFrogZ();
@@ -110,23 +117,26 @@ void renderScene(void) {
 		//printf("fx:%f, fy%f, fz%f\n", fx, fy, fz);
 
 		if (tracking == 1) {
-			core->lookAt(fx, fy + 3.5, fz - 2.5, fx + camX, (fy + camY * -0.5),
-					(fz + camZ * 0.5), 0, 1, 0);
+			printf("cm0\n");
+			core->lookAt(fx, fy + 3.5, fz - 2.5, fx + camX, (fy + camY * -0.5), (fz + camZ * 0.5), 0, 1, 0);
 
 		} else {
-//			core->lookAt(fx + camX, fy + camY * -0.5 + 2.5, fz - camZ, fx, fy,
-//					fz, 0, 1, 0);
+			printf("cm1\n");
+//			core->lookAt(fx + camX, fy + camY * -0.5 + 2.5, fz - camZ, fx, fy, fz, 0, 1, 0);
 			game->loadCamera();
 		}
 
 	} else {
-
+			printf("cm2\n");
 		core->lookAt(10, 10, 15.0, 10, 0, 15.0, 0, 0, 1);
 	}
 
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
+	glUseProgram(shader.getProgramIndex());
 	int lampbool = glGetUniformLocation(shader.getProgramIndex(), "lampOn");
 	glUniform1i(lampbool, lampOn);
-
 	int daybool = glGetUniformLocation(shader.getProgramIndex(), "isDay");
 	glUniform1i(daybool, l_on);
 
@@ -137,8 +147,31 @@ void renderScene(void) {
 	glUniform1i(pos_loc, tex_moving);
 
 	lightManager.drawLight(core);
-	glUseProgram(shader.getProgramIndex());
 	game->draw(core, &shader);
+	
+	////////////////////////////////////////////////////////////
+	///////////////Draw fonts//////////////////////////////////
+	//////////////////////////////////////////////////////////
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[6]);
+	glUseProgram(shaderF.getProgramIndex());
+	
+	int lifes = game->getFrogLifes();
+	int points = game->getFrogPoints();
+	char hud[30];
+	char buf[2];
+	buf[1] = '\0';
+	
+	strcpy(hud, "Lifes:");
+	sprintf(buf, "%d\0", lifes);
+	strcat(hud, buf);
+	strcat(hud, "   ");
+	strcat(hud, "Points:");
+	sprintf(buf, "%d\0", points);
+	strcat(hud, buf);
+	fontM.DrawString(&shader, 0.0f, 0.0f, hud, true);
+	
+	
 	glutSwapBuffers();
 
 }
@@ -185,7 +218,6 @@ void reshape(int w, int h) {
 		}
 
 	} else {
-
 		core->perspective(125.0f, ratio, 0.1f, 40.0f);
 	}
 	WinX = w;
@@ -444,7 +476,9 @@ void setupCore() {
 
 GLuint setupShaders() {
 
-	// Shader for fonts
+	///////////////////////////////////////////// 
+	//////////////Shader for fonts//////////////
+	/////////////////////////////////////////////
 	shaderF.init();
 	shaderF.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/color.vert");
 	shaderF.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/color.frag");
@@ -458,12 +492,14 @@ GLuint setupShaders() {
 
 	// add sampler uniforms
 	shaderF.setUniform("texUnit", 0);
+	fontM.Init();
 
 	printf("InfoLog for Font Shader\n%s\n\n", shaderF.getAllInfoLogs().c_str());
 
-	// Shader for models
+	///////////////////////////////////////////// 
+	//////////////Shader for models//////////////
+	/////////////////////////////////////////////
 	shader.init();
-
 	shader.loadShader(VSShaderLib::VERTEX_SHADER, "shaders/oldvShader.glsl");
 	shader.loadShader(VSShaderLib::FRAGMENT_SHADER, "shaders/oldfShader.glsl");
 
@@ -539,15 +575,15 @@ void init(int argc, char* argv[]) {
 	setupCallbacks();
 	setupLight();
 	l_on = false;
-	glGenTextures(5, TextureArray);
+	glGenTextures(7, TextureArray);
 	TGA_Texture(TextureArray, "textures/lightwood.tga", 0);
 	TGA_Texture(TextureArray, "textures/road.tga", 1);
 	TGA_Texture(TextureArray, "textures/water.tga", 2);
 	TGA_Texture(TextureArray, "textures/grass.tga", 3);
 	TGA_Texture(TextureArray, "textures/tree.tga", 4);
+	TGA_Texture(TextureArray, "textures/eye.tga", 5);
+	TGA_Texture(TextureArray, "textures/font1.tga", 6);
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
 }
 
 int main(int argc, char* argv[]) {

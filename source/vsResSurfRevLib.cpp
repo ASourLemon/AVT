@@ -118,8 +118,7 @@ void VSResSurfRevLib::createRectangle(float height, float width) {
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(VSShaderLib::VERTEX_COORD_ATTRIB);
-	glVertexAttribPointer(VSShaderLib::VERTEX_COORD_ATTRIB, 4, GL_FLOAT, 0, 0,
-			0);
+	glVertexAttribPointer(VSShaderLib::VERTEX_COORD_ATTRIB, 4, GL_FLOAT, 0, 0, 0);
 
 	//normals buffer
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
@@ -131,8 +130,7 @@ void VSResSurfRevLib::createRectangle(float height, float width) {
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(VSShaderLib::TEXTURE_COORD_ATTRIB);
-	glVertexAttribPointer(VSShaderLib::TEXTURE_COORD_ATTRIB, 2, GL_FLOAT, 0, 0,
-			0);
+	glVertexAttribPointer(VSShaderLib::TEXTURE_COORD_ATTRIB, 2, GL_FLOAT, 0, 0, 0);
 
 	//index buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
@@ -264,8 +262,7 @@ void VSResSurfRevLib::createCube(float side) {
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(VSShaderLib::VERTEX_COORD_ATTRIB);
-	glVertexAttribPointer(VSShaderLib::VERTEX_COORD_ATTRIB, 4, GL_FLOAT, 0, 0,
-			0);
+	glVertexAttribPointer(VSShaderLib::VERTEX_COORD_ATTRIB, 4, GL_FLOAT, 0, 0, 0);
 
 //normals buffer
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
@@ -277,8 +274,7 @@ void VSResSurfRevLib::createCube(float side) {
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(VSShaderLib::TEXTURE_COORD_ATTRIB);
-	glVertexAttribPointer(VSShaderLib::TEXTURE_COORD_ATTRIB, 2, GL_FLOAT, 0, 0,
-			0);
+	glVertexAttribPointer(VSShaderLib::TEXTURE_COORD_ATTRIB, 2, GL_FLOAT, 0, 0, 0);
 
 	//index buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);

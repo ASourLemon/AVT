@@ -32,7 +32,6 @@ Car::Car(float x, float y, float z, int direction, float velocity) :
 
 	components.push_front(load);
 
-	//float center[] = { this->x, this->y, this->z};
 	AABB = new BoxAABB(&_x, &_y, &_z, 0.05f, 2.35f, 0.01f, 0.01f, 0.01f, 0.01f);
 }
 

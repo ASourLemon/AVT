@@ -83,6 +83,8 @@ void Frog::draw(VSMathLib* core, VSShaderLib* shader){
 	eye.setColor(VSResourceLib::AMBIENT, eyeAmbient);
 	eye.setColor(VSResourceLib::SHININESS, &eyeShininess);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[5]);
 	//olhos - 1
 	core->pushMatrix(VSMathLib::MODEL);
 	if (!created) {
@@ -91,12 +93,14 @@ void Frog::draw(VSMathLib* core, VSShaderLib* shader){
 	}
 	core->translate(0.4, 2.8, -1.5);
 	core->scale(0.7, 1.0, 0.7);
+	core->rotate(-100, 0, 1, 0);
 	eye.render();
 	core->popMatrix(VSMathLib::MODEL);
 	//olhos - 2
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(-0.4, 2.8, -1.5);
 	core->scale(0.7, 1.0, 0.7);
+	core->rotate(-100, 0, 1, 0);
 	eye.render();
 	core->popMatrix(VSMathLib::MODEL);
 	core->popMatrix(VSMathLib::MODEL);
@@ -108,7 +112,8 @@ void Frog::draw(VSMathLib* core, VSShaderLib* shader){
 	eye.render();
 	core->popMatrix(VSMathLib::MODEL);
 	core->popMatrix(VSMathLib::MODEL);*/
-
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
 }
 
 void Frog::move(int d){

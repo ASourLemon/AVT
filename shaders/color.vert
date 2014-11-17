@@ -8,6 +8,8 @@ layout (std140) uniform Matrices {
 
 in vec4 position;
 in vec4 texCoord;
+uniform bool selected;
+
 
 out Data {
 	vec4 texCoord;

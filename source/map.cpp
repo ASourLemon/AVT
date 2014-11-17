@@ -1,7 +1,5 @@
 #include "../include/map.h"
 
-extern GLuint TextureArray[3];
-
 namespace domain {
 
 float Map::roadAmb[4] = { 0.0f, 0.0f, 0.0f, 1.0f };

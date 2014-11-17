@@ -9,7 +9,6 @@
 #include "vsResSurfRevLib.h"
 #include "BoxAABB.h"
 
-
 #define LEFT_X_LIMIT 17.0f
 #define RIGHT_X_LIMIT -7.0f
 #define SPEED_INC 0.1f
@@ -20,6 +19,8 @@
 #define DIR_RIGHT 3
 #define DIR_UP 4
 #define DIR_DOWN 5
+
+extern GLuint TextureArray[7];
 
 namespace domain {
 

@@ -1,9 +1,9 @@
 #include "../include/Tree.h"
+
 #include <string.h>
 #include "../include/game.h"
 #include "../include/camera.h"
 
-extern GLuint TextureArray[3];
 
 namespace domain {
 
