@@ -301,7 +301,7 @@ void processMouseMotion(int xx, int yy) {
 	float rAux;
 	mx = xx;
 	my = yy;
-	printf("mX: %d, mY: %d \n", xx, yy);
+	//printf("mX: %d, mY: %d \n", xx, yy);
 
 	deltaX = -xx + startX;
 	deltaY = yy - startY;

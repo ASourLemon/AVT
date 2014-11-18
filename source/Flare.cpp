@@ -38,34 +38,49 @@ void Flare::draw(VSMathLib* core, VSShaderLib* shader) {
 		support.createRectangle(20.0f, 20.0f);
 		created = true;
 	} 
-	
 
-	
-	float pos[] = {1.0f, 1.0f, 1.0f};
+
+	//hardcooded light pos
+	float pos[4] = { 15.0f, 3.0f, 15.0f, 1.0f };
 	float p_p[4];
-	float p_pv[4];
-	core->multMatrixPoint(VSMathLib::PROJECTION, pos, p_p);
-	core->multMatrixPoint(VSMathLib::VIEW, p_p, p_pv);
 	
-	printf("x: %.1f, y: %.1f, z: %.1f\n", p_pv[0], p_pv[1], p_pv[2]); 
+	
+	//get viewport coordinates [-1, 1]
+	core->multMatrixPoint(VSMathLib::PROJ_VIEW_MODEL, pos, p_p);
+	p_p[0] /= p_p[3];
+	p_p[1] /= p_p[3];
+	p_p[2] /= p_p[3];
+	
+	//transform to window coordinates [0, WinX] and [0, WinY] 
+	p_p[0] *= 0.5;
+	p_p[0] += 0.5;
+	p_p[0] *= WinX;
+	p_p[1] *= 0.5;
+	p_p[1] += 0.5;
+	p_p[1] *= WinY;
+	
+	printf("x: %.1f, y: %.1f, z: %.1f\n", (p_p[0]),  p_p[1], p_p[2]); 
 	
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
-
+	
+	core->pushMatrix(VSMathLib::MODEL);
+	core->loadIdentity(VSMathLib::MODEL);
 	
 	core->pushMatrix(VSMathLib::VIEW);
 	core->loadIdentity(VSMathLib::VIEW);
-	
-	core->pushMatrix(VSMathLib::MODEL);
-	core->loadIdentity(VSMathLib::MODEL);	
 	
 	core->pushMatrix(VSMathLib::PROJECTION);	
 	core->loadIdentity(VSMathLib::PROJECTION);
 	core->ortho(.0f, float(WinX), .0f, float(WinY), -1.0f, 1.0f);
 	
 	
-	float lx = mx;
-	float ly = WinY-my;
+	
+
+	
+	
+	float lx = p_p[0];
+	float ly = p_p[1];
 	
 	
 	float cx = WinX*0.5;
