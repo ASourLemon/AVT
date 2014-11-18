@@ -14,21 +14,18 @@ Flare::Flare() : created(false) {
 		support.setColor(VSResourceLib::AMBIENT, flareAmb);
 		support.setColor(VSResourceLib::SPECULAR, flareSpec);
 		support.setColor(VSResourceLib::SHININESS, &flareShininess);
-		
-
-	
-
 }
 
 Flare::~Flare() {
 }
 
-void Flare::addFlareElement(int type, float size, float alpha, float distance){
+void Flare::addFlareElement(int type, float size, float maxSize, float alpha, float distance){
 	FlareElement* fl = new FlareElement();
 	fl->type = type;
 	fl->size = size;
 	fl->alpha = alpha;
 	fl->distance = distance;
+	fl->maxSize = maxSize;
 	
 	flareElements.push_back(fl);
 }
@@ -63,6 +60,8 @@ void Flare::draw(VSMathLib* core, VSShaderLib* shader) {
 	
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
+
+	
 	
 	core->pushMatrix(VSMathLib::MODEL);
 	core->loadIdentity(VSMathLib::MODEL);
@@ -76,7 +75,7 @@ void Flare::draw(VSMathLib* core, VSShaderLib* shader) {
 	
 	
 	
-
+	float radio = WinX/WinY;
 	
 	
 	float lx = p_p[0];
@@ -106,9 +105,14 @@ void Flare::draw(VSMathLib* core, VSShaderLib* shader) {
 		
 		
 		float w = flareElements.at(i)->size * distancescale;
-		float h = w * 1.0f; //FIXME: aspectratio, not 1.0f 
+		if(w >  flareElements.at(i)->maxSize){
+			w = flareElements.at(i)->maxSize;
+		}
+		float h = w * radio;
+		
 		
 		float alpha = flareElements.at(i)->alpha;
+		
 		core->pushMatrix(VSMathLib::MODEL);
 		core->loadIdentity(VSMathLib::MODEL);
 		core->translate(px, py, 0);	//flare position
@@ -117,46 +121,16 @@ void Flare::draw(VSMathLib* core, VSShaderLib* shader) {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, FlareTextureArray[flareElements.at(i)->type]);
 
+		glEnable(GL_BLEND);		
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		support.render();
+		glDisable(GL_BLEND);		
 		core->popMatrix(VSMathLib::MODEL);	
-		
 	}
-
-	/*
-	 TODO: Implement this pseudo-code
-
-	 lx, ly -> projected light on screen
-	 cx, cy -> center of flare
-
-	 maxflaredist = sqrt(cx^2 + cy^2);
-	 flaredist = sqrt((lx - cx)^2 + (ly - cy)^2);
-
-	 distancescale = (maxflaredist - flaredist)/maxflaredist);
-
-	 dx = cx + (cx - lx);
-	 dy = cy + (cy - ly);
-
-     // TODO: Note: Element colours and textures is not done yet!
-	 for each element in flare {
-	 	px = (1 - element.distance)*lx + element.distance*dx;
-	 	py = (1 - element.distance)*ly + element.distance*dy;
-
-	 	width = element.size * distancescale * flare.scale;
-
-	 	if (width > flare.maxsize) {
-	 		width = flare.maxsize;
-	 	}
-
-	 	height = width * aspectratio;
-
-	 	alpha = element.alpha * distancescale
-
-	 	drawrectangle( element.texture, element.colour, alpha, px, py, dith, height);
-	 }
-	 */
 	 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
+
 	core->popMatrix(VSMathLib::MODEL);	
 	core->popMatrix(VSMathLib::VIEW);
 	core->popMatrix(VSMathLib::PROJECTION);
