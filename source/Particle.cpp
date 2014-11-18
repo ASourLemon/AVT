@@ -27,11 +27,14 @@ void Particle::Draw(VSMathLib* core){
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(x, y, z);
-	//core->scale(0.1f, 0.10f, 0.10f);
+	core->scale(10.1f, 10.10f, 10.10f);
 	if (!created) {
 		body.createSphere(2.2f, 5.0f);
+		created = true;
 	}
 	
+	body.render();
+
 	core->popMatrix(VSMathLib::MODEL);
 
 }
