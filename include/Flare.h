@@ -10,8 +10,15 @@ public:
 	float maxSize;
 	float alpha;
 	float distance;
-	
 }FlareElement;
+
+typedef struct{
+public:
+	float x;
+	float y;
+	float z;
+	float w;
+}Vec4;
 
 namespace domain {
 class Flare: public Drawable {
@@ -19,6 +26,7 @@ public:
 	Flare();
 	~Flare();
 	void addFlareElement(int type, float size, float maxSize, float alpha, float distance);
+	void addLight(float pos[4]);
 	void draw(VSMathLib* core, VSShaderLib* shader);
 	void tick();
 
@@ -32,6 +40,8 @@ private:
 	static float flareSpec[4];
 	static float flareShininess;
 	std::vector<FlareElement*> flareElements;
+	std::vector<Vec4*> lights;
+	void drawFlare(VSMathLib* core, VSShaderLib* shader, float pos[4]);
 };
 
 }

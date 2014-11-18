@@ -74,6 +74,7 @@ int nTimer = 0;
 LightManager lightManager;
 bool l_on;
 bool lampOn;
+bool drawFlare;
 
 int mx = 0, my = 0;
 
@@ -158,8 +159,10 @@ void renderScene(void) {
 	///////////////Draw flares/////////////////////////////////
 	//////////////////////////////////////////////////////////
 
-	glUseProgram(shaderF.getProgramIndex());
-	flare.draw(core, &shaderF);
+	if(drawFlare && lampOn && !l_on){
+		glUseProgram(shaderF.getProgramIndex());
+		flare.draw(core, &shaderF);
+	}
 	
 	////////////////////////////////////////////////////////////
 	///////////////Draw fonts//////////////////////////////////
@@ -252,6 +255,7 @@ void timer(int value) {
 		oss << CAPTION << ": " << std::setprecision(4) << FrameCount << " FPS @ (" << WinX << "x"
 				<< WinY << ")" << "Lifes:" << lifes << "Points:" << points;
 	} else {
+		drawFlare = false;
 		oss << CAPTION << ": G A M E   O V E R!!";
 	}
 
@@ -400,6 +404,7 @@ void processKeys() {
 		if (!game->getFrogLifes()) {
 			game->setFrogLifes(3);
 			game->setFrogPoints(0);
+			drawFlare = true;
 		}
 		keyStates['r'] = false;
 	}
@@ -584,6 +589,15 @@ void setupLight() {
 	float l2_dir[4] = { 0.0f, 0.0f, 1.0f, 0.0f };
 	lightManager.addLight(l2_dir, l2_cut);
 
+
+	//add lights to the flare system
+	flare.addLight(p0_pos);
+	flare.addLight(p1_pos);
+	flare.addLight(p2_pos);
+	flare.addLight(p3_pos);
+	flare.addLight(p4_pos);
+	flare.addLight(p5_pos);
+	
 	int n_lights = lightManager.getNumLights();
 	shader.setUniform("n_lights", &n_lights);
 	lightManager.lightsOn();
@@ -594,6 +608,8 @@ void setupFlare(){
 	flare.addFlareElement(1, 2.0f, 5.0f, 0.5f, 0.2f);
 	flare.addFlareElement(2, 2.0f, 5.0f, 0.5f, 0.8f);
 	flare.addFlareElement(3, 2.0f, 5.0f, 0.5f, 0.9f);
+	drawFlare = true;
+	
 }
 
 void init(int argc, char* argv[]) {
