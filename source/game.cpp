@@ -30,50 +30,52 @@ namespace domain {
 		Drawable *d = map;
 		game_objects.push_back(d);
 
-		Car *c = new Car(-6.0f, 0.3f, 4.0f, DIR_LEFT, 0.5f);
-		cars.push_back(c);
-		refactored_game_objects.push_back(c);
-//		game_objects.push_back(c);
-		c = new Car(-6.0f, 0.3f, 6.0f, DIR_LEFT, 1.2f);
-		cars.push_back(c);
-//		game_objects.push_back(c);
-		refactored_game_objects.push_back(c);
-		c = new Car(-4.0f, 0.3f, 9.0f, DIR_RIGHT, 1.2f);
-		cars.push_back(c);
-//		game_objects.push_back(c);
-		refactored_game_objects.push_back(c);
-		c = new Car(-6.0f, 0.3f, 11.0f, DIR_RIGHT, 0.5f);
-		cars.push_back(c);
-		refactored_game_objects.push_back(c);
-//		game_objects.push_back(c);
+		const float UNITS_PER_SECOND = 2.0f;
+		const float TICKS_PER_SECOND = 60.0f;
+		const float UNITS_PER_TICK = UNITS_PER_SECOND / TICKS_PER_SECOND;
+		Vec3 car_speed_right = Vec3(UNITS_PER_TICK, 0.0f, 0.0f);
+		Vec3 car_speed_left = car_speed_right*(-1);
+		Vec3 car_positions[] = { Vec3(-6.0f, 0.3f, 4.0f),
+								 Vec3(-6.0f, 0.3f, 6.0f),
+								 Vec3(-4.0f, 0.3f, 9.0f),
+								 Vec3(-6.0f, 0.3f, 11.0f) };
+		Car *car;
+		for(int i = 0; i < 4; i++) {
+			car = new Car(car_positions[i], (i < 2) ? car_speed_left : car_speed_right);
+			cars.push_back(car);
+			refactored_game_objects.push_back(car);
+//			game_objects.push_back(c);
+		}
 
 
-		Riverlog *r = new Riverlog(2.0f, -0.5f, 17.0f, 50.0f, DIR_LEFT, 0.2f);
-		riverlogs.push_back(r);
-		game_objects.push_back(r);
-		r = new Riverlog(2.0f, -0.5f, 21.0f, 50.0f, DIR_LEFT, 0.2f);
-		riverlogs.push_back(r);
-		game_objects.push_back(r);
+
+		Vec3 riverlogs_positions[] = { Vec3(2.0f, -0.5f, 17.0f),
+				 	 	 	 	 	   Vec3(2.0f, -0.5f, 21.0f) };
+		// FIXME: set specific speeds for logs
+		Riverlog *r;
+		for(int i = 0; i < 2; i++) {
+					r = new Riverlog(riverlogs_positions[i], (i < 1) ? car_speed_left : car_speed_right);
+					riverlogs.push_back(r);
+					refactored_game_objects.push_back(r);
+		//			game_objects.push_back(r);
+		}
 
 
-		Turtle *t = new Turtle(5.0f, -.5f, 19.0f, DIR_RIGHT, 0.2f);
-		turtles.push_back(t);
-		game_objects.push_back(t);
-		t = new Turtle(10.0f, -.5f, 19.0f, DIR_RIGHT, 0.2f);
-		turtles.push_back(t);
-		game_objects.push_back(t);
-		t = new Turtle(15.0f, -.5, 19.0f, DIR_RIGHT, 0.2f);
-		turtles.push_back(t);
-		game_objects.push_back(t);
-		t = new Turtle(15.0f, -.5f, 23.0f, DIR_RIGHT, 0.2f);
-		turtles.push_back(t);
-		game_objects.push_back(t);
-		t = new Turtle(10.0f, -.5f, 23.0f, DIR_RIGHT, 0.2f);
-		turtles.push_back(t);
-		game_objects.push_back(t);
-		t = new Turtle(5.0f, -.5f, 23.0f, DIR_RIGHT, 0.2f);
-		turtles.push_back(t);
-		game_objects.push_back(t);
+
+		Vec3 turtles_positions[] = { Vec3(5.0f, -.5f, 19.0f),
+  	   	   	   	                    Vec3(10.0f, -.5f, 19.0f),
+	   	   	   	   	                Vec3(15.0f, -.5f, 19.0f),
+	 	   	   	   	   	            Vec3(5.0f, -.5f, 23.0f),
+	 	   	   	   	   	            Vec3(10.0f, -.5f, 23.0f),
+	 	   	   	   	   	            Vec3(15.0f, -.5f, 23.0f) };
+		// FIXME: set specific speeds for logs
+		Turtle *turtle;
+		for(int i = 0; i < 6; i++) {
+			turtle = new Turtle(turtles_positions[i], (i < 3) ? car_speed_left : car_speed_right);
+			turtles.push_back(turtle);
+			refactored_game_objects.push_back(turtle);
+//			game_objects.push_back(turtle);
+		}
 
         Lamp *l = new Lamp(15.0f, 0.0f, 15.0f, false);
 		lamps.push_back(l);
@@ -354,7 +356,7 @@ namespace domain {
 		for (unsigned int i = 0; i < cars.size(); i++) {
 			if (!frog->isCompressed() && testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())) {
 				frog->setCompressed(true);
-				//FIXME: Isto está a causar o bug do fechar a janela e ficar breakado, apos uma colisão...
+				//FIXME: Isto estï¿½ a causar o bug do fechar a janela e ficar breakado, apos uma colisï¿½o...
 				list_particle_system_I->front()->activar(frog->getX(), frog->getY(), frog->getZ(), list_particle_system_A, list_particle_system_I);
 				break;
 			}

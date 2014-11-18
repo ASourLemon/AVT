@@ -18,13 +18,10 @@ float Car::tireSpec[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
 float Car::tireShininess = 100;
 
 
-Car::Car(float x, float y, float z, int direction, float velocity) : created(false) {
-	_position = Vec3(x, y, z);
-
-	const float UNITS_PER_SECOND = 2.0f;
-	const float TICKS_PER_SECOND = 60.0f;
-	const float UNITS_PER_TICK = UNITS_PER_SECOND / TICKS_PER_SECOND;
-	_speed = Vec3(UNITS_PER_TICK, 0.0f, 0.0f);
+Car::Car(Vec3 position, Vec3 initSpeed) : created(false) {
+	_position = position;
+	_initSpeed = initSpeed;
+	_speed = initSpeed;
 
 	VSResSurfRevLib load;
 	load.createCube(1);

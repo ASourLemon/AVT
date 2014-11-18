@@ -17,8 +17,10 @@ float Turtle::legDif[4] = { 0.4f, 0.6f, 0.4f, 1.0f };
 float Turtle::legSpec[4] = { 0.7f, 0.7f, 0.7f, 1.0f };
 float Turtle::legShininess = 10;
 
-Turtle::Turtle(float x, float y, float z, int direction, float velocity) :
-		x(x), y(y), z(z), speed(velocity), direction(direction), created(false)  {
+Turtle::Turtle(Vec3 position, Vec3 initSpeed) : created(false)  {
+	_position = position;
+	_initSpeed = initSpeed;
+	_speed = initSpeed;
 	
 	body.createSphere(0.8f, TURTLE_DIVISIONS);
 	body.setMaterialBlockName("Materials");
@@ -41,17 +43,17 @@ Turtle::Turtle(float x, float y, float z, int direction, float velocity) :
 	head.setColor(VSResourceLib::SPECULAR, headSpec);
 	head.setColor(VSResourceLib::SHININESS, &headShininess);
 
-//	body_box = new BoxAABB(&this->x, &this->y, &this->z, 0.4f, 0.4f, 0.12f, 0.12f, 0.5f, 0.5f);
+	body_box = new BoxAABB(&_position, 0.8f, 0.24f, 0.1f);
 }
 
 Turtle::~Turtle() {
-	//delete body_box;
+	delete body_box;
 }
 
 void Turtle::draw(VSMathLib* core, VSShaderLib* shader) {
 	
 	core->pushMatrix(VSMathLib::MODEL);
-	core->translate(x, y, z);
+	core->translate(_position.getX(), _position.getY(), _position.getZ());
 	
 	//body
 	core->pushMatrix(VSMathLib::MODEL);
@@ -75,9 +77,9 @@ void Turtle::draw(VSMathLib* core, VSShaderLib* shader) {
 	
 	//head
 	core->pushMatrix(VSMathLib::MODEL);	
-	if(direction == DIR_RIGHT){
+	if(_speed.getX() < 0){
 		core->translate(-0.6f, 0.0f, 0.0f);	
-	}else if(direction == DIR_LEFT){
+	}else if(_speed.getX() > 0){
 		core->translate(0.6f, 0.0f, 0.0f);
 	}
 
@@ -89,30 +91,6 @@ void Turtle::draw(VSMathLib* core, VSShaderLib* shader) {
 	
 	//end
 	core->popMatrix(VSMathLib::MODEL);
-}
-
-void Turtle::tick() {
-	this->second_in_game += 0.01f;	//After 100 calls, 1 second
-	
-	if(second_in_game >= 5.0){
-		speed += 0.5f;
-		second_in_game = 0.0;
-	}
-	
-	int r = rand() % 5;
-	float d = speed * 0.1;
-	if (direction == DIR_LEFT) {
-		if (this->x >= LEFT_X_LIMIT) {
-			this->x = RIGHT_X_LIMIT - r;
-		}
-		this->x += d;
-	} else if (direction == DIR_RIGHT) {
-		if (this->x <= RIGHT_X_LIMIT) {
-			this->x = LEFT_X_LIMIT + r;
-		}
-		this->x -= d;
-	}
-
 }
 
 } /* namespace domain */

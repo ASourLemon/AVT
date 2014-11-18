@@ -1,12 +1,12 @@
 #ifndef INCLUDE_TURTLE_H_
 #define INCLUDE_TURTLE_H_
 
-#include "drawable.h"
+#include "DynamicObject.h"
 
 #define TURTLE_DIVISIONS 10
 
 namespace domain {
-class Turtle: public Drawable {
+class Turtle: public DynamicObject {
 private:
 	static float bodyAmb[4];
 	static float bodyDif[4];
@@ -25,23 +25,14 @@ private:
 
 protected:
 	VSResSurfRevLib head, body, leg;
-	float x;
-	float y;
-	float z;
-	float speed;
-	int direction;
 	bool created;
 	BoxAABB *body_box;
 
 public:
-	Turtle(float x, float y, float z, int direction, float velocity);
+	Turtle(Vec3 position, Vec3 initSpeed);
 	~Turtle();
 	void draw(VSMathLib* core, VSShaderLib* shader);
-	void tick();
 	inline BoxAABB * get_AABB(){ return body_box;}
-	inline float getSpeed(){ return speed;};
-	inline int getDirection(){ return direction; }
-
 };
 
 }
