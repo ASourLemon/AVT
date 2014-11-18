@@ -590,10 +590,10 @@ void setupLight() {
 }
 
 void setupFlare(){
-	flare.addFlareElement(0, 10.0f, 1.0f, 0.1f);
-	flare.addFlareElement(1, 10.0f, 1.0f, 0.2f);
-	flare.addFlareElement(2, 10.0f, 1.0f, 0.8f);
-	flare.addFlareElement(3, 10.0f, 1.0f, 0.9f);
+	flare.addFlareElement(0, 2.0f, 5.0f, 0.5f, 0.1f);
+	flare.addFlareElement(1, 2.0f, 5.0f, 0.5f, 0.2f);
+	flare.addFlareElement(2, 2.0f, 5.0f, 0.5f, 0.8f);
+	flare.addFlareElement(3, 2.0f, 5.0f, 0.5f, 0.9f);
 }
 
 void init(int argc, char* argv[]) {

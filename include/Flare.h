@@ -7,6 +7,7 @@ typedef struct{
 public:
 	int type;
 	float size;
+	float maxSize;
 	float alpha;
 	float distance;
 	
@@ -17,7 +18,7 @@ class Flare: public Drawable {
 public:
 	Flare();
 	~Flare();
-	void addFlareElement(int type, float size, float alpha, float distance);
+	void addFlareElement(int type, float size, float maxSize, float alpha, float distance);
 	void draw(VSMathLib* core, VSShaderLib* shader);
 	void tick();
 
