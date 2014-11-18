@@ -27,9 +27,9 @@ void Particle::Draw(VSMathLib* core){
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(x, y, z);
-	core->scale(10.1f, 10.10f, 10.10f);
+	core->scale(0.25f, 0.15f, 0.15f);
 	if (!created) {
-		body.createSphere(2.2f, 5.0f);
+		body.createSphere(1.2f, 5.0f);
 		created = true;
 	}
 	
