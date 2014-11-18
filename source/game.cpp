@@ -32,16 +32,20 @@ namespace domain {
 
 		Car *c = new Car(-6.0f, 0.3f, 4.0f, DIR_LEFT, 0.5f);
 		cars.push_back(c);
-		game_objects.push_back(c);
+		refactored_game_objects.push_back(c);
+//		game_objects.push_back(c);
 		c = new Car(-6.0f, 0.3f, 6.0f, DIR_LEFT, 1.2f);
 		cars.push_back(c);
-		game_objects.push_back(c);
+//		game_objects.push_back(c);
+		refactored_game_objects.push_back(c);
 		c = new Car(-4.0f, 0.3f, 9.0f, DIR_RIGHT, 1.2f);
 		cars.push_back(c);
-		game_objects.push_back(c);
+//		game_objects.push_back(c);
+		refactored_game_objects.push_back(c);
 		c = new Car(-6.0f, 0.3f, 11.0f, DIR_RIGHT, 0.5f);
 		cars.push_back(c);
-		game_objects.push_back(c);
+		refactored_game_objects.push_back(c);
+//		game_objects.push_back(c);
 
 
 		Riverlog *r = new Riverlog(2.0f, -0.5f, 17.0f, 50.0f, DIR_LEFT, 0.2f);
@@ -129,6 +133,9 @@ namespace domain {
 		for(unsigned int i = 0; i < game_objects.size() ; i++) {
 			game_objects.at(i)->draw(core, shader);
 		}
+		for (unsigned int i = 0; i < refactored_game_objects.size(); i++) {
+			refactored_game_objects.at(i)->draw(core, shader);
+		}
 
 		//Reflection lamps
 		glEnable(GL_BLEND);		
@@ -149,8 +156,7 @@ namespace domain {
 	}
 
 	void Game::tick(VSMathLib* core) {
-
-		float now    = glutGet( GLUT_ELAPSED_TIME);
+		float now = glutGet( GLUT_ELAPSED_TIME);
 		float elaped = now - lastTime;
 		lastTime   = now;
 
@@ -190,6 +196,9 @@ namespace domain {
 		frog->tick();
 		for(unsigned int i = 0; i < game_objects.size() ; i++) {
 			game_objects.at(i)->tick();
+		}
+		for (unsigned int i = 0; i < refactored_game_objects.size(); i++) {
+			refactored_game_objects.at(i)->update(1.0);
 		}
 
 		if (testCircleAABB(frog->get_Sphere(), map->getWinBox())){
@@ -254,13 +263,14 @@ namespace domain {
 			}
 		}
 		//Collision Frog vs Cars
+		/*
 		for (unsigned int i = 0; i < cars.size(); i++) {
 			if (!frog->isCompressed() && testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())) {
 				frog->setCompressed(true);
 				list_particle_system_I->front()->activar(frog->getX(),frog->getY(), frog->getZ(), list_particle_system_A, list_particle_system_I);
 				break;
 			}
-		}
+		}*/
 		//Collision Frog vs Lamps
 		/*for (unsigned int i = 0; i < lamps.size(); i++) {
 			if (testCircleAABB(frog->get_Sphere(), lamps.at(i)->get_AABB())) {

@@ -1,19 +1,22 @@
 === JOAO ===
 DONE - PerspectiveCamera implementado, o objetivo é colocar primeira as cameras no Game
-- 3 cameras + 1 ponteiro para active camera (game::setActiveCamera, actCam.load() )
+PARTIALLY DONE - 3 cameras + 1 ponteiro para active camera (game::setActiveCamera, actCam.load() )
      - Adiar a ortogonal
 DONE - Pode se fazer retrieve da camera ativa no Game
 DONE - A Tree irá usar essa informação para implementar o billboard
 - Fix camera movement
 - Reorganizar codigo de inicializacoes do frogger.cpp
-- Listas de objetos...
+DONE - Listas de objetos...
 - Blender + Assimp
 DONE - Game singleton
 DONE - O blending está buggy. Sapo e candeeiros por vezes ficam translúcidos.
 DONE - Meter blending nos billboards
-- Lens flare
 - rename material tree
-- objetos estaticos / dinamicos
+IN PROGRESS- objetos estaticos / dinamicos
+     - update recebe parametro inutil? sempre 1... verificar isto . NAO. MUDAR PARA SECONDS/MILISECONDS
+	 - fix AABS para novos atributos dos objetos.
+	 - reactivar colisoes dos carros
+	 - refactorizar restantes objetos (prioridade = dinamicos)
 - Ver Materials file (txt) (VERY SUPER EXTREMELY LOW PRIORITY)
 
 === MIGUEL ===
@@ -22,6 +25,7 @@ Particle System
 
 === NELSON ===
 
+- Lens flare
 
 
 

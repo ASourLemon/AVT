@@ -1,11 +1,11 @@
 #ifndef INCLUDE_CAR_H_
 #define INCLUDE_CAR_H_
 
-#include "drawable.h"
+#include "DynamicObject.h"
 #include "BoxAABB.h"
 
 namespace domain {
-	class Car : public Drawable {
+	class Car : public DynamicObject {
 	private:
 		static float driverAmb[4];
 		static float driverDif[4];
@@ -27,11 +27,6 @@ namespace domain {
 		std::list<VSResSurfRevLib> components;
 		VSResSurfRevLib driver;
 		VSResSurfRevLib tire;
-		float _x;
-		float _y;
-		float _z;
-		float speed;
-		int direction;
 		bool created;
 
 
@@ -39,7 +34,6 @@ namespace domain {
 		Car(float x, float y, float z, int direction, float velocity);
 		~Car();
 		void draw(VSMathLib* core, VSShaderLib* shader);
-		void tick();
 		BoxAABB * get_AABB(){ return AABB; }
 
 	};

@@ -3,6 +3,7 @@
 
 #include <list>
 #include "../include/drawable.h"
+#include "../include/GameObject.h"
 #include "../include/map.h"
 #include "../include/frog.h"
 #include "../include/car.h"
@@ -65,6 +66,7 @@ private:
 	Game();
 	static Game *_instance;
 	std::vector<Drawable*> game_objects;
+	std::vector<GameObject*> refactored_game_objects;
 	std::vector<Car*> cars;
 	std::vector<Riverlog*> riverlogs;
 	std::vector<Turtle*> turtles;

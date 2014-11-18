@@ -18,8 +18,13 @@ float Car::tireSpec[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
 float Car::tireShininess = 100;
 
 
-Car::Car(float x, float y, float z, int direction, float velocity) :
-		_x(x), _y(y), _z(z), speed(velocity), direction(direction), created(false) {
+Car::Car(float x, float y, float z, int direction, float velocity) : created(false) {
+	_position = Vec3(x, y, z);
+
+	const float UNITS_PER_SECOND = 2.0f;
+	const float TICKS_PER_SECOND = 60.0f;
+	const float UNITS_PER_TICK = UNITS_PER_SECOND / TICKS_PER_SECOND;
+	_speed = Vec3(UNITS_PER_TICK, 0.0f, 0.0f);
 
 	VSResSurfRevLib load;
 	load.createCube(1);
@@ -32,14 +37,17 @@ Car::Car(float x, float y, float z, int direction, float velocity) :
 
 	components.push_front(load);
 
-	AABB = new BoxAABB(&_x, &_y, &_z, 0.05f, 2.35f, 0.01f, 0.01f, 0.01f, 0.01f);
+//	AABB = new BoxAABB(&_x, &_y, &_z, 0.05f, 2.35f, 0.01f, 0.01f, 0.01f, 0.01f);
 }
 
 Car::~Car() {
-	delete AABB;
+	//delete AABB;
 }
 
 void Car::draw(VSMathLib* core, VSShaderLib* shader) {
+	float _x = _position.getX();
+	float _y = _position.getY();
+	float _z = _position.getZ();
 
 	std::list<VSResSurfRevLib>::iterator iter;
 	for (iter = components.begin(); iter != components.end(); iter++) {
@@ -61,7 +69,7 @@ void Car::draw(VSMathLib* core, VSShaderLib* shader) {
 	driver.setColor(VSResourceLib::SHININESS, &driverShininess);
 
 	core->pushMatrix(VSMathLib::MODEL);
-	if (direction == DIR_RIGHT)
+	if (_speed.getX() < 0)
 		core->translate(_x - 0.7f, _y, _z);
 	else
 		core->translate(_x + 3.0f, _y, _z);
@@ -82,7 +90,7 @@ void Car::draw(VSMathLib* core, VSShaderLib* shader) {
 	}
 
 	core->pushMatrix(VSMathLib::MODEL);
-	if (direction == DIR_RIGHT)
+	if (_speed.getX() < 0)
 		core->translate(_x + 1.6f, _y, _z + 0.15f);
 	else
 		core->translate(_x + 0.7f, _y, _z + 0.15f);
@@ -90,7 +98,7 @@ void Car::draw(VSMathLib* core, VSShaderLib* shader) {
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
 	core->pushMatrix(VSMathLib::MODEL);
-	if (direction == DIR_RIGHT)
+	if (_speed.getX() < 0)
 		core->translate(_x + 2.3f, _y, _z + 0.15f);
 	else
 		core->translate(_x + 1.4f, _y, _z + 0.15f);
@@ -99,7 +107,7 @@ void Car::draw(VSMathLib* core, VSShaderLib* shader) {
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
-	if (direction == DIR_RIGHT)
+	if (_speed.getX() < 0)
 		core->translate(_x + 1.6f, _y, _z + 0.85f);
 	else
 		core->translate(_x + 0.7f, _y, _z + 0.85f);
@@ -107,7 +115,7 @@ void Car::draw(VSMathLib* core, VSShaderLib* shader) {
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
 	core->pushMatrix(VSMathLib::MODEL);
-	if (direction == DIR_RIGHT)
+	if (_speed.getX() < 0)
 		core->translate(_x + 2.3f, _y, _z + 0.85f);
 	else
 		core->translate(_x + 1.4f, _y, _z + 0.85f);
@@ -116,7 +124,7 @@ void Car::draw(VSMathLib* core, VSShaderLib* shader) {
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
-	if (direction == DIR_RIGHT)
+	if (_speed.getX() < 0)
 		core->translate(_x + 0.1f, _y, _z + 0.15f);
 	else
 		core->translate(_x + 2.7f, _y, _z + 0.15f);
@@ -125,36 +133,13 @@ void Car::draw(VSMathLib* core, VSShaderLib* shader) {
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
-	if (direction == DIR_RIGHT)
+	if (_speed.getX() < 0)
 		core->translate(_x + 0.1f, _y, _z + 0.85f);
 	else
 		core->translate(_x + 2.7f, _y, _z + 0.85f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
-
-}
-
-void Car::tick() {
-	this->second_in_game += 0.01;	//After 100 calls, 1 second
-	if(second_in_game > 15.0){
-		speed += 0.5f;
-		second_in_game = 0.0;
-	}
-	
-	int r = rand() % 5;
-	float d = speed * 0.1;
-	if (direction == DIR_LEFT) {
-		if (this->_x >= LEFT_X_LIMIT) {
-			this->_x = RIGHT_X_LIMIT - r;
-		}
-		this->_x += d;
-	} else if (direction == DIR_RIGHT) {
-		if (this->_x <= RIGHT_X_LIMIT) {
-			this->_x = LEFT_X_LIMIT + r;
-		}
-		this->_x -= d;
-	}
 
 }
 
