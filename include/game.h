@@ -64,6 +64,7 @@ public:
 
 private:
 	Game();
+	void computeCollisions();
 	static Game *_instance;
 	std::vector<Drawable*> game_objects;
 	std::vector<GameObject*> refactored_game_objects;

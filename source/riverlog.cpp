@@ -26,7 +26,7 @@ namespace domain {
 		body.setColor(VSResourceLib::AMBIENT, logAmbient);
 		body.setColor(VSResourceLib::SHININESS, &logShininess);
 
-		AABB = new BoxAABB(&this->x, &this->y, &this->z, LOG_HEIGHT / 2, LOG_HEIGHT / 2, 5, 5, LOG_RADIOS, LOG_RADIOS);
+//		AABB = new BoxAABB(&this->x, &this->y, &this->z, LOG_HEIGHT / 2, LOG_HEIGHT / 2, 5, 5, LOG_RADIOS, LOG_RADIOS);
 		//float * test1 = new float_t;
 		//*test1 = 0.0f;
 		//float * test2 = new float_t;
@@ -36,7 +36,7 @@ namespace domain {
 	}
 
 	Riverlog::~Riverlog(){
-		delete AABB;
+		//delete AABB;
 	}
 
 	void Riverlog::draw(VSMathLib* core, VSShaderLib* shader){

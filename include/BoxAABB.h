@@ -1,31 +1,30 @@
 #ifndef BOXAABB_H_
 #define BOXAABB_H_
 
+#include "Vec3.h"
+
 
 namespace domain {
 	
 	class BoxAABB{
 	public:
-		BoxAABB(float *x, float *y, float *z, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
+		BoxAABB(Vec3 *center, float x_size, float y_size, float z_size);
 		~BoxAABB();
 
-		float get_x(){return *_x;}
-		float get_y(){return *_y;}
-		float get_z(){return *_z;}
-		float get_xmin(){return *_x - _xmin;}
-		float get_xmax(){return *_x + _xmax;}
-		float get_ymin(){return *_y - _ymin;}
-		float get_ymax(){return *_y + _ymax;}
-		float get_zmin(){return *_z - _zmin;}
-		float get_zmax(){return *_z + _zmax;}
+		float get_x(){ return _center->getX(); }
+		float get_y(){ return _center->getY(); }
+		float get_z(){ return _center->getZ(); }
+		float get_xmin(){ return get_x() - _x_size / 2; }
+		float get_xmax(){ return get_x() + _x_size / 2; }
+		float get_ymin(){ return get_y() - _y_size / 2; }
+		float get_ymax(){ return get_y() + _y_size / 2; }
+		float get_zmin(){ return get_z() - _z_size / 2; }
+		float get_zmax(){ return get_z() + _z_size / 2; }
  
      
 		private:
- 
-		float *_x, *_y, *_z; //(x, y, z)
-		float _xmin, _ymin, _xmax, _ymax, _zmin, _zmax; //Diferença do centro para os Xs e Ys max e min, varia com cada objecto
- 
-
+			Vec3 *_center;
+			float _x_size, _y_size, _z_size;
 
 	};
 }

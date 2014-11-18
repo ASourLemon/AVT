@@ -26,8 +26,8 @@ float Lamp::RlampShadeShininess = 100;
 Lamp::Lamp(float x, float y, float z, bool reflect) :
 		x(x), y(y), z(z), created(false), reflection(reflect)  {
 
-	if(reflection == false)
-		AABB = new BoxAABB(&this->x, &this->y, &this->z, 0.15f, 0.15f, 0.7f, 0.7f, 0.15f, 0.15f);
+//	if(reflection == false)
+//		AABB = new BoxAABB(&this->x, &this->y, &this->z, 0.15f, 0.15f, 0.7f, 0.7f, 0.15f, 0.15f);
 
 	support.createCylinder(1.0f, 0.2f, 10);
 	support.setMaterialBlockName("Materials");

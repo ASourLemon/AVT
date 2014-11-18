@@ -37,11 +37,11 @@ Car::Car(float x, float y, float z, int direction, float velocity) : created(fal
 
 	components.push_front(load);
 
-//	AABB = new BoxAABB(&_x, &_y, &_z, 0.05f, 2.35f, 0.01f, 0.01f, 0.01f, 0.01f);
+	AABB = new BoxAABB(&_position, 2.4f, 1.0f, 1.0f);
 }
 
 Car::~Car() {
-	//delete AABB;
+	delete AABB;
 }
 
 void Car::draw(VSMathLib* core, VSShaderLib* shader) {

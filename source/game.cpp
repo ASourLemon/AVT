@@ -200,95 +200,21 @@ namespace domain {
 		for (unsigned int i = 0; i < refactored_game_objects.size(); i++) {
 			refactored_game_objects.at(i)->update(1.0);
 		}
+		
+		computeCollisions();
 
-		if (testCircleAABB(frog->get_Sphere(), map->getWinBox())){
-			frog->setX(10.0);
-			frog->setY(0.0);
-			frog->setZ(1.0);
-			points++;
-			printf("Well done!\n");
-
-		}
-
-		bool log = false;
-		//Collision Frog vs Riverlogs
-		for (unsigned int i = 0; i < riverlogs.size(); i++) {
-
-			if (testCircleAABB(frog->get_Sphere(), riverlogs.at(i)->get_AABB())) {
-				log = true;
-				beingCarried = true;
-				float d = (float)riverlogs.at(i)->getSpeed() * 0.1f;
-
-				if (riverlogs.at(i)->getDirection() == DIR_RIGHT){
-
-					frog->setX(frog->getX() - d);
-
-				}
-				else if (riverlogs.at(i)->getDirection() == DIR_LEFT){
-
-					frog->setX(frog->getX() + d);
-
-				}
-			}
-		}
-		if (!log){
-			beingCarried = false;
-		}
-		log = false;
-
-		//Collision Frog vs Turtles
-		for (unsigned int i = 0; i < turtles.size(); i++) {
-			if (testCircleAABB(frog->get_Sphere(), turtles.at(i)->get_AABB())) {
-				log = true;
-				beingCarried = true;
-				float d = (float)turtles.at(i)->getSpeed() * 0.1f;
-				if (turtles.at(i)->getDirection() == DIR_RIGHT){
-
-					frog->setX(frog->getX() - d);
-
-				}
-				else if (turtles.at(i)->getDirection() == DIR_LEFT){
-
-					frog->setX(frog->getX() + d);
-
-				}
-			}
-		}
-		if ((frog->getZ() >= 16.5) && (frog->getZ() <= 23.5)){
-			//it's on water!
-			if (!beingCarried){
-				printf("SPLASH\n");
-				falling = true;
-
-			}
-		}
-		//Collision Frog vs Cars
-		/*
-		for (unsigned int i = 0; i < cars.size(); i++) {
-			if (!frog->isCompressed() && testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())) {
-				frog->setCompressed(true);
-				list_particle_system_I->front()->activar(frog->getX(),frog->getY(), frog->getZ(), list_particle_system_A, list_particle_system_I);
-				break;
-			}
-		}*/
-		//Collision Frog vs Lamps
-		/*for (unsigned int i = 0; i < lamps.size(); i++) {
-			if (testCircleAABB(frog->get_Sphere(), lamps.at(i)->get_AABB())) {
-
-			}
-			}*/
 		//Update dos sistemas de particulas
 		core->pushMatrix(VSMathLib::MODEL);
-		for(std::list<ParticleManager*>::iterator x=list_particle_system_A->begin(); x!=list_particle_system_A->end(); x++){
+		for (std::list<ParticleManager*>::iterator x = list_particle_system_A->begin(); x != list_particle_system_A->end(); x++){
 
-			if(!(*x)->get_activeParticles().empty()){
-					(*x)->Update(elaped);
-					(*x)->Draw(core);
+			if (!(*x)->get_activeParticles().empty()){
+				(*x)->Update(elaped);
+				(*x)->Draw(core);
 			}
 			else Particletemp.push_back(*x);
 		}
 		core->popMatrix(VSMathLib::MODEL);
-		for(std::vector<ParticleManager*>::iterator i=Particletemp.begin(); i!=Particletemp.end(); i++)
+		for (std::vector<ParticleManager*>::iterator i = Particletemp.begin(); i != Particletemp.end(); i++)
 			(*i)->desactivar(list_particle_system_A, list_particle_system_I);
 		Particletemp.clear();
 		//UpdateParticles(core, elaped);
@@ -359,6 +285,87 @@ namespace domain {
 	void UpdateParticles(VSMathLib* core, float elaped){
 		
 	
+	}
+
+	void Game::computeCollisions() {
+		/*
+		if (testCircleAABB(frog->get_Sphere(), map->getWinBox())){
+		frog->setX(10.0);
+		frog->setY(0.0);
+		frog->setZ(1.0);
+		points++;
+		printf("Well done!\n");
+
+		}
+
+		bool log = false;
+		//Collision Frog vs Riverlogs
+		for (unsigned int i = 0; i < riverlogs.size(); i++) {
+
+		if (testCircleAABB(frog->get_Sphere(), riverlogs.at(i)->get_AABB())) {
+		log = true;
+		beingCarried = true;
+		float d = (float)riverlogs.at(i)->getSpeed() * 0.1f;
+
+		if (riverlogs.at(i)->getDirection() == DIR_RIGHT){
+
+		frog->setX(frog->getX() - d);
+
+		}
+		else if (riverlogs.at(i)->getDirection() == DIR_LEFT){
+
+		frog->setX(frog->getX() + d);
+
+		}
+		}
+		}
+		if (!log){
+		beingCarried = false;
+		}
+		log = false;
+
+		//Collision Frog vs Turtles
+		for (unsigned int i = 0; i < turtles.size(); i++) {
+		if (testCircleAABB(frog->get_Sphere(), turtles.at(i)->get_AABB())) {
+		log = true;
+		beingCarried = true;
+		float d = (float)turtles.at(i)->getSpeed() * 0.1f;
+		if (turtles.at(i)->getDirection() == DIR_RIGHT){
+
+		frog->setX(frog->getX() - d);
+
+		}
+		else if (turtles.at(i)->getDirection() == DIR_LEFT){
+
+		frog->setX(frog->getX() + d);
+
+		}
+		}
+		}
+		if ((frog->getZ() >= 16.5) && (frog->getZ() <= 23.5)){
+		//it's on water!
+		if (!beingCarried){
+		printf("SPLASH\n");
+		falling = true;
+
+		}
+		}*/
+		//Collision Frog vs Cars
+		for (unsigned int i = 0; i < cars.size(); i++) {
+			if (!frog->isCompressed() && testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())) {
+				frog->setCompressed(true);
+				//FIXME: Isto está a causar o bug do fechar a janela e ficar breakado, apos uma colisão...
+				list_particle_system_I->front()->activar(frog->getX(), frog->getY(), frog->getZ(), list_particle_system_A, list_particle_system_I);
+				break;
+			}
+		}
+
+		//Collision Frog vs Lamps
+		/*for (unsigned int i = 0; i < lamps.size(); i++) {
+		if (testCircleAABB(frog->get_Sphere(), lamps.at(i)->get_AABB())) {
+
+		}
+		}*/
 	}
 
 

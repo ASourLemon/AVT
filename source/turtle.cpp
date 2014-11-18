@@ -41,11 +41,11 @@ Turtle::Turtle(float x, float y, float z, int direction, float velocity) :
 	head.setColor(VSResourceLib::SPECULAR, headSpec);
 	head.setColor(VSResourceLib::SHININESS, &headShininess);
 
-	body_box = new BoxAABB(&this->x, &this->y, &this->z, 0.4f, 0.4f, 0.12f, 0.12f, 0.5f, 0.5f);
+//	body_box = new BoxAABB(&this->x, &this->y, &this->z, 0.4f, 0.4f, 0.12f, 0.12f, 0.5f, 0.5f);
 }
 
 Turtle::~Turtle() {
-	delete body_box;
+	//delete body_box;
 }
 
 void Turtle::draw(VSMathLib* core, VSShaderLib* shader) {

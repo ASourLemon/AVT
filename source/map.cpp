@@ -31,12 +31,12 @@ Map::Map() : deltaWater(0.0f), goingLeft(false), win_x(10.0f), win_y(0.0f), win_
 
 	body.createCube(1.0f);
 	water.createCube(2.0f);
-	win_box = new BoxAABB(&win_x, &win_y, &win_z, 10.0f, 10.0f, 1.0f, 1.0f,
-			1.0f, 1.0f);
+//	win_box = new BoxAABB(&win_x, &win_y, &win_z, 10.0f, 10.0f, 1.0f, 1.0f,
+//			1.0f, 1.0f);
 }
 
 Map::~Map() {
-	delete win_box;
+	//delete win_box;
 }
 
 void Map::draw(VSMathLib* core, VSShaderLib* shader) {
