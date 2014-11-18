@@ -73,6 +73,7 @@ void Game::init() {
 //			game_objects.push_back(turtle);
 	}
 
+	//FIXME: CONVERT THESE TO EXTEND STATIC OBJECT CLASS
 	Lamp *l = new Lamp(15.0f, 0.0f, 15.0f, false);
 	lamps.push_back(l);
 	game_objects.push_back(l);
@@ -296,7 +297,7 @@ void UpdateParticles(VSMathLib* core, float elaped) {
 
 void Game::computeCollisions() {
 	/*
-	 if (testCircleAABB(frog->get_Sphere(), map->getWinBox())){
+	 if (testCircleAABB(frog->get_Sphere(), map->getWinBox())) {
 	 frog->setX(10.0);
 	 frog->setY(0.0);
 	 frog->setZ(1.0);
@@ -304,65 +305,56 @@ void Game::computeCollisions() {
 	 printf("Well done!\n");
 
 	 }
+	 */
+	bool wonPoint = frog->getZ() > 30.0f;
+	if (wonPoint) {
+		frog->setX(10.0);
+		frog->setY(0.0);
+		frog->setZ(1.0);
+		points++;
+	}
 
-	 bool log = false;
-	 //Collision Frog vs Riverlogs
-	 for (unsigned int i = 0; i < riverlogs.size(); i++) {
+	beingCarried = false;
+	//Collision Frog vs Riverlogs
+	for (unsigned int i = 0; i < riverlogs.size() ; i++) {
 
-	 if (testCircleAABB(frog->get_Sphere(), riverlogs.at(i)->get_AABB())) {
-	 log = true;
-	 beingCarried = true;
-	 float d = (float)riverlogs.at(i)->getSpeed() * 0.1f;
+		if (testCircleAABB(frog->get_Sphere(), riverlogs.at(i)->get_AABB())) {
+			beingCarried = true;
+			// TODO: If we change frog implementation, this will be easier to write/read
+			Vec3 d = riverlogs.at(i)->getSpeed();
+			Vec3 frog_pos = Vec3(frog->getX(), frog->getY(), frog->getZ());
+			frog_pos = frog_pos + d;
+			frog->setX(frog_pos.getX());
+			frog->setY(frog_pos.getY());
+			frog->setZ(frog_pos.getZ());
+		}
+	}
 
-	 if (riverlogs.at(i)->getDirection() == DIR_RIGHT){
+	//Collision Frog vs Turtles
+	for (unsigned int i = 0; i < turtles.size() ; i++) {
+		if (testCircleAABB(frog->get_Sphere(), turtles.at(i)->get_AABB())) {
+			beingCarried = true;
+			// TODO: If we change frog implementation, this will be easier to write/read
+			Vec3 d = turtles.at(i)->getSpeed();
+			Vec3 frog_pos = Vec3(frog->getX(), frog->getY(), frog->getZ());
+			frog_pos = frog_pos + d;
+			frog->setX(frog_pos.getX());
+			frog->setY(frog_pos.getY());
+			frog->setZ(frog_pos.getZ());
+		}
+	}
 
-	 frog->setX(frog->getX() - d);
+	bool isOnRiver = (frog->getZ() >= 16.5) && (frog->getZ() <= 23.5);
+	if (isOnRiver && !beingCarried) {
+		falling = true;
+	}
 
-	 }
-	 else if (riverlogs.at(i)->getDirection() == DIR_LEFT){
-
-	 frog->setX(frog->getX() + d);
-
-	 }
-	 }
-	 }
-	 if (!log){
-	 beingCarried = false;
-	 }
-	 log = false;
-
-	 //Collision Frog vs Turtles
-	 for (unsigned int i = 0; i < turtles.size(); i++) {
-	 if (testCircleAABB(frog->get_Sphere(), turtles.at(i)->get_AABB())) {
-	 log = true;
-	 beingCarried = true;
-	 float d = (float)turtles.at(i)->getSpeed() * 0.1f;
-	 if (turtles.at(i)->getDirection() == DIR_RIGHT){
-
-	 frog->setX(frog->getX() - d);
-
-	 }
-	 else if (turtles.at(i)->getDirection() == DIR_LEFT){
-
-	 frog->setX(frog->getX() + d);
-
-	 }
-	 }
-	 }
-	 if ((frog->getZ() >= 16.5) && (frog->getZ() <= 23.5)){
-	 //it's on water!
-	 if (!beingCarried){
-	 printf("SPLASH\n");
-	 falling = true;
-
-	 }
-	 }*/
 	//Collision Frog vs Cars
 	for (unsigned int i = 0; i < cars.size(); i++) {
 		if (!frog->isCompressed()
 				&& testCircleAABB(frog->get_Sphere(), cars.at(i)->get_AABB())) {
 			frog->setCompressed(true);
-			//FIXME: Isto est� a causar o bug do fechar a janela e ficar breakado, apos uma colis�o...
+			// FIXME: Change location of the code below
 			list_particle_system_I->front()->activar(frog->getX(), frog->getY(),
 					frog->getZ(), list_particle_system_A,
 					list_particle_system_I);
