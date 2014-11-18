@@ -20,6 +20,11 @@
 #define DIR_DOWN 5
 
 extern GLuint TextureArray[7];
+extern GLuint FlareTextureArray[4];
+extern int mx;
+extern int my;
+extern int WinX;
+extern int WinY;
 
 namespace domain {
 

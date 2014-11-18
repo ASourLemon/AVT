@@ -13,7 +13,7 @@ void main()
 {
 	vec4 col=selected?vec4(1,0,0,1):vec4(1);
 	outputF = texture(texmap, DataIn.texCoord.st)*col;
-	if (outputF.a < 0.5) {
+	if (outputF.a < 0.5 || outputF.a == 0.0 || outputF.rgb == vec3(0.0f)) {
 		discard;
 	}
 		

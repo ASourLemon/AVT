@@ -24,6 +24,7 @@
 #include "../include/lightManager.h"
 #include "../include/TGA.h"
 #include "../include/FontMapper.h"
+#include "../include/Flare.h"
 
 #define CAPTION "Frogger 3D"
 
@@ -45,6 +46,7 @@ GLuint VertexShaderId, FragmentShaderId, ProgramId, ColorId;
 GLint UniformId, ProjectionID, ModelID, ViewID;
 GLint tex_loc;
 GLuint TextureArray[7];
+GLuint FlareTextureArray[4];
 
 // Mouse Tracking Variables
 int startX, startY, tracking = 0;
@@ -54,9 +56,12 @@ float r = 5.0f;
 // Camera Position
 float camX = 0.0, camY = 0.0, camZ = 2.0;
 
+using namespace domain;
+
 VSMathLib* core;
 VSResSurfRevLib mySurfRev;
 FontMapper fontM;
+Flare flare;
 
 VSShaderLib shader, shaderF;
 domain::Game *game = domain::Game::getInstance();
@@ -69,6 +74,8 @@ int nTimer = 0;
 LightManager lightManager;
 bool l_on;
 bool lampOn;
+
+int mx = 0, my = 0;
 
 ///////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////// ERRORS
@@ -147,6 +154,12 @@ void renderScene(void) {
 		game->draw(core, &shader);
 	}
 
+	////////////////////////////////////////////////////////////
+	///////////////Draw flares/////////////////////////////////
+	//////////////////////////////////////////////////////////
+
+	glUseProgram(shaderF.getProgramIndex());
+	flare.draw(core, &shaderF);
 	
 	////////////////////////////////////////////////////////////
 	///////////////Draw fonts//////////////////////////////////
@@ -232,7 +245,7 @@ void reshape(int w, int h) {
 
 void timer(int value) {
 
-	/*std::ostringstream oss;
+	std::ostringstream oss;
 	int lifes = game->getFrogLifes();
 	int points = game->getFrogPoints();
 	if (lifes) {
@@ -244,7 +257,7 @@ void timer(int value) {
 
 	std::string s = oss.str();
 	glutSetWindow(WindowHandle);
-	glutSetWindowTitle(s.c_str());*/
+	glutSetWindowTitle(s.c_str());
 
 	//std::cout << FrameCount << std::endl;
 	game->tick(core);
@@ -286,6 +299,9 @@ void processMouseMotion(int xx, int yy) {
 	int deltaX, deltaY;
 	float alphaAux, betaAux;
 	float rAux;
+	mx = xx;
+	my = yy;
+	printf("mX: %d, mY: %d \n", xx, yy);
 
 	deltaX = -xx + startX;
 	deltaY = yy - startY;
@@ -573,6 +589,13 @@ void setupLight() {
 	lightManager.lightsOn();
 }
 
+void setupFlare(){
+	flare.addFlareElement(0, 10.0f, 1.0f, 0.1f);
+	flare.addFlareElement(1, 10.0f, 1.0f, 0.2f);
+	flare.addFlareElement(2, 10.0f, 1.0f, 0.8f);
+	flare.addFlareElement(3, 10.0f, 1.0f, 0.9f);
+}
+
 void init(int argc, char* argv[]) {
 	setupGLUT(argc, argv);
 	setupGLEW();
@@ -584,6 +607,7 @@ void init(int argc, char* argv[]) {
 	}
 	setupSurfRev();
 	setupCallbacks();
+	setupFlare();
 	setupLight();
 	l_on = false;
 	glGenTextures(7, TextureArray);
@@ -594,7 +618,12 @@ void init(int argc, char* argv[]) {
 	TGA_Texture(TextureArray, "textures/tree.tga", 4);
 	TGA_Texture(TextureArray, "textures/eye.tga", 5);
 	TGA_Texture(TextureArray, "textures/font1.tga", 6);
-
+	
+	glGenTextures(4, FlareTextureArray);
+	TGA_Texture(FlareTextureArray, "textures/Flare1.tga", 0);
+	TGA_Texture(FlareTextureArray, "textures/Flare2.tga", 1);
+	TGA_Texture(FlareTextureArray, "textures/Flare3.tga", 2);
+	TGA_Texture(FlareTextureArray, "textures/Flare4.tga", 3);
 }
 
 int main(int argc, char* argv[]) {
