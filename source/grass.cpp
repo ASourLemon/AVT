@@ -58,16 +58,6 @@ void Grass::draw(VSMathLib* core, VSShaderLib* shader) {
 
 	delete objToCam;
 
-	/*
-	 TODO: Implement this pseudocode ---> IMPLEMENTED ABOVE, BUT STILL NOT WORKING AS INTENDED
-
-	 objTocam = CamPos - ObjPos;
-	 objToCam.y = 0;
-	 normalize(objToCam);
-	 cos_alpha = dot(lookAt, objToCam);
-	 upAux = crossProduct(lookAt, objToCam);
-	 core->rotate(arcos(cos_alpha)*180/PI, upAux.x, upAux.y, upAux.z);
-	 */
 	glDisable(GL_CULL_FACE);
 	rectangle.render();
 	glEnable(GL_CULL_FACE);

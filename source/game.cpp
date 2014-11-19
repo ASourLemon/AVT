@@ -244,7 +244,7 @@ void Game::tick(VSMathLib* core) {
 
 	UpdateParticles(core, elaped);
 
-	activeCam->update(); //FIXME: actualizar as outras tambem
+	activeCam->update();
 
 }
 
