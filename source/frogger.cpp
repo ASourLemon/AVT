@@ -45,7 +45,7 @@ GLuint VaoId, VboId[4];
 GLuint VertexShaderId, FragmentShaderId, ProgramId, ColorId;
 GLint UniformId, ProjectionID, ModelID, ViewID;
 GLint tex_loc;
-GLuint TextureArray[8];
+GLuint TextureArray[10];
 GLuint FlareTextureArray[4];
 
 // Mouse Tracking Variables
@@ -634,7 +634,7 @@ void init(int argc, char* argv[]) {
 	setupFlare();
 	setupLight();
 	l_on = false;
-	glGenTextures(8, TextureArray);
+	glGenTextures(9, TextureArray);
 	TGA_Texture(TextureArray, "textures/lightwood.tga", 0);
 	TGA_Texture(TextureArray, "textures/road.tga", 1);
 	TGA_Texture(TextureArray, "textures/water.tga", 2);
@@ -643,6 +643,8 @@ void init(int argc, char* argv[]) {
 	TGA_Texture(TextureArray, "textures/eye.tga", 5);
 	TGA_Texture(TextureArray, "textures/font1.tga", 6);
 	TGA_Texture(TextureArray, "textures/tallgrass.tga", 7);
+	TGA_Texture(TextureArray, "textures/stone.tga", 8);
+	TGA_Texture(TextureArray, "textures/smoke.tga", 9);
 	
 	glGenTextures(4, FlareTextureArray);
 	TGA_Texture(FlareTextureArray, "textures/Flare1.tga", 0);

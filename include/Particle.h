@@ -20,7 +20,7 @@ namespace domain{
 		bool IsAlive() const { return life>0.0f; };
 		bool IsDead()  const { return life<=0.0f; };
 
-		void setColor(int c){ color = c;};
+		void setColor(int c);
 
 
 	private:

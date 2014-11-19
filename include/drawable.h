@@ -19,12 +19,13 @@
 #define DIR_UP 4
 #define DIR_DOWN 5
 
-extern GLuint TextureArray[8];
+extern GLuint TextureArray[10];
 extern GLuint FlareTextureArray[4];
 extern int mx;
 extern int my;
 extern int WinX;
 extern int WinY;
+extern bool fogOn;
 
 namespace domain {
 

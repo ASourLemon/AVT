@@ -12,9 +12,9 @@ float Particle::bodyDiffuse[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 float Particle::bodySpec[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 float Particle::bodyShininess = 60;
 
-float Particle::bodyAmbientS[4] = { 0.08f, 0.08f, 0.12f, 1.0f };
-float Particle::bodyDiffuseS[4] = { 0.0f, 0.9f, 1.0f, 1.0f };
-float Particle::bodySpecS[4] = { 0.0f, 0.0f, 0.1f, 1.0f };
+float Particle::bodyAmbientS[4] = { 0.08f, 0.08f, 0.12f, 0.8f };
+float Particle::bodyDiffuseS[4] = { 0.6f, 0.6f, 0.8f, 0.8f };
+float Particle::bodySpecS[4] = { 0.0f, 0.0f, 0.0f, 0.8f };
 float Particle::bodyShininessS = 10;
 
 Particle::Particle(): x(0.0), y(0.0), z(0.0), life(0.0f), created(false), color(0){
@@ -23,35 +23,43 @@ Particle::Particle(): x(0.0), y(0.0), z(0.0), life(0.0f), created(false), color(
 }
 
 void Particle::Draw(VSMathLib* core){
-	switch(color){
-		case 0: //BLOOD!!
-			body.setMaterialBlockName("Materials");
-			body.setColor(VSResourceLib::SPECULAR, bodySpec);
-			body.setColor(VSResourceLib::DIFFUSE, bodyDiffuse);
-			body.setColor(VSResourceLib::AMBIENT, bodyAmbient);
-			body.setColor(VSResourceLib::SHININESS, &bodyShininess);
-			break;
-		case 1: //SPLASH
-			body.setMaterialBlockName("Materials");
-			body.setColor(VSResourceLib::SPECULAR, bodySpecS);
-			body.setColor(VSResourceLib::DIFFUSE, bodyDiffuseS);
-			body.setColor(VSResourceLib::AMBIENT, bodyAmbientS);
-			body.setColor(VSResourceLib::SHININESS, &bodyShininessS);
-	}
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, TextureArray[9]);
 	
 	core->pushMatrix(VSMathLib::MODEL);
-	core->translate(x, y, z);
+	core->translate(x, y, z);	
+	core->rotate(frand(), 0, 1, 0);
 	core->scale(0.025f, 0.025f, 0.025f);
 	if (!created) {
-		body.createSphere(1.0f, 3.0f);
-		//body.createRectangle(1.0f, 1.0f);
+		//body.createSphere(1.0f, 3.0f);
+		body.createRectangle(2.0f, 2.0f);
 		created = true;
 	}
-	
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	body.render();
-
+	//glDisable(GL_BLEND);
 	core->popMatrix(VSMathLib::MODEL);
 
+}
+
+void Particle::setColor(int c){
+	 color = c;
+	switch(color){
+	case 0: //BLOOD!!
+		body.setMaterialBlockName("Materials");
+		body.setColor(VSResourceLib::SPECULAR, bodySpec);
+		body.setColor(VSResourceLib::DIFFUSE, bodyDiffuse);
+		body.setColor(VSResourceLib::AMBIENT, bodyAmbient);
+		body.setColor(VSResourceLib::SHININESS, &bodyShininess);
+		break;
+	case 1: //SPLASH
+		body.setMaterialBlockName("Materials");
+		body.setColor(VSResourceLib::SPECULAR, bodySpecS);
+		body.setColor(VSResourceLib::DIFFUSE, bodyDiffuseS);
+		body.setColor(VSResourceLib::AMBIENT, bodyAmbientS);
+		body.setColor(VSResourceLib::SHININESS, &bodyShininessS);
+	}
 }
 
 bool Particle::Respawn(bool spawn, int c){
@@ -68,8 +76,8 @@ bool Particle::Respawn(bool spawn, int c){
         y = 0.0f;
         z = 0.0f;
         vx = -v * sin(theta);;
-        vy = v; //* sin(phi) * cos(theta);
-        vz = v; //* cos(phi) * sin(theta);//v * sin(theta) * sin(phi) - 3.0f;
+        vy = v * sin(phi) * cos(theta);
+        vz = v * cos(phi) * sin(theta);//v * sin(theta) * sin(phi) - 3.0f;
         ax =  -0.15f; 
         ay = -0.15f; /* gravity pull */
         az =  0.0f;
@@ -121,3 +129,6 @@ bool Particle::Update_particle(float elapsedTime, bool respawn){
 }
 
 }
+
+
+
