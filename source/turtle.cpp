@@ -2,8 +2,8 @@
 
 namespace domain {
 
-float Turtle::bodyAmb[4] = { 0.1f, 0.4f, 0.1f, 1.0f };
-float Turtle::bodyDif[4] = { 0.2f, 0.4f, 0.2f, 1.0f };
+float Turtle::bodyAmb[4] = { 0.2f, 0.4f, 0.1f, 1.0f };
+float Turtle::bodyDif[4] = { 0.4f, 0.8f, 0.2f, 1.0f };
 float Turtle::bodySpec[4] = { 0.6f, 0.6f, 0.6f, 1.0f };
 float Turtle::bodyShininess = 10;
 

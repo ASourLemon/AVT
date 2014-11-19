@@ -40,40 +40,42 @@ void Game::init() {
 	const float UNITS_PER_TICK = UNITS_PER_SECOND / TICKS_PER_SECOND;
 	Vec3 car_speed_right = Vec3(UNITS_PER_TICK, 0.0f, 0.0f);
 	Vec3 car_speed_left = car_speed_right * (-1);
-	Vec3 car_positions[] = { Vec3(-6.0f, CAR_SIZE_Y / 2, 4.0f), Vec3(-6.0f, CAR_SIZE_Y / 2, 6.0f),
-		Vec3(-4.0f, CAR_SIZE_Y / 2, 9.0f), Vec3(-6.0f, CAR_SIZE_Y / 2, 11.0f) };
+	Vec3 car_positions[] = { Vec3(-6.0f, CAR_SIZE_Y / 2, 4.0f),
+							 Vec3(-6.0f, CAR_SIZE_Y / 2, 6.0f),
+		                     Vec3(-4.0f, CAR_SIZE_Y / 2, 9.0f),
+							 Vec3(-6.0f, CAR_SIZE_Y / 2, 11.0f) };
 	Car *car;
 	for (int i = 0; i < 4; i++) {
 		car = new Car(car_positions[i],
 				(i < 2) ? car_speed_left : car_speed_right);
 		cars.push_back(car);
 		refactored_game_objects.push_back(car);
-//			game_objects.push_back(c);
 	}
 
-	Vec3 riverlogs_positions[] = { Vec3(2.0f, -0.5f, 17.0f), Vec3(2.0f, -0.5f,
-			21.0f) };
+	Vec3 riverlogs_positions[] = { Vec3(2.0f, -0.5f, 17.0f),
+	                               Vec3(2.0f, -0.5f, 21.0f),
+		                           Vec3(10.0f, -0.5f, 17.0f),
+		                           Vec3(10.0f, -0.5f, 21.0f) };
 	// FIXME: set specific speeds for logs
 	Riverlog *r;
-	for (int i = 0; i < 2; i++) {
-		r = new Riverlog(riverlogs_positions[i],
-				(i < 1) ? car_speed_left : car_speed_right);
+	for (int i = 0; i < 4; i++) {
+		r = new Riverlog(riverlogs_positions[i], car_speed_left);
 		riverlogs.push_back(r);
 		refactored_game_objects.push_back(r);
-		//			game_objects.push_back(r);
 	}
 
-	Vec3 turtles_positions[] = { Vec3(5.0f, -.5f, 19.0f), Vec3(10.0f, -.5f,
-			19.0f), Vec3(15.0f, -.5f, 19.0f), Vec3(5.0f, -.5f, 23.0f), Vec3(
-			10.0f, -.5f, 23.0f), Vec3(15.0f, -.5f, 23.0f) };
+	Vec3 turtles_positions[] = { Vec3(5.0f, -.5f, 19.0f),
+		                         Vec3(10.0f, -.5f, 19.0f),
+		                         Vec3(15.0f, -.5f, 19.0f),
+								 Vec3(5.0f, -.5f, 23.0f),
+								 Vec3(10.0f, -.5f, 23.0f),
+								 Vec3(15.0f, -.5f, 23.0f) };
 	// FIXME: set specific speeds for logs
 	Turtle *turtle;
 	for (int i = 0; i < 6; i++) {
-		turtle = new Turtle(turtles_positions[i],
-				(i < 3) ? car_speed_left : car_speed_right);
+		turtle = new Turtle(turtles_positions[i], car_speed_right);
 		turtles.push_back(turtle);
 		refactored_game_objects.push_back(turtle);
-//			game_objects.push_back(turtle);
 	}
 
 	//FIXME: CONVERT THESE TO EXTEND STATIC OBJECT CLASS

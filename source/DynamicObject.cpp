@@ -31,7 +31,7 @@ namespace domain {
 	void DynamicObject::increaseSpeed() {
 		const float SPEED_INCREMENT = 1.75f;
 
-		_speed = _speed * SPEED_INCREMENT;
+		_speed = _initSpeed * SPEED_INCREMENT;
 	}
 
 	Vec3 DynamicObject::getSpeed() {
