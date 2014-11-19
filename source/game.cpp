@@ -29,7 +29,8 @@ void Game::init() {
 	float up[3] = { 0.0f, 1.0f, 0.0f };
 	float at[3] = { 1.0f, 1.0f, 5.0f };
 	frogCam = FrogPerspectiveCamera::getInstance();
-	activeCam = frogCam;
+	topCam = TopPerspectiveCamera::getInstance();
+	activeCam = frogCam; // one must be active at start
 
 	map = new Map();
 	Drawable *d = map;
@@ -107,8 +108,6 @@ void Game::init() {
 	frog->setMaplimit(map->getMaplimit());
 
 	Tree *tree = new Tree(3.0f, 15.0f);
-	game_objects.push_back(tree);
-	tree = new Tree(10.0f, 15.0f);
 	game_objects.push_back(tree);
 	tree = new Tree(17.0f, 15.0f);
 	game_objects.push_back(tree);
@@ -304,7 +303,13 @@ bool Game::testCircleAABB(BoxSphere *sphere, BoxAABB *aabb) {
 	return sqDist <= r * r;
 }
 
-void Game::loadCamera() {
+void Game::loadCamera(int nCam) {
+	if (nCam == 2) {
+		activeCam = topCam;
+	}
+	else if (nCam == 3) {
+		activeCam = frogCam;
+	}
 	activeCam->load();
 }
 

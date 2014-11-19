@@ -12,6 +12,7 @@
 #include "../include/lamp.h"
 #include "../include/Tree.h"
 #include "../include/FrogPerspectiveCamera.h"
+#include "../include/TopPerspectiveCamera.h"
 #include "../include/ParticleManager.h"
 #include "../include/grass.h"
 
@@ -60,7 +61,7 @@ public:
 
 	float sqDistPointAABB(float x, float y, float z, BoxAABB *aabb);
 	bool testCircleAABB(BoxSphere *sphere, BoxAABB *aabb);
-	void loadCamera();
+	void loadCamera(int nCam);
 	Camera *getActiveCamera() { return activeCam; }
 	void UpdateParticles(VSMathLib* core, float elaped);
 
@@ -77,6 +78,7 @@ private:
 	Frog* frog;
 
 	FrogPerspectiveCamera* frogCam;
+	TopPerspectiveCamera* topCam;
 	Camera* activeCam;
 
 	std::vector<ParticleManager*> Particletemp;

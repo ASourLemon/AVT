@@ -9,8 +9,6 @@ protected:
 	float pos[3];
 	float up[3];
 	float at[3];
-	float nearVal;
-	float farVal;
 
 public:
 	Camera();

@@ -7,8 +7,6 @@ namespace domain {
 class FrogPerspectiveCamera: public Camera {
 private:
 	static FrogPerspectiveCamera *_instance;
-	float fovy;
-	float ratio;
 	FrogPerspectiveCamera();
 
 public:

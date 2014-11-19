@@ -120,21 +120,18 @@ void renderScene(void) {
 		
 		// set camera
 		if (CAM_TYPE == CAM_FROG) {
-			float fx = game->getFrogX();
-			float fy = game->getFrogY();
-			float fz = game->getFrogZ();
-
-			//printf("fx:%f, fy%f, fz%f\n", fx, fy, fz);
-
 			if (tracking == 1) {
+				// Move camera around
+				float fx = game->getFrogX();
+				float fy = game->getFrogY();
+				float fz = game->getFrogZ();
 				core->lookAt(fx + camX, fy + camY, fz + camZ, fx, fy, fz, 0, 1, 0);
-
 			} else {
-				game->loadCamera();
+				game->loadCamera(3);
 			}
-
-		} else {
-			core->lookAt(10, 10, 15.0, 10, 0, 15.0, 0, 0, 1);
+		}
+		else {
+			game->loadCamera(2);
 		}
 
 		glActiveTexture(GL_TEXTURE0);
