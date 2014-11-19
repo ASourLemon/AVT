@@ -1,5 +1,7 @@
 #include "../include/map.h"
 
+#define H 15.0f
+
 namespace domain {
 
 float Map::roadAmb[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -53,64 +55,64 @@ void Map::draw(VSMathLib* core, VSShaderLib* shader) {
 	//top
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(0.0, -1.0, -1.0);
-	core->scale(MAP0_W, 3.5, 1.0);
+	core->scale(MAP0_W, H, 1.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	//right
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(MAP0_W, -1.0, 0.0);
-	core->scale(1.0, 3.5, 3.0);
+	core->scale(1.0, H, 3.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(MAP0_W, 1.5, 3.0);
-	core->scale(1.0, 1.0, 10.0);
+	core->scale(1.0, H-2.5f, 10.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(MAP0_W, -1.0, 13.0);
-	core->scale(1.0, 3.5, 3.0);
+	core->scale(1.0, H, 3.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(MAP0_W, -1.0, 24.0);
-	core->scale(1.0, 3.5, 8.0);
+	core->scale(1.0, H, 8.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	//left
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(-1.0, -1.0, 0.0);
-	core->scale(1.0, 3.5, 3.0);
+	core->scale(1.0, H, 3.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(-1.0, 1.5, 3.0);
-	core->scale(1.0, 1.0, 10.0);
+	core->scale(1.0, H-2.5f, 10.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(-1.0, -1.0, 13.0);
-	core->scale(1.0, 3.5, 3.0);
+	core->scale(1.0, H, 3.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(-1.0, -1.0, 24.0);
-	core->scale(1.0, 3.5, 8.0);
+	core->scale(1.0, H, 8.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	//down
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(0.0, -1.0, MAP0_H);
-	core->scale(MAP0_W, 3.5, 1.0);
+	core->scale(MAP0_W, H, 1.0);
 	body.render();
 	core->popMatrix(VSMathLib::MODEL);
 
@@ -200,22 +202,28 @@ void Map::draw(VSMathLib* core, VSShaderLib* shader) {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	core->pushMatrix(VSMathLib::MODEL);
-	core->translate(-2.0, -0.5, 16.0);	//base translate
+	core->translate(-0.5, -0.5, 16.0);	//base translate
 	
 	//river
 	core->pushMatrix(VSMathLib::MODEL);
-	core->scale(MAP0_W + 5, 0.1, 8.0);
+	core->scale(MAP0_W + 1, 0.1, 8.0);
 	water.render(); 
 	core->popMatrix(VSMathLib::MODEL);
 	
 	//waterfalls
 	core->pushMatrix(VSMathLib::MODEL);	
-	core->translate(0.0, 0.0, 0.0);
-	core->scale(0.1, 3.0, 8.0);
-	core->rotate(45, 0 ,1 ,0);
+	core->translate(-0.5, H-.5, 0.0);	
+	core->rotate(90, 1, 0, 0);
+	core->scale(0.5, 8.0, H-.5);
 	water.render(); 	
 	core->popMatrix(VSMathLib::MODEL);
-	
+
+	core->pushMatrix(VSMathLib::MODEL);	
+	core->translate(21.0, 0.0, 8.0);
+	core->rotate(-90, 1 ,0 ,0);	
+	core->scale(-0.5, 8.0, H-.5);
+	water.render(); 	
+	core->popMatrix(VSMathLib::MODEL);
 	
 	core->popMatrix(VSMathLib::MODEL);
 	glDepthMask(GL_TRUE);
@@ -223,7 +231,6 @@ void Map::draw(VSMathLib* core, VSShaderLib* shader) {
 	glDisable(GL_BLEND);
 	moving = false;
 	glUniform1i(pos_loc, moving);
-	
 	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
