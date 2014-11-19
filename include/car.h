@@ -4,6 +4,10 @@
 #include "DynamicObject.h"
 #include "BoxAABB.h"
 
+#define CAR_SIZE_X 4.7f
+#define CAR_SIZE_Y 1.2f
+#define CAR_SIZE_Z 1.0f
+
 namespace domain {
 	class Car : public DynamicObject {
 	private:
@@ -23,10 +27,9 @@ namespace domain {
 		static float tireShininess;
 		BoxAABB *AABB;
 
-	protected:
-		std::list<VSResSurfRevLib> components;
 		VSResSurfRevLib driver;
 		VSResSurfRevLib tire;
+		VSResSurfRevLib load;
 		bool created;
 
 

@@ -1,10 +1,3 @@
-/*
- * riverlog.cpp
- *
- *  Created on: Oct 12, 2014
- *      Author: un
- */
-
 #include "../include/riverlog.h"
 
 namespace domain {

@@ -37,8 +37,8 @@ void Game::init() {
 	const float UNITS_PER_TICK = UNITS_PER_SECOND / TICKS_PER_SECOND;
 	Vec3 car_speed_right = Vec3(UNITS_PER_TICK, 0.0f, 0.0f);
 	Vec3 car_speed_left = car_speed_right * (-1);
-	Vec3 car_positions[] = { Vec3(-6.0f, 0.3f, 4.0f), Vec3(-6.0f, 0.3f, 6.0f),
-			Vec3(-4.0f, 0.3f, 9.0f), Vec3(-6.0f, 0.3f, 11.0f) };
+	Vec3 car_positions[] = { Vec3(-6.0f, CAR_SIZE_Y / 2, 4.0f), Vec3(-6.0f, CAR_SIZE_Y / 2, 6.0f),
+		Vec3(-4.0f, CAR_SIZE_Y / 2, 9.0f), Vec3(-6.0f, CAR_SIZE_Y / 2, 11.0f) };
 	Car *car;
 	for (int i = 0; i < 4; i++) {
 		car = new Car(car_positions[i],

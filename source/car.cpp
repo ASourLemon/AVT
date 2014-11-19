@@ -23,18 +23,28 @@ Car::Car(Vec3 position, Vec3 initSpeed) : created(false) {
 	_initSpeed = initSpeed;
 	_speed = initSpeed;
 
-	VSResSurfRevLib load;
 	load.createCube(1);
-
 	load.setMaterialBlockName("Materials");
 	load.setColor(VSResourceLib::DIFFUSE, loadDif);
 	load.setColor(VSResourceLib::AMBIENT, loadAmb);
 	load.setColor(VSResourceLib::SPECULAR, loadSpec);
 	load.setColor(VSResourceLib::SHININESS, &loadShininess);
 
-	components.push_front(load);
+	driver.createCube(1.0f);
+	driver.setMaterialBlockName("Materials");
+	driver.setColor(VSResourceLib::DIFFUSE, driverDif);
+	driver.setColor(VSResourceLib::AMBIENT, driverAmb);
+	driver.setColor(VSResourceLib::SPECULAR, driverSpec);
+	driver.setColor(VSResourceLib::SHININESS, &driverShininess);
 
-	AABB = new BoxAABB(&_position, 2.4f, 1.0f, 1.0f);
+	tire.createCylinder(0.2f, 0.4f, 20);
+	tire.setMaterialBlockName("Materials");
+	tire.setColor(VSResourceLib::SPECULAR, tireSpec);
+	tire.setColor(VSResourceLib::DIFFUSE, tireDif);
+	tire.setColor(VSResourceLib::AMBIENT, tireAmb);
+	tire.setColor(VSResourceLib::SHININESS, &tireShininess);
+
+	AABB = new BoxAABB(&_position, CAR_SIZE_X, CAR_SIZE_Y, CAR_SIZE_Z);
 }
 
 Car::~Car() {
@@ -46,96 +56,75 @@ void Car::draw(VSMathLib* core, VSShaderLib* shader) {
 	float _y = _position.getY();
 	float _z = _position.getZ();
 
-	std::list<VSResSurfRevLib>::iterator iter;
-	for (iter = components.begin(); iter != components.end(); iter++) {
-		core->pushMatrix(VSMathLib::MODEL);
-		core->translate(_x, _y, _z);
-		core->scale(3.0f, 1.0f, 1.0f);
-		iter->render();
-		core->popMatrix(VSMathLib::MODEL);
-	}
+	core->pushMatrix(VSMathLib::MODEL);
+	core->translate(_x, _y, _z);
 
-	if (!created) {
-		driver.createCube(1.0f);
+	const bool isHeadingLeft = _speed.getX() > 0;
+	if (isHeadingLeft) {
+		core->rotate(180.0f, 0.0f, 1.0f, 0.0f);
 	}
-
-	driver.setMaterialBlockName("Materials");
-	driver.setColor(VSResourceLib::DIFFUSE, driverDif);
-	driver.setColor(VSResourceLib::AMBIENT, driverAmb);
-	driver.setColor(VSResourceLib::SPECULAR, driverSpec);
-	driver.setColor(VSResourceLib::SHININESS, &driverShininess);
 
 	core->pushMatrix(VSMathLib::MODEL);
-	if (_speed.getX() < 0)
-		core->translate(_x - 0.7f, _y, _z);
-	else
-		core->translate(_x + 3.0f, _y, _z);
+	core->scale(4.0f, 1.0f, 1.0f);
+	core->translate(-0.5f, -0.5f, -0.5f);
+	load.render();
+	core->popMatrix(VSMathLib::MODEL);
+
+	core->pushMatrix(VSMathLib::MODEL);
+	core->translate(- 2.0f - 0.35f, 0.0f, 0.0f);
 	core->scale(0.7f, 0.7f, 0.9f);
+	core->translate(-0.5f, -0.5f, -0.5f);
 	driver.render();
 	core->popMatrix(VSMathLib::MODEL);
 
-	tire.setMaterialBlockName("Materials");
-	tire.setColor(VSResourceLib::SPECULAR, tireSpec);
-	tire.setColor(VSResourceLib::DIFFUSE, tireDif);
-	tire.setColor(VSResourceLib::AMBIENT, tireAmb);
-	tire.setColor(VSResourceLib::SHININESS, &tireShininess);
-	//pneus - 1
-
-	if (!created) {
-		tire.createCylinder(0.2f, 0.4f, 20);
-		created = true;
-	}
-
 	core->pushMatrix(VSMathLib::MODEL);
-	if (_speed.getX() < 0)
-		core->translate(_x + 1.6f, _y, _z + 0.15f);
-	else
-		core->translate(_x + 0.7f, _y, _z + 0.15f);
-	core->rotate(90, 1, 0, 0);
-	tire.render();
-	core->popMatrix(VSMathLib::MODEL);
-	core->pushMatrix(VSMathLib::MODEL);
-	if (_speed.getX() < 0)
-		core->translate(_x + 2.3f, _y, _z + 0.15f);
-	else
-		core->translate(_x + 1.4f, _y, _z + 0.15f);
+	core->translate(1.5f, -0.2f, -0.51f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
-	if (_speed.getX() < 0)
-		core->translate(_x + 1.6f, _y, _z + 0.85f);
-	else
-		core->translate(_x + 0.7f, _y, _z + 0.85f);
-	core->rotate(90, 1, 0, 0);
-	tire.render();
-	core->popMatrix(VSMathLib::MODEL);
-	core->pushMatrix(VSMathLib::MODEL);
-	if (_speed.getX() < 0)
-		core->translate(_x + 2.3f, _y, _z + 0.85f);
-	else
-		core->translate(_x + 1.4f, _y, _z + 0.85f);
+	core->translate(0.7f, -0.2f, -0.51f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
-	if (_speed.getX() < 0)
-		core->translate(_x + 0.1f, _y, _z + 0.15f);
-	else
-		core->translate(_x + 2.7f, _y, _z + 0.15f);
+	core->translate(-1.5f, -0.2f, -0.51f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
 	core->popMatrix(VSMathLib::MODEL);
 
 	core->pushMatrix(VSMathLib::MODEL);
-	if (_speed.getX() < 0)
-		core->translate(_x + 0.1f, _y, _z + 0.85f);
-	else
-		core->translate(_x + 2.7f, _y, _z + 0.85f);
+	core->translate(-0.7f, -0.2f, -0.51f);
 	core->rotate(90, 1, 0, 0);
 	tire.render();
+	core->popMatrix(VSMathLib::MODEL);
+
+	core->pushMatrix(VSMathLib::MODEL);
+	core->translate(1.5f, -0.2f, 0.51f);
+	core->rotate(90, 1, 0, 0);
+	tire.render();
+	core->popMatrix(VSMathLib::MODEL);
+
+	core->pushMatrix(VSMathLib::MODEL);
+	core->translate(0.7f, -0.2f, 0.51f);
+	core->rotate(90, 1, 0, 0);
+	tire.render();
+	core->popMatrix(VSMathLib::MODEL);
+
+	core->pushMatrix(VSMathLib::MODEL);
+	core->translate(-1.5f, -0.2f, 0.51f);
+	core->rotate(90, 1, 0, 0);
+	tire.render();
+	core->popMatrix(VSMathLib::MODEL);
+
+	core->pushMatrix(VSMathLib::MODEL);
+	core->translate(-0.7f, -0.2f, 0.51f);
+	core->rotate(90, 1, 0, 0);
+	tire.render();
+	core->popMatrix(VSMathLib::MODEL);
+
 	core->popMatrix(VSMathLib::MODEL);
 
 }
