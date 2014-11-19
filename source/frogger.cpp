@@ -75,6 +75,7 @@ LightManager lightManager;
 bool l_on;
 bool lampOn;
 bool drawFlare;
+bool fogOn;
 
 int mx = 0, my = 0;
 
@@ -140,16 +141,22 @@ void renderScene(void) {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
 		glUseProgram(shader.getProgramIndex());
+		
 		int lampbool = glGetUniformLocation(shader.getProgramIndex(), "lampOn");
 		glUniform1i(lampbool, lampOn);
+		
 		int daybool = glGetUniformLocation(shader.getProgramIndex(), "isDay");
 		glUniform1i(daybool, l_on);
 
 		float time = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
 		shader.setUniform("time", &time);
+		
 		bool tex_moving = false;
 		int pos_loc = glGetUniformLocation(shader.getProgramIndex(), "tex_moving");
 		glUniform1i(pos_loc, tex_moving);
+		
+		int fog_loc = glGetUniformLocation(shader.getProgramIndex(), "fogOn");
+		glUniform1i(fog_loc, fogOn);
 
 		lightManager.drawLight(core);
 		game->draw(core, &shader);
@@ -189,13 +196,6 @@ void renderScene(void) {
 		
 		fontM.DrawString(&shaderF, WinX/2, WinY/2, "GAME OVER!", true);	
 	}
-
-
-	float time = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
-	shader.setUniform("time", &time);
-	bool tex_moving = false;
-	int pos_loc = glGetUniformLocation(shader.getProgramIndex(), "tex_moving");
-	glUniform1i(pos_loc, tex_moving);
 
 	glutSwapBuffers();
 }
@@ -426,6 +426,17 @@ void processKeys() {
 	if (keyStates['p']) {
 		game->move_frog(3);
 	}
+	if (keyStates['f']){
+		if (fogOn) {
+			fogOn = false;
+			printf("Fog off\n");
+		} else {
+			printf("Fog on\n");
+			fogOn = true;
+		}
+		keyStates['f'] = false;
+		
+	}
 	game->setFrogT(glutGet(GLUT_ELAPSED_TIME));
 }
 
@@ -640,6 +651,8 @@ void init(int argc, char* argv[]) {
 	TGA_Texture(FlareTextureArray, "textures/Flare2.tga", 1);
 	TGA_Texture(FlareTextureArray, "textures/Flare3.tga", 2);
 	TGA_Texture(FlareTextureArray, "textures/Flare4.tga", 3);
+	
+	fogOn = true;
 }
 
 int main(int argc, char* argv[]) {

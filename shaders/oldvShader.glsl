@@ -39,6 +39,7 @@ in vec4 texCoord;
 out vec2 tex_coord;
 uniform bool isDay;
 uniform bool lampOn;
+uniform bool fogOn;
 
 void main () {
 	int k, i = 0;

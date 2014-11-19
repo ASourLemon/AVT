@@ -38,6 +38,7 @@ uniform bool isDay;
 uniform bool lampOn;
 uniform float time;
 uniform bool tex_moving;
+uniform bool fogOn;
 int index=0;
 
 
@@ -200,6 +201,9 @@ void main() {
 	}	
 	colorOut = max(colorOut, ambient * 0.5);	
 	colorOut *= texel;	
-	colorOut = processFog();
+	if(fogOn){
+		colorOut = processFog();
+	}
+
 
 }

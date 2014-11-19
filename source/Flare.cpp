@@ -156,7 +156,7 @@ void Flare::draw(VSMathLib* core, VSShaderLib* shader) {
 		pos[1] = lights.at(i)->y;
 		pos[2] = lights.at(i)->z;
 		pos[3] = lights.at(i)->w;
-		printf("Light - %u \n", i);
+		//printf("Light - %u \n", i);
 		drawFlare(core, shader, pos);
 	}
 }
