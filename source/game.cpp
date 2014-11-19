@@ -210,23 +210,7 @@ void Game::tick(VSMathLib* core) {
 
 	computeCollisions();
 
-	//Update dos sistemas de particulas
-	core->pushMatrix(VSMathLib::MODEL);
-	for (std::list<ParticleManager*>::iterator x =
-			list_particle_system_A->begin(); x != list_particle_system_A->end();
-			x++) {
-
-		if (!(*x)->get_activeParticles().empty()) {
-			(*x)->Update(elaped);
-		} else
-			Particletemp.push_back(*x);
-	}
-	core->popMatrix(VSMathLib::MODEL);
-	for (std::vector<ParticleManager*>::iterator i = Particletemp.begin();
-			i != Particletemp.end(); i++)
-		(*i)->desactivar(list_particle_system_A, list_particle_system_I);
-	Particletemp.clear();
-	//UpdateParticles(core, elaped);
+	UpdateParticles(core, elaped);
 
 	activeCam->update(); //FIXME: actualizar as outras tambem
 
@@ -291,8 +275,25 @@ void Game::loadCamera() {
 	activeCam->load();
 }
 
-void UpdateParticles(VSMathLib* core, float elaped) {
+void Game::UpdateParticles(VSMathLib* core, float elaped) {
 
+	//Update dos sistemas de particulas
+	core->pushMatrix(VSMathLib::MODEL);
+	for (std::list<ParticleManager*>::iterator x =
+			list_particle_system_A->begin(); x != list_particle_system_A->end();
+			x++) {
+
+		if (!(*x)->get_activeParticles().empty()) {
+			(*x)->Update(elaped);
+		} else
+			Particletemp.push_back(*x);
+	}
+	core->popMatrix(VSMathLib::MODEL);
+	for (std::vector<ParticleManager*>::iterator i = Particletemp.begin();
+			i != Particletemp.end(); i++)
+		(*i)->desactivar(list_particle_system_A, list_particle_system_I);
+	Particletemp.clear();
+	//UpdateParticles(core, elaped);
 }
 
 void Game::computeCollisions() {
@@ -347,9 +348,10 @@ void Game::computeCollisions() {
 	bool isOnRiver = (frog->getZ() >= 16.5) && (frog->getZ() <= 23.5);
 	if (isOnRiver && !beingCarried) {
 		falling = true;
-		list_particle_system_I->front()->activar(frog->getX(), frog->getY(),
-					frog->getZ(), list_particle_system_A,
-					list_particle_system_I);
+		if(frog->getY() >= -0.25f)
+			list_particle_system_I->front()->activar(frog->getX(), frog->getY(),
+						frog->getZ(), 1, list_particle_system_A,
+						list_particle_system_I);
 	}
 
 	//Collision Frog vs Cars
@@ -359,7 +361,7 @@ void Game::computeCollisions() {
 			frog->setCompressed(true);
 			// FIXME: Change location of the code below
 			list_particle_system_I->front()->activar(frog->getX(), frog->getY(),
-					frog->getZ(), list_particle_system_A,
+					frog->getZ(), 0, list_particle_system_A,
 					list_particle_system_I);
 			break;
 		}

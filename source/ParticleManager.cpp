@@ -34,18 +34,18 @@ void ParticleManager::Draw(VSMathLib* core){
 
 }
 
-void ParticleManager::Reset(){
+void ParticleManager::Reset(int color){
 
 	for(std::list<Particle*>::iterator x=activeParticles->begin(); x!=activeParticles->end(); x++){
 
-		(*x)->Respawn( true);
+		(*x)->Respawn( true, color);
 	}
 
 
 
 	for(std::list<Particle*>::iterator x=deadParticles->begin(); x!=deadParticles->end(); x = deadParticles->erase(x)){
 
-		(*x)->Respawn();
+		(*x)->Respawn(false, color);
 		activeParticles->push_back(*x);
 	}
 
@@ -72,7 +72,7 @@ void ParticleManager::desactivar(std::list<ParticleManager*> *A, std::list<Parti
 	A->remove(this);
 }
 
-void ParticleManager::activar(float x, float y, float z, std::list<ParticleManager*> *A, std::list<ParticleManager*> *I){
+void ParticleManager::activar(float x, float y, float z, int color, std::list<ParticleManager*> *A, std::list<ParticleManager*> *I){
 
 
 	_x = x ;
@@ -81,7 +81,7 @@ void ParticleManager::activar(float x, float y, float z, std::list<ParticleManag
 	
 	A->push_back(this);
 	I->remove(this);
-	Reset();
+	Reset(color);
 }
 
 }

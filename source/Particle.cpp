@@ -12,18 +12,32 @@ float Particle::bodyDiffuse[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 float Particle::bodySpec[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 float Particle::bodyShininess = 60;
 
-Particle::Particle(): x(0.0), y(0.0), z(0.0), life(0.0f), created(false){
+float Particle::bodyAmbientS[4] = { 0.08f, 0.08f, 0.12f, 1.0f };
+float Particle::bodyDiffuseS[4] = { 0.0f, 0.9f, 1.0f, 1.0f };
+float Particle::bodySpecS[4] = { 0.0f, 0.0f, 0.1f, 1.0f };
+float Particle::bodyShininessS = 10;
 
-	Respawn();
+Particle::Particle(): x(0.0), y(0.0), z(0.0), life(0.0f), created(false), color(0){
+
+	Respawn(false, 0); //Default color = Red
 }
 
 void Particle::Draw(VSMathLib* core){
-	
-	body.setMaterialBlockName("Materials");
-	body.setColor(VSResourceLib::SPECULAR, bodySpec);
-	body.setColor(VSResourceLib::DIFFUSE, bodyDiffuse);
-	body.setColor(VSResourceLib::AMBIENT, bodyAmbient);
-	body.setColor(VSResourceLib::SHININESS, &bodyShininess);
+	switch(color){
+		case 0: //BLOOD!!
+			body.setMaterialBlockName("Materials");
+			body.setColor(VSResourceLib::SPECULAR, bodySpec);
+			body.setColor(VSResourceLib::DIFFUSE, bodyDiffuse);
+			body.setColor(VSResourceLib::AMBIENT, bodyAmbient);
+			body.setColor(VSResourceLib::SHININESS, &bodyShininess);
+			break;
+		case 1: //SPLASH
+			body.setMaterialBlockName("Materials");
+			body.setColor(VSResourceLib::SPECULAR, bodySpecS);
+			body.setColor(VSResourceLib::DIFFUSE, bodyDiffuseS);
+			body.setColor(VSResourceLib::AMBIENT, bodyAmbientS);
+			body.setColor(VSResourceLib::SHININESS, &bodyShininessS);
+	}
 	
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(x, y, z);
@@ -40,7 +54,9 @@ void Particle::Draw(VSMathLib* core){
 
 }
 
-bool Particle::Respawn(bool spawn){
+bool Particle::Respawn(bool spawn, int c){
+	
+	setColor(c);
 
     if ( life <= 0.0f  || spawn )
     {
@@ -68,7 +84,7 @@ bool Particle::Update_particle(float elapsedTime, bool respawn){
 
 
     if ( respawn && life <= 0.0 )
-        Respawn();
+        Respawn(false, 0);
     if ( life > 0.0 )
     {
         float delta = elapsedTime * .00378;
