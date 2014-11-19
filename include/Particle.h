@@ -25,10 +25,11 @@ namespace domain{
 		VSResSurfRevLib body;
 		float	life;		// life
 		float	fade;		// fade
-		float	 r,  g,  b; // colour
 		float    x,  y,  z; // position
 		float   vx, vy, vz; // speed
 		float   ax, ay, az; // aceleration
+
+		float alpha;
 
 		bool created;
 
