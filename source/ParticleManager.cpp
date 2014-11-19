@@ -3,7 +3,7 @@
 
 namespace domain{
 
-ParticleManager::ParticleManager(bool burst) : Max_Particles(100){
+ParticleManager::ParticleManager(bool burst) : Max_Particles(125){
 
 	activeParticles = new std::list<Particle*>;
 	deadParticles = new std::list<Particle*>;

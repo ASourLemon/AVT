@@ -43,7 +43,7 @@ void Particle::Draw(VSMathLib* core){
 	core->translate(x, y, z);
 	core->scale(0.025f, 0.025f, 0.025f);
 	if (!created) {
-		body.createSphere(3.0f, 3.0f);
+		body.createSphere(1.0f, 3.0f);
 		//body.createRectangle(1.0f, 1.0f);
 		created = true;
 	}
@@ -58,23 +58,42 @@ bool Particle::Respawn(bool spawn, int c){
 	
 	setColor(c);
 
-    if ( life <= 0.0f  || spawn )
-    {
+    if ( life <= 0.0f  || spawn ){
+
+		if(color == 0){ //BLOOD
         double v = -0.8*frand()+0.2;
         double phi = frand()*M_PI;
         double theta = 2.0*frand()*M_PI;
         x = 0.0f;
         y = 0.0f;
         z = 0.0f;
-        vx = v * sin(phi) * 0.5f;
-        vy = v * cos(phi);
-        vz = 0.5f * sin(phi);//v * sin(theta) * sin(phi) - 3.0f;
-        ax =  -0.10f; 
-        ay = -0.05f; /* gravity pull */
+        vx = -v * sin(theta);;
+        vy = v; //* sin(phi) * cos(theta);
+        vz = v; //* cos(phi) * sin(theta);//v * sin(theta) * sin(phi) - 3.0f;
+        ax =  -0.15f; 
+        ay = -0.15f; /* gravity pull */
         az =  0.0f;
         
-        life = .15f;		                        /* life granted to particle */
+        life = .20f;		                        /* life granted to particle */
 		fade = 0.0001515 + frand() * .000303;	    /* life decay */
+		}
+		if(color == 1){ //SPLASH
+			double v = -0.8*frand()+0.2;
+			double phi = frand()*M_PI;
+			double theta = 2.0*frand()*M_PI;
+			x = 0.0f;
+			y = 0.0f;
+			z = 0.0f;
+			vx = v * sin(phi) * cos(theta);
+			vy = v * sin(theta);
+			vz = v * cos(phi) * sin(theta);//v * sin(theta) * sin(phi) - 3.0f;
+			ax =  -0.05f; 
+			ay = -0.15f; /* gravity pull */
+			az =  -0.05f;
+        
+			life = .15f;		                        /* life granted to particle */
+			fade = 0.0001515 + frand() * .000303;	    /* life decay */
+		}
         return true;
     }
     return false;

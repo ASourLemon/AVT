@@ -348,7 +348,7 @@ void Game::computeCollisions() {
 	bool isOnRiver = (frog->getZ() >= 16.5) && (frog->getZ() <= 23.5);
 	if (isOnRiver && !beingCarried) {
 		falling = true;
-		if(frog->getY() >= -0.25f)
+		if(frog->getY() >= -0.20f)
 			list_particle_system_I->front()->activar(frog->getX(), frog->getY(),
 						frog->getZ(), 1, list_particle_system_A,
 						list_particle_system_I);
