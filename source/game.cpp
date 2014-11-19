@@ -16,6 +16,9 @@ Game::~Game() {
 	for (unsigned int i = 0; i < game_objects.size(); i++) {
 		delete game_objects.at(i);
 	}
+	for (unsigned int i = 0; i < refactored_game_objects.size(); i++) {
+		delete refactored_game_objects.at(i);
+	}
 }
 
 void Game::init() {
@@ -120,6 +123,15 @@ void Game::init() {
 	game_objects.push_back(grass);
 	grass = new Grass(15.0f, 15.0f, true);
 	game_objects.push_back(grass);
+
+	for(float i = 28.0f; i<=31.0f; i+=0.75){
+		for(float j = 6.0f; j <= 14.0f; j+=0.75){
+			grass = new Grass(j, i, false);
+			game_objects.push_back(grass);
+			grass = new Grass(j, i, true);
+			game_objects.push_back(grass);
+		}
+	}
 
 	list_particle_system_I = new std::list<ParticleManager*>;
 	list_particle_system_A = new std::list<ParticleManager*>;
@@ -320,7 +332,7 @@ void Game::computeCollisions() {
 
 	 }
 	 */
-	bool wonPoint = frog->getZ() > 30.0f;
+	/*bool wonPoint = frog->getZ() > 30.0f;
 	if (wonPoint) {
 		frog->setX(10.0);
 		frog->setY(0.0);
@@ -365,7 +377,7 @@ void Game::computeCollisions() {
 			list_particle_system_I->front()->activar(frog->getX(), frog->getY(),
 						frog->getZ(), 1, list_particle_system_A,
 						list_particle_system_I);
-	}
+	}*/
 
 	//Collision Frog vs Cars
 	for (unsigned int i = 0; i < cars.size(); i++) {
