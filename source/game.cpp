@@ -156,7 +156,10 @@ void Game::draw(VSMathLib* core, VSShaderLib* shader) {
 }
 
 void Game::move_frog(int direction) {
-	frog->move(direction);
+	if(!frog->isCompressed()){
+		frog->move(direction);
+	}
+
 }
 
 void Game::setFrogT(int i) {
@@ -198,9 +201,11 @@ void Game::tick(VSMathLib* core) {
 			frog->setCompressedR(1.0);
 			frog->setCompressed(false);
 		}
+	}else {
+		frog->tick();
 	}
 
-	frog->tick();
+
 	for (unsigned int i = 0; i < game_objects.size(); i++) {
 		game_objects.at(i)->tick();
 	}

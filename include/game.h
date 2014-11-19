@@ -26,6 +26,7 @@ public:
 	void add_drawable(Drawable* d);
 	void move_frog(int d);
 	void tick(VSMathLib* core);
+	void reset();
 	inline float getFrogX() {
 		return frog->getX();
 	}
