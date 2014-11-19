@@ -111,8 +111,8 @@ void Game::init() {
 	list_particle_system_I = new std::list<ParticleManager*>;
 	list_particle_system_A = new std::list<ParticleManager*>;
 
-	//cria 50 sistemas de particulas
-	for (int x = 0; x < 5; x++) {
+	//cria 5 sistemas de particulas
+	for (int x = 0; x < 50; x++) {
 		list_particle_system_I->push_back(new ParticleManager(_burst));
 	}
 
@@ -347,6 +347,9 @@ void Game::computeCollisions() {
 	bool isOnRiver = (frog->getZ() >= 16.5) && (frog->getZ() <= 23.5);
 	if (isOnRiver && !beingCarried) {
 		falling = true;
+		list_particle_system_I->front()->activar(frog->getX(), frog->getY(),
+					frog->getZ(), list_particle_system_A,
+					list_particle_system_I);
 	}
 
 	//Collision Frog vs Cars

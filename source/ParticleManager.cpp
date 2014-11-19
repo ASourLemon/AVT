@@ -3,15 +3,13 @@
 
 namespace domain{
 
-int Max_Particles = 1000;
-
-ParticleManager::ParticleManager(bool burst){
+ParticleManager::ParticleManager(bool burst) : Max_Particles(100){
 
 	activeParticles = new std::list<Particle*>;
 	deadParticles = new std::list<Particle*>;
 
 	//Cria particula e coloca na lista
-	for ( int i=0; i<100; i++){
+	for ( int i=0; i<Max_Particles; i++){
         activeParticles->push_back( new Particle());
 		respawnParticles = !burst;
 	}
