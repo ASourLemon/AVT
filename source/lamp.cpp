@@ -43,20 +43,6 @@ Lamp::Lamp(float x, float y, float z, bool reflect) :
 	lampShade.setColor(VSResourceLib::SPECULAR, lampShadeSpec);
 	lampShade.setColor(VSResourceLib::SHININESS, &lampShadeShininess);
 
-	if(reflection == true){
-		support.setMaterialBlockName("Materials");
-		support.setColor(VSResourceLib::DIFFUSE, RsupportDif);
-		support.setColor(VSResourceLib::AMBIENT, RsupportAmb);
-		support.setColor(VSResourceLib::SPECULAR, RsupportSpec);
-		support.setColor(VSResourceLib::SHININESS, &RsupportShininess);
-
-		lampShade.setMaterialBlockName("Materials");
-		lampShade.setColor(VSResourceLib::DIFFUSE, RlampShadeDif);
-		lampShade.setColor(VSResourceLib::AMBIENT, RlampShadeAmb);
-		lampShade.setColor(VSResourceLib::SPECULAR, RlampShadeSpec);
-		lampShade.setColor(VSResourceLib::SHININESS, &RlampShadeShininess);
-	}
-
 }
 
 Lamp::~Lamp() {
@@ -89,9 +75,6 @@ void Lamp::draw(VSMathLib* core, VSShaderLib* shader) {
 	core->translate(0.0f, SUPPORT_HEIGHT + LAMP_SHADE_RADIUS, 0.0f);
 	core->scale(LAMP_SHADE_RADIUS, LAMP_SHADE_RADIUS, LAMP_SHADE_RADIUS);
 		if(reflection == true){
-			//glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
-			//glStencilMask(0x00); // Don't write anything to stencil buffer
-			//glDepthMask(GL_TRUE); // Write to depth buffer
 			core->translate(0.0f, -17.5f, 0.0f);
 		}
 	lampShade.render();

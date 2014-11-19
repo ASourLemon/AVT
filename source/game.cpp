@@ -151,6 +151,16 @@ Game *Game::getInstance() {
 }
 
 void Game::draw(VSMathLib* core, VSShaderLib* shader) {
+	
+	//Reflection lamps
+	int lamp_loc = glGetUniformLocation(shader->getProgramIndex(), "vertex_moving");
+	glUniform1i(lamp_loc, true);
+	lamp7->draw(core, shader);
+	lamp8->draw(core, shader);
+	lamp9->draw(core, shader);
+	lamp10->draw(core, shader);
+	glUniform1i(lamp_loc, false);
+
 	frog->draw(core, shader);
 
 	for (unsigned int i = 0; i < game_objects.size(); i++) {
@@ -159,15 +169,6 @@ void Game::draw(VSMathLib* core, VSShaderLib* shader) {
 	for (unsigned int i = 0; i < refactored_game_objects.size(); i++) {
 		refactored_game_objects.at(i)->draw(core, shader);
 	}
-
-	//Reflection lamps
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	lamp7->draw(core, shader);
-	lamp8->draw(core, shader);
-	lamp9->draw(core, shader);
-	lamp10->draw(core, shader);
-	glDisable(GL_BLEND);
 
 	for (std::list<ParticleManager*>::iterator x =
 			list_particle_system_A->begin(); x != list_particle_system_A->end();

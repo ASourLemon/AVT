@@ -127,10 +127,9 @@ void renderScene(void) {
 			//printf("fx:%f, fy%f, fz%f\n", fx, fy, fz);
 
 			if (tracking == 1) {
-				core->lookAt(fx, fy + 3.5f, fz - 2.5f, fx + camX, (fy + camY * -0.5f), (fz + camZ * 0.5f), 0.0f, 1.0f, 0.0f);
+				core->lookAt(fx + camX, fy + camY, fz + camZ, fx, fy, fz, 0, 1, 0);
 
 			} else {
-	//			core->lookAt(fx + camX, fy + camY * -0.5 + 2.5, fz - camZ, fx, fy, fz, 0, 1, 0);
 				game->loadCamera();
 			}
 
@@ -311,7 +310,7 @@ void processMouseMotion(int xx, int yy) {
 	deltaY = yy - startY;
 
 	// left mouse button: move camera
-	//if (tracking == 1) {
+	if (tracking == 1) {
 
 	alphaAux = alpha + deltaX;
 	betaAux = beta + deltaY;
@@ -321,7 +320,7 @@ void processMouseMotion(int xx, int yy) {
 	else if (betaAux < -85.0f)
 		betaAux = -85.0f;
 	rAux = r;
-	/*}
+	}
 
 	 // right mouse button: zoom
 	 else if (tracking == 2) {
@@ -331,15 +330,13 @@ void processMouseMotion(int xx, int yy) {
 	 rAux = r + (deltaY * 0.01f);
 	 if (rAux < 0.1f)
 	 rAux = 0.1f;
-	 }*/
+	 }
 
 	camX = rAux * sin(alphaAux * 3.14f / 180.0f)
 			* cos(betaAux * 3.14f / 180.0f);
 	camZ = rAux * cos(alphaAux * 3.14f / 180.0f)
 			* cos(betaAux * 3.14f / 180.0f);
 	camY = rAux * sin(betaAux * 3.14f / 180.0f);
-
-	//printf("camX:%f , camY:%f, camZ:%f\n", camX, camY, camZ);
 }
 
 void keyPressed(unsigned char key, int x, int y) {
@@ -408,11 +405,11 @@ void processKeys() {
 		}
 		keyStates['r'] = false;
 	}
-	if (keyStates['w']) {
-		r += 0.1f;
-	}
 	if (keyStates['s']) {
-		r -= 0.1f;
+		r += 0.5f;
+	}
+	if (keyStates['w']) {
+		r -= 0.5f;
 	}
 	if (keyStates['a']) {
 		game->move_frog(1);

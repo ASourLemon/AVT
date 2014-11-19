@@ -12,9 +12,9 @@ float Map::grassDif[4] = { 0.2f, 0.5f, 0.2f, 1.0f };
 float Map::grassSpec[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 float Map::grassShininess = 1;
 
-float Map::waterAmb[4] = { 0.08f, 0.12f, 0.08f, 1.0f };
-float Map::waterDif[4] = { 0.4f, 0.6f, 0.4f, 1.0f };
-float Map::waterSpec[4] = { 0.0f, 0.0f, 0.1f, 1.0f };
+float Map::waterAmb[4] = { 0.08f, 0.12f, 0.08f, .7f };
+float Map::waterDif[4] = { 0.4f, 0.6f, 0.4f, .7f };
+float Map::waterSpec[4] = { 0.0f, 0.0f, 0.1f, .7f };
 float Map::waterShininess = 10;
 
 float Map::wallAmb[4] = { 0.2f, 0.1f, 0.1f, 1.0f };
@@ -196,15 +196,35 @@ void Map::draw(VSMathLib* core, VSShaderLib* shader) {
 	glDepthMask(GL_FALSE);
 	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
 	
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	core->pushMatrix(VSMathLib::MODEL);
 	core->translate(-2.0, -0.5, 16.0);	//base translate
+	
+	//river
+	core->pushMatrix(VSMathLib::MODEL);
 	core->scale(MAP0_W + 5, 0.1, 8.0);
-	water.render();
+	water.render(); 
+	core->popMatrix(VSMathLib::MODEL);
+	
+	//waterfalls
+	core->pushMatrix(VSMathLib::MODEL);	
+	core->translate(0.0, 0.0, 0.0);
+	core->scale(0.1, 3.0, 8.0);
+	core->rotate(45, 0 ,1 ,0);
+	water.render(); 	
+	core->popMatrix(VSMathLib::MODEL);
+	
+	
 	core->popMatrix(VSMathLib::MODEL);
 	glDepthMask(GL_TRUE);
 	glDisable(GL_STENCIL_TEST);
+	glDisable(GL_BLEND);
 	moving = false;
 	glUniform1i(pos_loc, moving);
+	
+	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureArray[0]);
 }

@@ -179,7 +179,7 @@ void main() {
 	vec4 texel;
 
 	if(tex_moving)
-		texel = texture(texmap, vec2(tex_coord.x + sin(tex_coord.y * 60.0 + time * 2.0) / 30.0, 1.0 - tex_coord.y));  // texel from lighwood.tga
+		texel = texture(texmap, vec2(tex_coord.x + time/10, tex_coord.y + sin(tex_coord.x * 60.0 + time * 2.0) / 30.0));  // texel from lighwood.tga
 	else
 		texel = texture(texmap, tex_coord);
 		 
