@@ -13,6 +13,7 @@
 #include "../include/Tree.h"
 #include "../include/PerspectiveCamera.h"
 #include "../include/ParticleManager.h"
+#include "../include/grass.h"
 
 namespace domain {
 

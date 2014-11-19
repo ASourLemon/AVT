@@ -103,10 +103,23 @@ void Game::init() {
 
 	Tree *tree = new Tree(3.0f, 15.0f);
 	game_objects.push_back(tree);
-	tree = new Tree((17.0 - 3.0) / 2.0 + 3.0, 15.0f);
+	tree = new Tree(10.0f, 15.0f);
 	game_objects.push_back(tree);
 	tree = new Tree(17.0f, 15.0f);
 	game_objects.push_back(tree);
+
+	Grass *grass = new Grass(10.0f, 15.0f, false);
+	game_objects.push_back(grass);
+	grass = new Grass(10.0f, 15.0f, true);
+	game_objects.push_back(grass);
+	grass = new Grass(5.0f, 15.0f, false);
+	game_objects.push_back(grass);
+	grass = new Grass(5.0f, 15.0f, true);
+	game_objects.push_back(grass);
+	grass = new Grass(15.0f, 15.0f, false);
+	game_objects.push_back(grass);
+	grass = new Grass(15.0f, 15.0f, true);
+	game_objects.push_back(grass);
 
 	list_particle_system_I = new std::list<ParticleManager*>;
 	list_particle_system_A = new std::list<ParticleManager*>;

@@ -91,17 +91,17 @@ void Frog::draw(VSMathLib* core, VSShaderLib* shader){
 		eye.createSphere(0.6f, 9.0f);
 		created = true;
 	}
-	core->translate(0.4, 2.8, -1.5);
-	core->scale(0.7, 1.0, 0.7);
-	core->rotate(-100, 0, 1, 0);
+	core->translate(0.4f, 2.8f, -1.5f);
+	core->scale(0.7f, 1.0f, 0.7f);
+	core->rotate(-100.0f, 0.0f, 1.0f, 0.0f);
 	eye.render();
 	core->popMatrix(VSMathLib::MODEL);
 	//olhos - 2
 	core->pushMatrix(VSMathLib::MODEL);
 	
-	core->translate(-0.4, 2.8, -1.5);
-	core->scale(0.7, 1.0, 0.7);
-	core->rotate(-100, 0, 1, 0);
+	core->translate(-0.4f, 2.8f, -1.5f);
+	core->scale(0.7f, 1.0f, 0.7f);
+	core->rotate(-100.0f, 0.0f, 1.0f, 0.0f);
 	eye.render();
 	core->popMatrix(VSMathLib::MODEL);
 	core->popMatrix(VSMathLib::MODEL);
@@ -122,7 +122,7 @@ void Frog::move(int d){
 
 	case(DIR_FRONT):{			
 		direction = DIR_FRONT;
-		if(_z < 31.0){
+		if(_z < 31.0f){
 			deltaT=glutGet(GLUT_ELAPSED_TIME)-t;
 			_z+=speed*deltaT;
 		}  
@@ -132,7 +132,7 @@ void Frog::move(int d){
 
 	case(DIR_BACK):{			
 		direction = DIR_BACK;
-		if(_z > 1.0){
+		if(_z > 1.0f){
 			deltaT=glutGet(GLUT_ELAPSED_TIME)-t;
 			_z-=speed*deltaT;
 		}
@@ -150,7 +150,7 @@ void Frog::move(int d){
 
 	case(DIR_RIGHT):{
 		direction = DIR_RIGHT;
-		if(_x>1){
+		if(_x>1.0f){
 			deltaT=glutGet(GLUT_ELAPSED_TIME)-t;
 			_x-=speed*deltaT;
 		}

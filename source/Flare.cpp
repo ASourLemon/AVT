@@ -89,8 +89,8 @@ void Flare::drawFlare(VSMathLib* core, VSShaderLib* shader, float pos[4]) {
 	float ly = p_p[1];
 	
 	
-	float cx = WinX*0.5;
-	float cy = WinY*0.5;
+	float cx = WinX*0.5f;
+	float cy = WinY*0.5f;
 	
 	//compute flare distance from center
 	float maxflaredist = sqrt(cx*cx + cy*cy);
