@@ -16,9 +16,11 @@ namespace domain{
 		//void Draw();
 		void Draw( VSMathLib* core);
 		bool Update_particle(float elapsedTime, bool respawn);
-		bool Respawn(bool spawn = false);
+		bool Respawn(bool spawn, int c);
 		bool IsAlive() const { return life>0.0f; };
 		bool IsDead()  const { return life<=0.0f; };
+
+		void setColor(int c){ color = c;};
 
 
 	private:
@@ -32,12 +34,18 @@ namespace domain{
 		float alpha;
 
 		bool created;
-
+		int color;
 	
 		static float bodyAmbient[4];
 		static float bodyDiffuse[4];
 		static float bodySpec[4];
 		static float bodyShininess;
+
+		static float bodyAmbientS[4];
+		static float bodyDiffuseS[4];
+		static float bodySpecS[4];
+		static float bodyShininessS;
+
 
 	};
 

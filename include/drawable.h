@@ -19,7 +19,7 @@
 #define DIR_UP 4
 #define DIR_DOWN 5
 
-extern GLuint TextureArray[7];
+extern GLuint TextureArray[8];
 extern GLuint FlareTextureArray[4];
 extern int mx;
 extern int my;

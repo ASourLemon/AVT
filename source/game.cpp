@@ -16,6 +16,9 @@ Game::~Game() {
 	for (unsigned int i = 0; i < game_objects.size(); i++) {
 		delete game_objects.at(i);
 	}
+	for (unsigned int i = 0; i < refactored_game_objects.size(); i++) {
+		delete refactored_game_objects.at(i);
+	}
 }
 
 void Game::init() {
@@ -103,10 +106,32 @@ void Game::init() {
 
 	Tree *tree = new Tree(3.0f, 15.0f);
 	game_objects.push_back(tree);
-	tree = new Tree((17.0 - 3.0) / 2.0 + 3.0, 15.0f);
+	tree = new Tree(10.0f, 15.0f);
 	game_objects.push_back(tree);
 	tree = new Tree(17.0f, 15.0f);
 	game_objects.push_back(tree);
+
+	Grass *grass = new Grass(10.0f, 15.0f, false);
+	game_objects.push_back(grass);
+	grass = new Grass(10.0f, 15.0f, true);
+	game_objects.push_back(grass);
+	grass = new Grass(5.0f, 15.0f, false);
+	game_objects.push_back(grass);
+	grass = new Grass(5.0f, 15.0f, true);
+	game_objects.push_back(grass);
+	grass = new Grass(15.0f, 15.0f, false);
+	game_objects.push_back(grass);
+	grass = new Grass(15.0f, 15.0f, true);
+	game_objects.push_back(grass);
+
+	for(float i = 28.0f; i<=31.0f; i+=0.75){
+		for(float j = 6.0f; j <= 14.0f; j+=0.75){
+			grass = new Grass(j, i, false);
+			game_objects.push_back(grass);
+			grass = new Grass(j, i, true);
+			game_objects.push_back(grass);
+		}
+	}
 
 	list_particle_system_I = new std::list<ParticleManager*>;
 	list_particle_system_A = new std::list<ParticleManager*>;
@@ -215,23 +240,7 @@ void Game::tick(VSMathLib* core) {
 
 	computeCollisions();
 
-	//Update dos sistemas de particulas
-	core->pushMatrix(VSMathLib::MODEL);
-	for (std::list<ParticleManager*>::iterator x =
-			list_particle_system_A->begin(); x != list_particle_system_A->end();
-			x++) {
-
-		if (!(*x)->get_activeParticles().empty()) {
-			(*x)->Update(elaped);
-		} else
-			Particletemp.push_back(*x);
-	}
-	core->popMatrix(VSMathLib::MODEL);
-	for (std::vector<ParticleManager*>::iterator i = Particletemp.begin();
-			i != Particletemp.end(); i++)
-		(*i)->desactivar(list_particle_system_A, list_particle_system_I);
-	Particletemp.clear();
-	//UpdateParticles(core, elaped);
+	UpdateParticles(core, elaped);
 
 	activeCam->update(); //FIXME: actualizar as outras tambem
 
@@ -296,8 +305,25 @@ void Game::loadCamera() {
 	activeCam->load();
 }
 
-void UpdateParticles(VSMathLib* core, float elaped) {
+void Game::UpdateParticles(VSMathLib* core, float elaped) {
 
+	//Update dos sistemas de particulas
+	core->pushMatrix(VSMathLib::MODEL);
+	for (std::list<ParticleManager*>::iterator x =
+			list_particle_system_A->begin(); x != list_particle_system_A->end();
+			x++) {
+
+		if (!(*x)->get_activeParticles().empty()) {
+			(*x)->Update(elaped);
+		} else
+			Particletemp.push_back(*x);
+	}
+	core->popMatrix(VSMathLib::MODEL);
+	for (std::vector<ParticleManager*>::iterator i = Particletemp.begin();
+			i != Particletemp.end(); i++)
+		(*i)->desactivar(list_particle_system_A, list_particle_system_I);
+	Particletemp.clear();
+	//UpdateParticles(core, elaped);
 }
 
 void Game::computeCollisions() {
@@ -311,7 +337,7 @@ void Game::computeCollisions() {
 
 	 }
 	 */
-	bool wonPoint = frog->getZ() > 30.0f;
+	/*bool wonPoint = frog->getZ() > 30.0f;
 	if (wonPoint) {
 		frog->setX(10.0);
 		frog->setY(0.0);
@@ -352,10 +378,11 @@ void Game::computeCollisions() {
 	bool isOnRiver = (frog->getZ() >= 16.5) && (frog->getZ() <= 23.5);
 	if (isOnRiver && !beingCarried) {
 		falling = true;
-		list_particle_system_I->front()->activar(frog->getX(), frog->getY(),
-					frog->getZ(), list_particle_system_A,
-					list_particle_system_I);
-	}
+		if(frog->getY() >= -0.20f)
+			list_particle_system_I->front()->activar(frog->getX(), frog->getY(),
+						frog->getZ(), 1, list_particle_system_A,
+						list_particle_system_I);
+	}*/
 
 	//Collision Frog vs Cars
 	for (unsigned int i = 0; i < cars.size(); i++) {
@@ -364,7 +391,7 @@ void Game::computeCollisions() {
 			frog->setCompressed(true);
 			// FIXME: Change location of the code below
 			list_particle_system_I->front()->activar(frog->getX(), frog->getY(),
-					frog->getZ(), list_particle_system_A,
+					frog->getZ(), 0, list_particle_system_A,
 					list_particle_system_I);
 			break;
 		}

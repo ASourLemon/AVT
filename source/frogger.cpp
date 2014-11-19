@@ -45,7 +45,7 @@ GLuint VaoId, VboId[4];
 GLuint VertexShaderId, FragmentShaderId, ProgramId, ColorId;
 GLint UniformId, ProjectionID, ModelID, ViewID;
 GLint tex_loc;
-GLuint TextureArray[7];
+GLuint TextureArray[8];
 GLuint FlareTextureArray[4];
 
 // Mouse Tracking Variables
@@ -127,7 +127,7 @@ void renderScene(void) {
 			//printf("fx:%f, fy%f, fz%f\n", fx, fy, fz);
 
 			if (tracking == 1) {
-				core->lookAt(fx, fy + 3.5, fz - 2.5, fx + camX, (fy + camY * -0.5), (fz + camZ * 0.5), 0, 1, 0);
+				core->lookAt(fx, fy + 3.5f, fz - 2.5f, fx + camX, (fy + camY * -0.5f), (fz + camZ * 0.5f), 0.0f, 1.0f, 0.0f);
 
 			} else {
 	//			core->lookAt(fx + camX, fy + camY * -0.5 + 2.5, fz - camZ, fx, fy, fz, 0, 1, 0);
@@ -637,7 +637,7 @@ void init(int argc, char* argv[]) {
 	setupFlare();
 	setupLight();
 	l_on = false;
-	glGenTextures(7, TextureArray);
+	glGenTextures(8, TextureArray);
 	TGA_Texture(TextureArray, "textures/lightwood.tga", 0);
 	TGA_Texture(TextureArray, "textures/road.tga", 1);
 	TGA_Texture(TextureArray, "textures/water.tga", 2);
@@ -645,6 +645,7 @@ void init(int argc, char* argv[]) {
 	TGA_Texture(TextureArray, "textures/tree.tga", 4);
 	TGA_Texture(TextureArray, "textures/eye.tga", 5);
 	TGA_Texture(TextureArray, "textures/font1.tga", 6);
+	TGA_Texture(TextureArray, "textures/tallgrass.tga", 7);
 	
 	glGenTextures(4, FlareTextureArray);
 	TGA_Texture(FlareTextureArray, "textures/Flare1.tga", 0);

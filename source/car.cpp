@@ -63,6 +63,7 @@ void Car::draw(VSMathLib* core, VSShaderLib* shader) {
 	if (isHeadingLeft) {
 		core->rotate(180.0f, 0.0f, 1.0f, 0.0f);
 	}
+	core->translate(0.35f, 0.0f, 0.0f);
 
 	core->pushMatrix(VSMathLib::MODEL);
 	core->scale(4.0f, 1.0f, 1.0f);

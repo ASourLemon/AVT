@@ -16,12 +16,13 @@ namespace domain{
 
 		void Update(float elapsed);
 		void Draw(VSMathLib* core);
-		void Reset();
+		void Reset(int c);
 
 		void desactivar(std::list<ParticleManager*> *A, std::list<ParticleManager*> *I);
-		void activar(float x, float y, float z, std::list<ParticleManager*> *A, std::list<ParticleManager*> *I);
+		void activar(float x, float y, float z, int c, std::list<ParticleManager*> *A, std::list<ParticleManager*> *I);
 
 		std::list<Particle*> get_activeParticles(){return *activeParticles;}
+
 	private:
 	
 		std::list<Particle*> *activeParticles;
