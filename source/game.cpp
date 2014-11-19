@@ -28,7 +28,7 @@ void Game::init() {
 	float pos[3] = { 1.0f, 1.0f, 2.0f };
 	float up[3] = { 0.0f, 1.0f, 0.0f };
 	float at[3] = { 1.0f, 1.0f, 5.0f };
-	frogCam = new PerspectiveCamera(pos, up, at, 0.1f, 20.0f, 45.0f, 1.3f);
+	frogCam = FrogPerspectiveCamera::getInstance();
 	activeCam = frogCam;
 
 	map = new Map();

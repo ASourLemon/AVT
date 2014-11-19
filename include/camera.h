@@ -13,7 +13,7 @@ protected:
 	float farVal;
 
 public:
-	Camera(float pos[3], float up[3], float at[3], float nearVal, float farVal);
+	Camera();
 	virtual ~Camera();
 	float* getPos();
 	float* getAtVector();

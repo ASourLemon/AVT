@@ -11,7 +11,7 @@
 #include "../include/turtle.h"
 #include "../include/lamp.h"
 #include "../include/Tree.h"
-#include "../include/PerspectiveCamera.h"
+#include "../include/FrogPerspectiveCamera.h"
 #include "../include/ParticleManager.h"
 #include "../include/grass.h"
 
@@ -76,7 +76,7 @@ private:
 	std::vector<Lamp*> lamps;
 	Frog* frog;
 
-	PerspectiveCamera* frogCam;
+	FrogPerspectiveCamera* frogCam;
 	Camera* activeCam;
 
 	std::vector<ParticleManager*> Particletemp;
