@@ -1,40 +1,86 @@
+//document.write('<script language="javascript" src="glMatrix-0.9.5.min.js"></script>');
 
-//var texture = loader.load( 'textures/grass.tga' );
-//var material1 = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture1 } );
+/*var triangleVertexPositionBuffer;
+			var squareVertexPositionBuffer;
 
+			function initBuffers() {
+				triangleVertexPositionBuffer = gl.createBuffer();
+				gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
+				
+				var vertices = [
+				0.0, 1.0, 0.0,
+				-1.0, -1.0, 0.0,
+				1.0, -1.0, 0.0
+				];
+				
+				
+				
+				squareVertexPositionBuffer = gl.createBuffer();
+				gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
+				
+				vertices = [
+				0.0, 1.0, 0.0,
+				-1.0, -1.0, 0.0,
+				1.0, -1.0, 0.0
+				];
+				
+				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+				squareVertexPositionBuffer.itemSize = 3;
+				squareVertexPositionBuffer.numItems = 3;
+			}*/
 
-uniforms = {
- 	color: { type: "v4", value: new THREE.Vector4(0.0, 1.0, 0.0, 1.0) },
-};
+var rectangleVertexPositionBuffer;
+var rectangleVertexNormalsBuffer;
+			function initBuffers() {
 
-material = new THREE.ShaderMaterial( {
+				createRectangle(2.0, 2.0);
+			}
 
-	uniforms: uniforms,
-	vertexShader: vertShader,
-	fragmentShader: fragShader
+			function createRectangle(height, width){
+				
+				// var height = h;
+				// var width = w;
+				var vertices = [
+					
+					width/2, height/2, 0.0, 
+					-width/2, height/2, 0.0,
+					width/2, -height/2, 0.0,
+					-width/2, -height/2, 0.0
+					
+				];
 
-} )
+				var normals = [
+					-1.0, 0.0, -1.0,
+					-1.0, 0.0, -1.0,
+					1.0, 0.0, -1.0,
+					1.0, 0.0, -1.0
+				];
 
-var Mapgeometry1 = new THREE.PlaneBufferGeometry( 20, 3);
-var floor1 = new THREE.Mesh( Mapgeometry1, material );
-floor1.translateX(4.0);
+				var texCoords = [
+					0.0, 0.0,
+					0.0, 1.0,
+					1.0, 1.0,
+					1.0, 0.0
+				];
 
-//Estrada
-// uniforms = {
-//  	color: { type: "v4", value: new THREE.Vector4(0.1, 0.2, 0.1, 1.0) },
-// };
+				var faceIndex = [
+					0,1,2,0,2,3
+				];
 
-// material1 = new THREE.ShaderMaterial( {
+				
+				
+				rectangleVertexPositionBuffer = gl.createBuffer();
+				gl.bindBuffer(gl.ARRAY_BUFFER, rectangleVertexPositionBuffer)
+				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+				rectangleVertexPositionBuffer.itemSize = 3;
+				rectangleVertexPositionBuffer.numItems = 4;
 
-// 	uniforms: uniforms,
-// 	vertexShader: vertShader,
-// 	fragmentShader: fragShader
-
-// } )
-
-// var Mapgeometry2 = new THREE.PlaneBufferGeometry( 20, 6);
-// var road = new THREE.Mesh( Mapgeometry2, material1 );
-// //plane.translateY(1.0);
-// road.translateX(4.0);
-
-
+				
+				
+				rectangleVertexNormalsBuffer = gl.createBuffer();
+				gl.bindBuffer(gl.ARRAY_BUFFER, rectangleVertexNormalsBuffer)
+				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+				rectangleVertexNormalsBuffer.itemSize = 3;
+				rectangleVertexNormalsBuffer.numItems = 4;
+				
+			}
