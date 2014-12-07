@@ -20,17 +20,20 @@
 		<!-- /////////////////////////////////////////VERTEX SHADER//////////////////////////////// -->
 		<script id="shader-vs" type="x-shader/x-vertex">
 			attribute vec3 aVertexPosition;
-			attribute vec4 aVertexColor;
+			//attribute vec4 aVertexColor;
+			attribute vec2 aTextureCoord;
 
 			uniform mat4 uMVMatrix;
 			uniform mat4 uPMatrix;
 			
-			varying vec4 vColor;
+			//varying vec4 vColor;
+			varying vec2 vTextureCoord;
 
 			void main(void) {
 			
 			gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-			vColor = aVertexColor;
+			//vColor = aVertexColor;
+			vTextureCoord = aTextureCoord;
 			
 			}
 		</script>
@@ -39,11 +42,13 @@
 		<script id="shader-fs" type="x-shader/x-fragment">
 			precision mediump float;
 			
-			varying vec4 vColor;
+			//varying vec4 vColor;
+			varying vec2 vTextureCoord;
+			uniform sampler2D uSampler;
 
 			void main(void) {
 			
-			gl_FragColor = vColor;
+			gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 			
 			}
 		</script>
@@ -107,6 +112,7 @@
 			function initShaders() {
 				var fragmentShader = getShader(gl, "shader-fs");
 				var vertexShader = getShader(gl, "shader-vs");
+				
 				shaderProgram = gl.createProgram();
 				gl.attachShader(shaderProgram, vertexShader);
 				gl.attachShader(shaderProgram, fragmentShader);
@@ -120,12 +126,37 @@
 				shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
 				gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 
-				shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-				gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+				// shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
+				// gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+				shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+				gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 
 				shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
 				shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+				 shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
 			}
+
+			function handleLoadedTexture(image, texture) {
+			    gl.bindTexture(gl.TEXTURE_2D, texture);
+				gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+				gl.generateMipmap(gl.TEXTURE_2D);
+				gl.bindTexture(gl.TEXTURE_2D, null);
+			}
+
+			var grassTexture;
+		  	function initTexture() {
+		    	grassTexture = gl.createTexture();
+		   		grassImage = new Image();
+		    	grassImage.onload = function() {
+		      	handleLoadedTexture(grassImage, grassTexture)
+		    }
+
+		    grassImage.src = "textures/grass.png";
+		  	}
+
+		  	
 			
 			var mvMatrix = mat4.create();
 			var pMatrix = mat4.create();
@@ -157,13 +188,6 @@
 				create2DObjects();
 				create3DObjects();
 
-				
-				
-				// rectangleVertexNormalsBuffer = gl.createBuffer();
-				// gl.bindBuffer(gl.ARRAY_BUFFER, rectangleVertexNormalsBuffer)
-				// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
-				// rectangleVertexNormalsBuffer.itemSize = 3;
-				// rectangleVertexNormalsBuffer.numItems = 4;
 			}
 		
 			var rotate = 0;
@@ -182,77 +206,27 @@
 			function drawScene() {
 				gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-				
-				// var pos = vec3.create(0.0, 10.0, 10.0);
-				// var eye = vec3.create(0.0, 0.0, 0.0);
-				// var up = vec3.create(0.0, 0.0, 1.0);
-				
-
-				mat4.perspective(45.0, gl.viewportWidth / gl.viewportHeight, 0.1, 40.0, pMatrix);
-				
-				
-				
-				//mvMatrix =  camera * ;
-
-				
+				mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
 				mat4.identity(mvMatrix);
-					//mat4.lookAt(  pos, eye, up, mvMatrix);
-
-					//Triangulo
-				// mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]);
-
-				// mvPushMatrix();
-   	// 			 mat4.rotate(mvMatrix, rotate, [0, 1, 0]);
-				// gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
-				// gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-				// gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer);
-    // 			gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, triangleVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-				// setMatrixUniforms();
-				// gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems);
-				// mvPopMatrix();
 				
-				// //Quadrado
-				// mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
-
-				//  mvPushMatrix();
-    // 			mat4.rotate(mvMatrix, rotate, [1, 0, 0]);
-				// gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
-				// gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-				// gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer);
-    // 			gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, squareVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
-				// setMatrixUniforms();
-				// gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
-
-				//mvPopMatrix();
-
-				//Pyramide
-				mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]);
-				mvPushMatrix();
-   				mat4.rotate(mvMatrix, rotate, [0, 1, 0]);
-   				gl.bindBuffer(gl.ARRAY_BUFFER, pyramidVertexPositionBuffer);
-			    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, pyramidVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-			    gl.bindBuffer(gl.ARRAY_BUFFER, pyramidVertexColorBuffer);
-			    gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, pyramidVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-			    setMatrixUniforms();
-			    gl.drawArrays(gl.TRIANGLES, 0, pyramidVertexPositionBuffer.numItems);
-			    mvPopMatrix();
-
-			    //Cube
-			    mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
-			    mvPushMatrix();
-     			mat4.rotate(mvMatrix, rotate, [1, 0, 0]);
-     			gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-			    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-			    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexColorBuffer);
-			    gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, cubeVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
-			    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
-    			setMatrixUniforms();
-    			gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+				mat4.translate(mvMatrix, [0.0, 0.0, -5.0]);
+				mat4.rotate(mvMatrix, rotate, [1, 0, 0]);
+				mat4.rotate(mvMatrix, rotate, [0, 1, 0]);
+				mat4.rotate(mvMatrix, rotate, [0, 0, 1]);
+				
+				gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
+				gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+				
+				gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
+				gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+				
+				gl.activeTexture(gl.TEXTURE0);
+				gl.bindTexture(gl.TEXTURE_2D, grassTexture);
+				gl.uniform1i(shaderProgram.samplerUniform, 0);
+				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
+				
+				setMatrixUniforms();
+				gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 			}
 
 			
@@ -262,6 +236,8 @@
    				drawScene();
 			    animate();
 			}
+
+			
 			
 			function webGLStart() {
 				var canvas = document.getElementById("Frogger");
@@ -269,11 +245,11 @@
 				initGL(canvas);
 				initShaders();
 				initBuffers();
+				initTexture();
 				
 				gl.clearColor(0.0, 0.0, 0.0, 1.0);
 				gl.enable(gl.DEPTH_TEST);
 				
-				//drawScene();
 				tick();
 			}
 		</script>
