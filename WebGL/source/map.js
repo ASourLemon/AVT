@@ -29,58 +29,55 @@
 				squareVertexPositionBuffer.numItems = 3;
 			}*/
 
-var rectangleVertexPositionBuffer;
-var rectangleVertexNormalsBuffer;
-			function initBuffers() {
 
-				createRectangle(2.0, 2.0);
-			}
+			var triangleVertexPositionBuffer;
+			var triangleVertexColorBuffer;
+			var squareVertexPositionBuffer;
+			var squareVertexColorBuffer;
 
-			function createRectangle(height, width){
-				
-				// var height = h;
-				// var width = w;
+			function createRectangle(){
+				triangleVertexPositionBuffer = gl.createBuffer();
+				gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
 				var vertices = [
-					
-					width/2, height/2, 0.0, 
-					-width/2, height/2, 0.0,
-					width/2, -height/2, 0.0,
-					-width/2, -height/2, 0.0
-					
+					0.0, 1.0, 0.0,
+					-1.0, -1.0, 0.0,
+					1.0, -1.0, 0.0
 				];
-
-				var normals = [
-					-1.0, 0.0, -1.0,
-					-1.0, 0.0, -1.0,
-					1.0, 0.0, -1.0,
-					1.0, 0.0, -1.0
-				];
-
-				var texCoords = [
-					0.0, 0.0,
-					0.0, 1.0,
-					1.0, 1.0,
-					1.0, 0.0
-				];
-
-				var faceIndex = [
-					0,1,2,0,2,3
-				];
-
-				
-				
-				rectangleVertexPositionBuffer = gl.createBuffer();
-				gl.bindBuffer(gl.ARRAY_BUFFER, rectangleVertexPositionBuffer)
 				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-				rectangleVertexPositionBuffer.itemSize = 3;
-				rectangleVertexPositionBuffer.numItems = 4;
+				triangleVertexPositionBuffer.itemSize = 3;
+				triangleVertexPositionBuffer.numItems = 3;
 
+				triangleVertexColorBuffer = gl.createBuffer();
+			    gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer);
+			    var colors = [
+			        1.0, 0.0, 0.0, 1.0,
+			        0.0, 1.0, 0.0, 1.0,
+			        0.0, 0.0, 1.0, 1.0
+			    ];
+			    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+			    triangleVertexColorBuffer.itemSize = 4;
+			    triangleVertexColorBuffer.numItems = 3;
 				
-				
-				rectangleVertexNormalsBuffer = gl.createBuffer();
-				gl.bindBuffer(gl.ARRAY_BUFFER, rectangleVertexNormalsBuffer)
+				squareVertexPositionBuffer = gl.createBuffer();
+				gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
+				vertices = [
+					1.0, 1.0, 0.0,
+					-1.0, 1.0, 0.0,
+					1.0, -1.0, 0.0,
+					-1.0, -1.0, 0.0
+				];
 				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-				rectangleVertexNormalsBuffer.itemSize = 3;
-				rectangleVertexNormalsBuffer.numItems = 4;
+				squareVertexPositionBuffer.itemSize = 3;
+				squareVertexPositionBuffer.numItems = 4;
+									
+				squareVertexColorBuffer = gl.createBuffer();
+			    gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer);
+			    colors = []
+			    for (var i=0; i < 4; i++) {
+			      colors = colors.concat([0.5, 0.5, 1.0, 1.0]);
+			    }
+			    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+			    squareVertexColorBuffer.itemSize = 4;
+			    squareVertexColorBuffer.numItems = 4;
 				
 			}
