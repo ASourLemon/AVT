@@ -146,15 +146,16 @@
 				gl.bindTexture(gl.TEXTURE_2D, null);
 			}
 
-			var grassTexture;
+			var grassTexture = [];
+			var grassImage = [];
 		  	function initTexture() {
-		    	grassTexture = gl.createTexture();
-		   		grassImage = new Image();
-		    	grassImage.onload = function() {
-		      	handleLoadedTexture(grassImage, grassTexture)
+		    	grassTexture[0] = gl.createTexture();
+		   		grassImage[0] = new Image();
+		    	grassImage[0].onload = function() {
+		      	handleLoadedTexture(grassImage[0], grassTexture[0])
 		    }
 
-		    grassImage.src = "textures/grass.png";
+		    grassImage[0].src = "textures/grass.png";
 		  	}
 </script>
 		  	<script src="source/ResourcesLib.js"></script>
@@ -238,7 +239,7 @@
 				
 				
 				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, grassTexture);
+				gl.bindTexture(gl.TEXTURE_2D, grassTexture[0]);
 				gl.uniform1i(shaderProgram.samplerUniform, 0);
 				
 				
