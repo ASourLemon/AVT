@@ -14,7 +14,8 @@
 		<!--<script src="lib/lib/dist/gl-matrix-min.js"></script>
 		<script src="lib/lib/dist/gl-matrix.js"></script>-->
 		
-		<script src="source/Map.js"></script>  
+		
+		<script src="source/drawable.js"></script>
 		
 
 		<!-- /////////////////////////////////////////VERTEX SHADER//////////////////////////////// -->
@@ -155,25 +156,12 @@
 
 		    grassImage.src = "textures/grass.png";
 		  	}
-
-		  	
+</script>
+		  	<script src="source/ResourcesLib.js"></script>
+		  	<script src="source/MathLib.js"></script>
+		  	<script src="source/map.js"></script>
+			<script>
 			
-			var mvMatrix = mat4.create();
-			var pMatrix = mat4.create();
-			var mvMatrixStack = [];
-			
-			function mvPushMatrix() {
-			    var copy = mat4.create();
-			    mat4.set(mvMatrix, copy);
-			    mvMatrixStack.push(copy);
-			}
-
-			function mvPopMatrix() {
-			    if (mvMatrixStack.length == 0) {
-			    	throw "Invalid popMatrix!";
-			    }
-			    mvMatrix = mvMatrixStack.pop();
-			}
 
 			function setMatrixUniforms() {
 				gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
@@ -216,8 +204,9 @@
 
 			function initBuffers() {
 				
-				create2DObjects();
-				create3DObjects();
+				
+				var map = new Map();
+				map.draw();
 
 			}
 		
@@ -246,25 +235,23 @@
 				mat4.rotate(mvMatrix, rotate, [0, 1, 0]);
 				mat4.rotate(mvMatrix, rotate, [0, 0, 1]);
 				
-				gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-				gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 				
-				gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
-				gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 				
 				gl.activeTexture(gl.TEXTURE0);
 				gl.bindTexture(gl.TEXTURE_2D, grassTexture);
 				gl.uniform1i(shaderProgram.samplerUniform, 0);
-				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
+				
 				
 				setMatrixUniforms();
 				gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+				// setMatrixUniforms();
+				// gl.drawElements(gl.TRIANGLES, squareVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 			}
 
 			
 
-			function tick() {
-   				requestAnimFrame(tick);
+			function Update() {
+   				requestAnimFrame(Update);
    				handleKeys();
    				drawScene();
 			    animate();
@@ -286,7 +273,7 @@
 			    document.onkeydown = handleKeyDown;
 			    document.onkeyup = handleKeyUp;
 				
-				tick();
+				Update();
 			}
 		</script>
 	</head>
