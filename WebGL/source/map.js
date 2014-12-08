@@ -9,18 +9,23 @@ function Map(){
 	this.map0_W = 20.0;
 	this.map0_H = 32.0;
 	this.water_speed = 0.3;
+
+	this.created = false;
 }
 
 Map.prototype = new GameObject();
 
 Map.prototype.draw = function(){
 
-	createCube();
-	// mvPushMatrix();
-	// mat4.translate(mvMatrix, [0.0, 0.0, -3.0]);
-	// mat4.rotate(mvMatrix, 90.0, [1, 0, 0]);
-	// createSquare(32.0, 16.0);
-	// mvPushMatrix();
+	//createCube();
+	mvPushMatrix();
+	mat4.translate(mvMatrix, [0.0, -2.0, -45.0]);
+	mat4.rotate(mvMatrix, 90.0, [1, 0, 0]);
+	if(this.created == false){
+		createSquare(32.0, 16.0);
+		this.created = true;
+	}
+	mvPushMatrix();
 
 }
 

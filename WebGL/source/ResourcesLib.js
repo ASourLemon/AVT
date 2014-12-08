@@ -7,13 +7,14 @@ function createSquare(height, width){
 	squareVertexPositionBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
 	vertices = [
-		width/2, height/2, 0.0,
-		-width/2, height/2, 0.0, //FIX ME 4th coord w
-		width/2, -height/2, 0.0,
-		-width/2, -height/2, 0.0
+		-width/2, -height/2, 0.0, 1.0,
+		-width/2, height/2, 0.0, 1.0,
+		width/2, height/2, 0.0, 1.0,
+		width/2, -height/2, 0.0, 1.0
+		
 	];
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	squareVertexPositionBuffer.itemSize = 3;
+	squareVertexPositionBuffer.itemSize = 4;
 	squareVertexPositionBuffer.numItems = 4;
 
 	squareTexCoordBuffer = gl.createBuffer();
@@ -29,6 +30,21 @@ function createSquare(height, width){
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
 	squareTexCoordBuffer.itemSize = 2;
 	squareTexCoordBuffer.numItems = 2;
+
+	
+	
+	// squareNormalsBuffer = gl.createBuffer();
+	// gl.bindBuffer(gl.ARRAY_BUFFER, squareNormalsBuffer);
+	// normals = [
+	// 	-1.0, 0.0, -1.0,
+	// 	-1.0, 0.0, -1.0,
+	// 	1.0, 0.0, -1.0,
+	// 	1.0, 0.0, -1.0
+	// ];
+
+	// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+	// squareNormalsBuffer.itemSize = 3;
+	// squareNormalsBuffer.numItems = 4;
 
 	squareVertexIndexBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, squareVertexIndexBuffer);
