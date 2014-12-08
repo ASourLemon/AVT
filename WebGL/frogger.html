@@ -146,18 +146,18 @@
 				gl.bindTexture(gl.TEXTURE_2D, null);
 			}
 
-			var grassTexture = [];
-			var grassImage = [];
-		  	function initTexture() {
-		    	grassTexture[0] = gl.createTexture();
-		   		grassImage[0] = new Image();
-		    	grassImage[0].onload = function() {
-		      	handleLoadedTexture(grassImage[0], grassTexture[0])
-		    }
+			var texArray = [];
+		  	function initTexture(number, imgSrc) {
+		    	texArray[number] = gl.createTexture();
+		   		texArray[number].image = new Image();
+		    	texArray[number].image.onload = function() {
+			      	handleLoadedTexture(texArray[number].image, texArray[number]);
+			    }
 
-		    grassImage[0].src = "textures/grass.png";
+		   		texArray[number].image.src = imgSrc;
 		  	}
-</script>
+			</script>
+
 		  	<script src="source/ResourcesLib.js"></script>
 		  	<script src="source/MathLib.js"></script>
 		  	<script src="source/map.js"></script>
@@ -239,7 +239,7 @@
 				
 				
 				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, grassTexture[0]);
+				gl.bindTexture(gl.TEXTURE_2D, texArray[0]);
 				gl.uniform1i(shaderProgram.samplerUniform, 0);
 				
 				
@@ -266,7 +266,7 @@
 				initGL(canvas);
 				initShaders();
 				initBuffers();
-				initTexture();
+				initTexture(0, "textures/grass.png");
 				
 				gl.clearColor(0.0, 0.0, 0.0, 1.0);
 				gl.enable(gl.DEPTH_TEST);
