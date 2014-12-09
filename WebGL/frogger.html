@@ -20,24 +20,48 @@
 
 		<!-- /////////////////////////////////////////VERTEX SHADER//////////////////////////////// -->
 		<script id="shader-vs" type="x-shader/x-vertex">
-			attribute vec3 aVertexPosition;
+			
+			attribute vec4 aVertexPosition;
 			//attribute vec4 aVertexColor;
 			attribute vec2 aTextureCoord;
-			//attribute vec3 aVertexNormal;
+			attribute vec3 aVertexNormal;
 
 			uniform mat4 uMVMatrix;
 			uniform mat4 uPMatrix;
-			//uniform mat3 uNMatrix;
+			uniform mat3 uNMatrix;
+
+			uniform vec3 uAmbientColor;			
+			varying vec3 uLightingDirection;
+			uniform vec3 uDirectionalColor;
+			uniform bool uUseLighting;
 			
 			//varying vec4 vColor;
 			varying vec2 vTextureCoord;
+			varying vec3 vLightWeighting;
+
+			//varying Data {
+			varying	vec3 normal;
+			varying	vec4 eye;
+			//	vec3 lightDir[1];
+			//} DataOut;
 
 			void main(void) {
-			
-			gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-			//vColor = aVertexColor;
-			vTextureCoord = aTextureCoord;
-			
+				vec4 pos = uMVMatrix * aVertexPosition;
+				eye = vec4(-pos);
+				normal = normalize(uNMatrix * aVertexNormal);
+
+				
+				//vColor = aVertexColor;
+				vTextureCoord = aTextureCoord;
+				// if (!uUseLighting) {
+				//     vLightWeighting = vec3(1.0, 1.0, 1.0);
+				// } else {
+				//     vec3 transformedNormal = uNMatrix * aVertexNormal;
+				//     float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+				//     vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+				// }
+				//vLightWeighting = uDirectionalColor;
+					gl_Position = uPMatrix * uMVMatrix * aVertexPosition;	
 			}
 		</script>
 	
@@ -54,17 +78,69 @@
 				int texCount;
 			};
 			
+			//varying Data {
+			varying	vec3 normal;
+			varying	vec4 eye;
+			//	vec3 lightDir[1];
+			//} DataIn;
+
 			uniform Materials material;
 			//varying vec4 vColor;
 			varying vec2 vTextureCoord;
 			uniform sampler2D uSampler;
+			varying vec3 vLightWeighting;
+			uniform bool uUseLighting;
+			varying vec3 uLightingDirection;
+			
+			vec4 processDirLights(){
+
+				vec4 finalColor = vec4(0.0);
+
+				// set the specular term to black
+				vec4 spec = vec4(0.0);
+				
+				// normalize both input vectors
+				vec3 n = normalize(normal);
+				vec3 e = normalize(vec3(eye));
+
+				float intensity = max(dot(n, uLightingDirection), 0.0);
+
+				// if the vertex is lit compute the specular color
+				if (intensity > 0.0) {
+					// compute the half vector
+					vec3 h = normalize( uLightingDirection + e);	
+					// compute the specular term into spec
+					float intSpec = max(dot(h,n), 0.0);
+					spec = material.specular * pow(intSpec, material.shininess);
+				}
+				//vec4 color =  max(intensity *  diffuse, ambient);
+				//colorOut = texture(texUnit, DataIn.texCoord) * color + spec;
+				finalColor = finalColor + max(intensity *  material.diffuse + spec, 0.0);
+			
+			
+				return finalColor;
+			}
+
+
+
 
 			void main(void) {
 			
-			//gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-			vec4 colorout = material.diffuse + (material.ambient * 0.5);
-			gl_FragColor = colorout * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t)) ;
-			
+			//gl_FragColor = material.diffuse + (material.ambient * 0.5) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+			// vec4 textureColor = material.diffuse + (material.ambient * 0.5) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+			// gl_FragColor = vec4(textureColor * vLightWeighting, textureColor.a);
+
+			// vec4 textureColor = material.diffuse + (material.ambient * 0.5) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+			// gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+			vec4 Color;
+
+				// if(!uUseLighting){
+				// 	Color = processDirLights();
+				// }
+				
+				//Color = max(Color, material.ambient * 0.5);
+				Color = processDirLights();
+				gl_FragColor = Color * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 			}
 		</script>
 
@@ -141,8 +217,8 @@
 				shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
 				gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 
-				// shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
-				// gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+				shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
+				gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
 
 				// shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
 				// gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
@@ -152,7 +228,11 @@
 				shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
 				shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
 				shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
-				//shaderProgram.uMaterials = gl.getUniformLocation(shaderProgram, "material");
+				
+				shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
+				shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+				shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightingDirection");
+				shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
 			}
 
 			function handleLoadedTexture(image, texture) {
@@ -186,6 +266,7 @@
 	  	<script src="source/Tree.js"></script>
 	  	<script src="source/Grass.js"></script>
 	  	<script src="source/Frog.js"></script>
+	  	<script src="source/LightManager.js"></script>
 	  	<script src="source/TopPerspectiveCamera.js"></script>
 	  	<script src="source/FrogPerspectiveCamera.js"></script>
 	  	<script src="source/TopOrthoCamera.js"></script>
@@ -222,8 +303,8 @@
 				if (currentlyPressedKeys[87]) {
 					var timeNow = new Date().getTime();
 					if (lastTime != 0) {
-						var elapsed2 = timeNow - lastTime;
-						game.frog.position[1] += (game.frog.speed[1] * elapsed2) / 1000.0
+					var elapsed2 = timeNow - lastTime;
+					game.frog.position[1] += (game.frog.speed[1] * elapsed2) / 1000.0
 					}
 				}
 				//a
@@ -250,6 +331,15 @@
 					game.frog.position[1] -= (game.frog.speed[1] * elapsed2) / 1000.0
 					}
 				}
+				//l
+				if (currentlyPressedKeys[76]) {
+					if(l.isDay){
+						l.isDay = false;
+					} else {
+						l.isDay = true;
+					}
+					currentlyPressedKeys[76] = false;
+				}
 			
 			}
 				
@@ -259,14 +349,14 @@
 			var lastTime = 0;
 			
 			function animate() {
-			    var timeNow = new Date().getTime();
+			    
 			    if (lastTime != 0) {
 			    	var elapsed = timeNow - lastTime;
 
 				    rotate += (0.5 * elapsed) / 1000.0;
 			    }
 			    //console.log(timeNow-lastTime);
-			    lastTime = timeNow;
+			    
 			}
 			
 			function drawScene() {
@@ -277,7 +367,7 @@
 				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 				mat4.identity(mvMatrix);
 				mat4.identity(pMatrix);
-				
+				l.init();
 				game.draw()
 			}
 
@@ -288,11 +378,13 @@
    				handleKeys();
    				game.update();
    				drawScene();
-			    animate();
+   				var timeNow = new Date().getTime();
+			   	lastTime = timeNow;
 			}
 
 			
 			var game = new Game();
+			var l = new LightManager();
 			function webGLStart() {
 				var canvas = document.getElementById("Frogger");
 				
@@ -304,6 +396,8 @@
 				initTexture(2, "textures/road.gif");
 				initTexture(3, "textures/lightwood.gif");
 				initTexture(4, "textures/eye.gif");
+				
+				
 				game.init();
 				
 				gl.clearColor(0.0, 0.0, 0.0, 1.0);

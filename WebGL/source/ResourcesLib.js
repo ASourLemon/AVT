@@ -105,7 +105,7 @@ function drawSquare(){
 			0.0, 1.0,
 			1.0, 1.0,
 			1.0, 0.0
-		]
+		];
 
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
 		squareTexCoordBuffer.itemSize = 2;
@@ -114,18 +114,18 @@ function drawSquare(){
 		
 		// TODO: Normals
 
-		// squareNormalsBuffer = gl.createBuffer();
-		// gl.bindBuffer(gl.ARRAY_BUFFER, squareNormalsBuffer);
-		// normals = [
-		// 	-1.0, 0.0, -1.0,
-		// 	-1.0, 0.0, -1.0,
-		// 	1.0, 0.0, -1.0,
-		// 	1.0, 0.0, -1.0
-		// ];
+		squareNormalsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, squareNormalsBuffer);
+		normals = [
+			-1.0, 0.0, -1.0,
+			-1.0, 0.0, -1.0,
+			1.0, 0.0, -1.0,
+			1.0, 0.0, -1.0
+		];
 
-		// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
-		// squareNormalsBuffer.itemSize = 3;
-		// squareNormalsBuffer.numItems = 4;
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+		squareNormalsBuffer.itemSize = 3;
+		squareNormalsBuffer.numItems = 4;
 
 		squareVertexIndexBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, squareVertexIndexBuffer);
@@ -144,8 +144,8 @@ function drawSquare(){
 	gl.bindBuffer(gl.ARRAY_BUFFER, squareTexCoordBuffer);
 	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, squareTexCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	
-	// gl.bindBuffer(gl.ARRAY_BUFFER, squareNormalsBuffer);
-	// gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, squareNormalsBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, squareNormalsBuffer);
+	gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, squareNormalsBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, squareVertexIndexBuffer);
 
@@ -363,11 +363,16 @@ function drawSphere(){
         sphereVertexIndexBuffer.numItems = indexData.length;
     } // initialization ended
 
-    // TODO: ADD OTHER BIND (normals). Do this when normals are passed to GLSL.
+    
 	gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexTextureCoordBuffer);
 	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, sphereVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
     gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexPositionBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, sphereVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexNormalBuffer);
+	gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, sphereVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	
+
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphereVertexIndexBuffer);
 
 	setMatrixUniforms();
