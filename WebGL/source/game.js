@@ -16,6 +16,8 @@ function Game(){
 
 Game.prototype.init = function (){
 
+	SetupMaterial();
+
 	this.map = new Map();
 	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
 	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));

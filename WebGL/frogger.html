@@ -23,9 +23,11 @@
 			attribute vec3 aVertexPosition;
 			//attribute vec4 aVertexColor;
 			attribute vec2 aTextureCoord;
+			//attribute vec3 aVertexNormal;
 
 			uniform mat4 uMVMatrix;
 			uniform mat4 uPMatrix;
+			//uniform mat3 uNMatrix;
 			
 			//varying vec4 vColor;
 			varying vec2 vTextureCoord;
@@ -42,14 +44,26 @@
 		<!-- /////////////////////////////////////////FRAGMENT SHADER//////////////////////////////// -->
 		<script id="shader-fs" type="x-shader/x-fragment">
 			precision mediump float;
+
+			struct Materials {
+				vec4 diffuse;
+				vec4 ambient;
+				vec4 specular;
+				vec4 emissive;
+				float shininess;
+				int texCount;
+			};
 			
+			uniform Materials material;
 			//varying vec4 vColor;
 			varying vec2 vTextureCoord;
 			uniform sampler2D uSampler;
 
 			void main(void) {
 			
-			gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+			//gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+			vec4 colorout = material.diffuse + (material.ambient * 0.5);
+			gl_FragColor = colorout * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t)) ;
 			
 			}
 		</script>
@@ -127,6 +141,9 @@
 				shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
 				gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 
+				// shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
+				// gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+
 				// shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
 				// gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
 				shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
@@ -134,7 +151,8 @@
 
 				shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
 				shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-				 shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+				shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+				//shaderProgram.uMaterials = gl.getUniformLocation(shaderProgram, "material");
 			}
 
 			function handleLoadedTexture(image, texture) {
@@ -156,20 +174,21 @@
 
 		   		texArray[number].image.src = imgSrc;
 		  	}
-			</script>
+		</script>
 
-		  	<script src="source/ResourcesLib.js"></script>
-		  	<script src="source/MathLib.js"></script>
-		  	<script src="source/StaticObject.js"></script>
-		  	<script src="source/DynamicObject.js"></script>
-		  	<script src="source/Truck.js"></script>
-		  	<script src="source/Turtle.js"></script>
-		  	<script src="source/Lamp.js"></script>
-		  	<script src="source/Tree.js"></script>
-		  	<script src="source/Grass.js"></script>
-		  	<script src="source/game.js"></script>
-		  	<script src="source/map.js"></script>
-			<script>
+	  	<script src="source/ResourcesLib.js"></script>
+	  	<script src="source/MathLib.js"></script>
+	  	<script src="source/StaticObject.js"></script>
+	  	<script src="source/DynamicObject.js"></script>
+	  	<script src="source/Truck.js"></script>
+	  	<script src="source/Turtle.js"></script>
+	  	<script src="source/Lamp.js"></script>
+	  	<script src="source/Tree.js"></script>
+	  	<script src="source/Grass.js"></script>
+	  	<script src="source/Frog.js"></script>
+	  	<script src="source/game.js"></script>
+	  	<script src="source/map.js"></script>
+		<script>
 			
 			var currentlyPressedKeys = {};
 
@@ -226,9 +245,9 @@
 				gl.viewport(gl.viewportWidth/2 - gl.viewportHeight/2, 0, gl.viewportHeight, gl.viewportHeight);
 
 				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-				//mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+				mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
 				mat4.identity(mvMatrix);
-				mat4.identity(pMatrix);
+				//mat4.identity(pMatrix);
 				
 				game.draw()
 			}
@@ -252,6 +271,7 @@
 				initShaders();
 				initTexture(0, "textures/grass.png");
 				initTexture(1, "textures/water.gif");
+				initTexture(2, "textures/road.gif");
 				game.init();
 				
 				gl.clearColor(0.0, 0.0, 0.0, 1.0);

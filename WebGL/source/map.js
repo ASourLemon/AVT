@@ -12,19 +12,69 @@ function Map(){
 }
 
 Map.prototype.draw = function(){
+	
+	mvPushMatrix();
+	//mat4.rotate(mvMatrix, 2.0, [1.0, 0.0, 0.0]);
+	//
+	//FLOOR
+	//
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texArray[0]);
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
 
+	//BOTTOM
+	this.setGrassColor();
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [0.0, -0.2, 0.0]);
-	//mat4.rotate(mvMatrix, 90.0, [1, 0, 0]);
-	//mat4.scale(mvMatrix, [2, 2, 1]);
+	mat4.translate(mvMatrix, [0.0, -10.0, -30.0]);
+	mat4.scale(mvMatrix, [32, 5, 1]);
 	drawSquare();
-	mvPopMatrix();	
+	mvPopMatrix();
+
+	//MIDDLE
+	mvPushMatrix();
+	mat4.translate(mvMatrix, [0.0, 0.0, -30.0]);
+	mat4.scale(mvMatrix, [32, 3, 1]);
+	drawSquare();
+	mvPopMatrix();
+
+	//TOP
+	mvPushMatrix();
+	mat4.translate(mvMatrix, [0.0, 10.0, -30.0]);
+	mat4.scale(mvMatrix, [32, 5, 1]);
+	drawSquare();
+	mvPopMatrix();
+
+	//
+	//ROAD
+	//
+	gl.bindTexture(gl.TEXTURE_2D, texArray[2]);
+	gl.uniform1i(shaderProgram.samplerUniform, 0);
+	
+	this.setRoadColor();
+	mvPushMatrix();
+	mat4.translate(mvMatrix, [0.0, -4.5, -30.0]);
+	mat4.scale(mvMatrix, [32, 6, 1]);
+	drawSquare();
+	mvPopMatrix();
+
+	//
+	//WATER
+	//
 	gl.bindTexture(gl.TEXTURE_2D, texArray[1]);
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
-	drawSphere();
+	this.setWaterColor();
+	
+	mvPushMatrix();
+	mat4.translate(mvMatrix, [0.0, 4.5, -30.0]);
+	mat4.scale(mvMatrix, [32, 6, 1]);
+	drawSquare();
+	mvPopMatrix();	
+	
+	// gl.bindTexture(gl.TEXTURE_2D, texArray[1]);
+	// gl.uniform1i(shaderProgram.samplerUniform, 0);
+	// drawSphere();
+
+	mvPopMatrix();
 
 	gl.bindTexture(gl.TEXTURE_2D, null);
 }
@@ -33,15 +83,37 @@ Map.prototype.getMaplimit = function(){
 	return this.map0_W;
 }
 
+Map.prototype.setGrassColor = function(){
 
+	setDiffuse(0.2, 0.5, 0.2, 1.0);
+	setAmbient(0.05/3.0, 0.125/3.0, 0.05/3.0, 1.0);
+	setSpecular(0.0, 0.0, 0.0, 1.0);
+	setShininess(1.0);
+}
 
+Map.prototype.setWaterColor = function(){
 
+	setDiffuse(0.4, 0.6, 0.4, .7 );
+	setAmbient(0.08, 0.12, 0.08, .7);
+	setSpecular(0.0, 0.0, 0.1, .7 );
+	setShininess(10);
+}
 
+Map.prototype.setWallColor = function(){
 
+	setDiffuse(0.6, 0.6, 0.6, 1.0);
+	setAmbient(0.3, 0.3, 0.3, 1.0);
+	setSpecular(0.0, 0.0, 0.0, 1.0);
+	setShininess(1);
+}
 
+Map.prototype.setRoadColor = function(){
 
-
-
+	setDiffuse(0.3, 0.3, 0.3, 1.0);
+	setAmbient(0.0, 0.0, 0.0, 1.0);
+	setSpecular(0.0, 0.0, 0.0, 1.0);
+	setShininess(1);
+}
 
 
 

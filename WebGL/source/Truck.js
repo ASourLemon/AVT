@@ -9,3 +9,5 @@ function Truck(position, initSpeed){
 Truck.prototype.draw = function (){
 	// TODO: Implement
 }
+
+

@@ -1,3 +1,78 @@
+var uMaterials = {};
+// 	diffuse = [0.5, 0.5, 0.5, 1.0];
+// 	ambient =  [0.5, 0.5, 0.5, 1.0];
+// 	specular =  [0.5, 0.5, 0.5, 1.0];
+// 	emissive =  [0.5, 0.5, 0.5, 1.0];
+// 	shininess = 1;
+// 	texCount = 0;
+
+// 	setDiffuse: function (r, g, b, a){
+// 		this.diffuse = [r, g, b, a];
+// 	}
+// 	setAmbient: function (r, g, b, a){
+// 		this.ambient = [r, g, b, a];
+// 	}
+// 	setSpecular: function (r, g, b, a){
+// 		this.specular = [r, g, b, a];
+// 	}
+// 	setEmissive: function (r, g, b, a){
+// 		this.emissive = [r, g, b, a];
+// 	}
+// 	setShininess: function (v){
+// 		this.shininess = v;
+// 	}
+// 	setTexCount: function (v){
+// 		this.texCount = v;
+// 	}
+
+// };
+
+
+function SetupMaterial(){
+
+	
+	
+	//gl.uniform4fv(shaderProgram.Materials, uMaterials)
+	uMaterials.diffuse = gl.getUniformLocation(shaderProgram,"material.diffuse");
+	uMaterials.ambient = gl.getUniformLocation(shaderProgram,"material.ambient");
+	uMaterials.specular = gl.getUniformLocation(shaderProgram,"material.specular");
+	uMaterials.emissive = gl.getUniformLocation(shaderProgram,"material.emissive");
+	uMaterials.shininess = gl.getUniformLocation(shaderProgram,"material.shininess");
+	uMaterials.texCount = gl.getUniformLocation(shaderProgram,"material.texCount");
+
+	setDiffuse(1.0, 1.0, 1.0, 1.0);
+	setAmbient(1.0, 1.0, 1.0, 1.0);
+	setSpecular(1.0, 1.0, 1.0, 1.0);
+	setEmissive(0.0, 0.0, 0.0, 1.0);
+	setShininess(1.0);
+	setTexCount(0);
+
+	
+}
+
+function setDiffuse (r, g, b, a){
+	gl.uniform4f(uMaterials.diffuse, r, g, b, a)
+}
+
+function setAmbient (r, g, b, a){
+	gl.uniform4f(uMaterials.ambient, r, g, b, a)
+}
+
+function setSpecular (r, g, b, a){
+	gl.uniform4f(uMaterials.specular, r, g, b, a)
+}
+
+function setEmissive (r, g, b, a){
+	gl.uniform4f(uMaterials.emissive, r, g, b, a)
+}
+function setShininess (v){
+	gl.uniform1f(uMaterials.emissive, v)
+}
+function setTexCount (v){
+	gl.uniform1i(uMaterials.emissive, v)
+}
+
+
 var squareVertexPositionBuffer;
 var squareVertexColorBuffer;
 var squareVertexTexCoordBuffer;
@@ -65,9 +140,17 @@ function drawSquare(){
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	
 	gl.bindBuffer(gl.ARRAY_BUFFER, squareTexCoordBuffer);
 	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, squareTexCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	
+	// gl.bindBuffer(gl.ARRAY_BUFFER, squareNormalsBuffer);
+	// gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, squareNormalsBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, squareVertexIndexBuffer);
+
+
+
 
 	setMatrixUniforms();
 	gl.drawElements(gl.TRIANGLES, squareVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
