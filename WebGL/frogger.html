@@ -160,15 +160,16 @@
 
 		  	<script src="source/ResourcesLib.js"></script>
 		  	<script src="source/MathLib.js"></script>
+		  	<script src="source/StaticObject.js"></script>
+		  	<script src="source/DynamicObject.js"></script>
+		  	<script src="source/Truck.js"></script>
+		  	<script src="source/Turtle.js"></script>
+		  	<script src="source/Lamp.js"></script>
+		  	<script src="source/Tree.js"></script>
+		  	<script src="source/Grass.js"></script>
 		  	<script src="source/game.js"></script>
 		  	<script src="source/map.js"></script>
 			<script>
-			
-
-			function setMatrixUniforms() {
-				gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-				gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
-			}
 			
 			var currentlyPressedKeys = {};
 
@@ -214,34 +215,22 @@
 
 				    rotate += (0.5 * elapsed) / 1000.0;
 			    }
+			    //console.log(timeNow-lastTime);
 			    lastTime = timeNow;
 			}
 			
 			function drawScene() {
-				gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+				// TODO: Durante o resize, o vieport deverá fazer resize mantendo o aspect ratio...
+				//gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+				// Centrado
+				gl.viewport(gl.viewportWidth/2 - gl.viewportHeight/2, 0, gl.viewportHeight, gl.viewportHeight);
+
 				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-				mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+				//mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
 				mat4.identity(mvMatrix);
-				
+				mat4.identity(pMatrix);
 				
 				game.draw()
-
-				// mat4.translate(mvMatrix, [position, 0.0, -5.0]);
-				// mat4.rotate(mvMatrix, rotate, [1, 0, 0]);
-				// mat4.rotate(mvMatrix, rotate, [0, 1, 0]);
-				// mat4.rotate(mvMatrix, rotate, [0, 0, 1]);
-				
-				
-				
-				gl.activeTexture(gl.TEXTURE0);
-				gl.bindTexture(gl.TEXTURE_2D, texArray[0]);
-				gl.uniform1i(shaderProgram.samplerUniform, 0);
-				
-				
-				// setMatrixUniforms();
-				// gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-				setMatrixUniforms();
-				gl.drawElements(gl.TRIANGLES, squareVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 			}
 
 			
@@ -262,6 +251,7 @@
 				initGL(canvas);
 				initShaders();
 				initTexture(0, "textures/grass.png");
+				initTexture(1, "textures/water.gif");
 				game.init();
 				
 				gl.clearColor(0.0, 0.0, 0.0, 1.0);

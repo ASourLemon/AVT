@@ -1,0 +1,12 @@
+- Converter todas as texturas restantes para tga ou gif, colocar na pasta e no código
+- Cilindros
+------>>>>>>> Materiais (componentes ambiente, especular, difusa, shininess)
+- Draw dos objetos
+- Update (DynamicObject)
+- ResetSpeed (DynamicObject)
+------>>>>>>> Luzes
+- Lens Flare
+- HUD
+- Particulas
+- Reflexoes
+- Sombras

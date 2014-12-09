@@ -14,3 +14,8 @@ function mvPopMatrix() {
 	}
 	mvMatrix = mvMatrixStack.pop();
 }
+
+function setMatrixUniforms() {
+	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
+	gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+}

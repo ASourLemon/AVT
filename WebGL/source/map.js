@@ -9,30 +9,24 @@ function Map(){
 	this.map0_W = 20.0;
 	this.map0_H = 32.0;
 	this.water_speed = 0.3;
-
-	this.created = false;
 }
-
-Map.prototype = new GameObject();
 
 Map.prototype.draw = function(){
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, texArray[0]);
+	gl.uniform1i(shaderProgram.samplerUniform, 0);
 
-	//createCube();
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [0.0, -2.0, -45.0]);
-	mat4.rotate(mvMatrix, 90.0, [1, 0, 0]);
-	if(this.created == false){
-		createSquare(32.0, 16.0);
-		this.created = true;
-	}
-	mvPushMatrix();
+	mat4.translate(mvMatrix, [0.0, -0.2, 0.0]);
+	//mat4.rotate(mvMatrix, 90.0, [1, 0, 0]);
+	//mat4.scale(mvMatrix, [2, 2, 1]);
+	drawSquare();
+	mvPopMatrix();	
+	gl.bindTexture(gl.TEXTURE_2D, texArray[1]);
+	gl.uniform1i(shaderProgram.samplerUniform, 0);
+	drawSphere();
 
-}
-
-Map.prototype.update = function(){
-
-
-	
+	gl.bindTexture(gl.TEXTURE_2D, null);
 }
 
 Map.prototype.getMaplimit = function(){

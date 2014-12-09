@@ -9,6 +9,7 @@ function Game(){
 
 	//objects
 	this.map = null;
+	this.gameObjects = [];
 
 	lastTime = new Date().getTime();
 }
@@ -16,6 +17,13 @@ function Game(){
 Game.prototype.init = function (){
 
 	this.map = new Map();
+	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
+	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
+	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
+	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
+	for(var i = 0 ; i < this.gameObjects.length ; i++) {
+		this.gameObjects[i].update();
+	}
 
 }
 
