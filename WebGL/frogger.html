@@ -218,12 +218,20 @@
 				if (currentlyPressedKeys[51]) {
 					game.setCamera(2);
 				}
+				//w
+				if (currentlyPressedKeys[87]) {
+					var timeNow = new Date().getTime();
+					if (lastTime != 0) {
+						var elapsed2 = timeNow - lastTime;
+						game.frog.position[1] += (game.frog.speed[1] * elapsed2) / 1000.0
+					}
+				}
 				//a
 				if (currentlyPressedKeys[65]) {
 					var timeNow = new Date().getTime();
 					if (lastTime != 0) {
 					var elapsed2 = timeNow - lastTime;
-					position -= (speed * elapsed2) / 1000.0
+					game.frog.position[0] -= (game.frog.speed[0] * elapsed2) / 1000.0
 					}
 				}
 				//d
@@ -231,7 +239,15 @@
 					var timeNow = new Date().getTime();
 					if (lastTime != 0) {
 					var elapsed2 = timeNow - lastTime;
-					position += (speed * elapsed2) / 1000.0
+					game.frog.position[0] += (game.frog.speed[0] * elapsed2) / 1000.0
+					}
+				}
+				//s
+				if (currentlyPressedKeys[83]) {
+					var timeNow = new Date().getTime();
+					if (lastTime != 0) {
+					var elapsed2 = timeNow - lastTime;
+					game.frog.position[1] -= (game.frog.speed[1] * elapsed2) / 1000.0
 					}
 				}
 			
@@ -285,6 +301,8 @@
 				initTexture(0, "textures/grass.png");
 				initTexture(1, "textures/water.gif");
 				initTexture(2, "textures/road.gif");
+				initTexture(3, "textures/lightwood.gif");
+				initTexture(4, "textures/eye.gif");
 				game.init();
 				
 				gl.clearColor(0.0, 0.0, 0.0, 1.0);

@@ -9,6 +9,7 @@ function Game(){
 
 	//objects
 	this.map = null;
+	this.frog = null;
 	this.gameObjects = [];
 	this.cameras = []
 	this.activeCam = null;
@@ -20,6 +21,7 @@ Game.prototype.init = function (){
 	SetupMaterial();
 
 	this.map = new Map();
+	this.frog = new Frog([1.0, 1.0, 0.5], [3.0, 3.0, 3.0])
 	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
 	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
 	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
@@ -35,6 +37,7 @@ Game.prototype.init = function (){
 Game.prototype.draw = function (){
 	this.activeCam.load();
 	this.map.draw();
+	this.frog.draw();
 }
 
 Game.prototype.setCamera = function (num){
