@@ -10,12 +10,13 @@ function Game(){
 	//objects
 	this.map = null;
 	this.gameObjects = [];
+	this.cameras = []
+	this.activeCam = null;
 
 	lastTime = new Date().getTime();
 }
 
 Game.prototype.init = function (){
-
 	SetupMaterial();
 
 	this.map = new Map();
@@ -23,14 +24,19 @@ Game.prototype.init = function (){
 	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
 	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
 	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
-	for(var i = 0 ; i < this.gameObjects.length ; i++) {
-		this.gameObjects[i].update();
-	}
 
+	this.cameras[0] = new TopOrthoCamera();
+	this.cameras[1] = new TopPerspectiveCamera();
+	//this.cameras[2] = new FrogPerspectiveCamera();
+
+	this.activeCam = this.cameras[1];
 }
 
 Game.prototype.draw = function (){
-
+	this.activeCam.load();
 	this.map.draw();
+}
 
+Game.prototype.setCamera = function (num){
+	this.activeCam = this.cameras[num - 1];
 }

@@ -186,6 +186,9 @@
 	  	<script src="source/Tree.js"></script>
 	  	<script src="source/Grass.js"></script>
 	  	<script src="source/Frog.js"></script>
+	  	<script src="source/TopPerspectiveCamera.js"></script>
+	  	<script src="source/FrogPerspectiveCamera.js"></script>
+	  	<script src="source/TopOrthoCamera.js"></script>
 	  	<script src="source/game.js"></script>
 	  	<script src="source/map.js"></script>
 		<script>
@@ -203,6 +206,18 @@
 			var position = 0.0;
 			var speed = 0.5;
 			function handleKeys() {
+				//1
+				if (currentlyPressedKeys[49]) {
+					game.setCamera(1);
+				}
+				//2
+				if (currentlyPressedKeys[50]) {
+					game.setCamera(2);
+				}
+				//2
+				if (currentlyPressedKeys[51]) {
+					game.setCamera(2);
+				}
 				//a
 				if (currentlyPressedKeys[65]) {
 					var timeNow = new Date().getTime();
@@ -243,11 +258,9 @@
 				//gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 				// Centrado
 				gl.viewport(gl.viewportWidth/2 - gl.viewportHeight/2, 0, gl.viewportHeight, gl.viewportHeight);
-
 				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-				mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
 				mat4.identity(mvMatrix);
-				//mat4.identity(pMatrix);
+				mat4.identity(pMatrix);
 				
 				game.draw()
 			}

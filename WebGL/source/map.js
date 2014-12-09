@@ -12,7 +12,6 @@ function Map(){
 }
 
 Map.prototype.draw = function(){
-	
 	mvPushMatrix();
 	//mat4.rotate(mvMatrix, 2.0, [1.0, 0.0, 0.0]);
 	//
@@ -21,26 +20,26 @@ Map.prototype.draw = function(){
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texArray[0]);
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
+	this.setGrassColor();
 
 	//BOTTOM
-	this.setGrassColor();
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [0.0, -10.0, -30.0]);
-	mat4.scale(mvMatrix, [32, 5, 1]);
+	mat4.translate(mvMatrix, [16.0, 1.75, 0.0]);
+	mat4.scale(mvMatrix, [32, 3.5, 1]);
 	drawSquare();
 	mvPopMatrix();
 
 	//MIDDLE
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [0.0, 0.0, -30.0]);
-	mat4.scale(mvMatrix, [32, 3, 1]);
+	mat4.translate(mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 1.0, 0.0]);
+	mat4.scale(mvMatrix, [32, 2, 1]);
 	drawSquare();
 	mvPopMatrix();
 
 	//TOP
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [0.0, 10.0, -30.0]);
-	mat4.scale(mvMatrix, [32, 5, 1]);
+	mat4.translate(mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 2.0/*mid*/ + 6.0/*water*/ + 1.75, 0.0]);
+	mat4.scale(mvMatrix, [32, 3.5, 1]);
 	drawSquare();
 	mvPopMatrix();
 
@@ -49,10 +48,10 @@ Map.prototype.draw = function(){
 	//
 	gl.bindTexture(gl.TEXTURE_2D, texArray[2]);
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
-	
 	this.setRoadColor();
+	
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [0.0, -4.5, -30.0]);
+	mat4.translate(mvMatrix, [16.0, 3.5/*bot*/ + 3.0, 0.0]);
 	mat4.scale(mvMatrix, [32, 6, 1]);
 	drawSquare();
 	mvPopMatrix();
@@ -65,17 +64,12 @@ Map.prototype.draw = function(){
 	this.setWaterColor();
 	
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [0.0, 4.5, -30.0]);
+	mat4.translate(mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 2.0/*mid*/ + 3.0, 0.0]);
 	mat4.scale(mvMatrix, [32, 6, 1]);
 	drawSquare();
-	mvPopMatrix();	
-	
-	// gl.bindTexture(gl.TEXTURE_2D, texArray[1]);
-	// gl.uniform1i(shaderProgram.samplerUniform, 0);
-	// drawSphere();
-
 	mvPopMatrix();
 
+	mvPopMatrix();
 	gl.bindTexture(gl.TEXTURE_2D, null);
 }
 
