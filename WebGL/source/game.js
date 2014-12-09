@@ -9,6 +9,7 @@ function Game(){
 
 	//objects
 	this.map = null;
+	this.frog = null;
 	this.gameObjects = [];
 
 	lastTime = new Date().getTime();
@@ -19,6 +20,7 @@ Game.prototype.init = function (){
 	SetupMaterial();
 
 	this.map = new Map();
+	this.frog = new Frog([0.0, -8.0, -30.0], [3.0, 3.0, 3.0])
 	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
 	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
 	this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
@@ -32,5 +34,6 @@ Game.prototype.init = function (){
 Game.prototype.draw = function (){
 
 	this.map.draw();
+	this.frog.draw();
 
 }
