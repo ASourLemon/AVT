@@ -1,9 +1,9 @@
 RiverLog.prototype = new DynamicObject();
 
 function RiverLog(position, initSpeed){
-	this.position = vec3.create(position);
-	this.initSpeed = vec3.create(initSpeed);
-	this.speed = vec3.create(initSpeed);
+	this.position = vec3.clone(position);
+	this.initSpeed = vec3.clone(initSpeed);
+	this.speed = vec3.clone(initSpeed);
 
 	this.BoxAABB = new BoxAABB(this.position, 1.0, 0.35, 0.35);
 }

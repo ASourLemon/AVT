@@ -71,8 +71,8 @@ Game.prototype.init = function (){
 	this.trucks.push(t3);
 	this.trucks.push(t4);
 
-	var r1 = new Riverlog([37, 12.25, 0], [-0.3, 0, 0]);
-	var r2 = new Riverlog([37, 15.25, 0], [-0.3, 0, 0]);
+	var r1 = new RiverLog([17, 12.25, 0], [-0.3, 0, 0]);
+	var r2 = new RiverLog([17, 15.25, 0], [-0.3, 0, 0]);
 
 	this.gameObjects.push(r1);
 	this.gameObjects.push(r2);
