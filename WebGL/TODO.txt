@@ -1,18 +1,21 @@
-- Converter todas as texturas restantes para tga ou gif, colocar na pasta e no código
-- Cilindros
------->>>>>>> Luzes
+- Ciclo de jogo
+- Cilindros (troncos, rodas, postes)
 - Lens Flare
 - HUD
 - Particulas
 - Reflexoes
 - Sombras
-- Colisoes
-- Ciclo de jogo
+
+
+
+LEAST IMPORTANT
+- shineness bug or not? :o
+- sapo mudar de direccao
 
 
 ONGOING (Joao)
-- Draw dos objetos
+------>>>>>>> Luzes (pontuais, spotlight)
 
 
 ONGOING (Miguel)
------->>>>>>> Materiais (componentes ambiente, especular, difusa, shininess)
+- Colisoes
