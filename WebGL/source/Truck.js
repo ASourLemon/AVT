@@ -4,9 +4,12 @@ function Truck(position, initSpeed){
 	this.position = vec3.clone(position);
 	this.initSpeed = vec3.clone(initSpeed);
 	this.speed = vec3.clone(initSpeed);
+
+	this.BoxAABB = new BoxAABB(this.position, 1.5, 0.25, 0.25);
 }
 
 Truck.prototype.draw = function (){
+	this.BoxAABB.setCenter(this.position);
 	// TODO: Implement
 	gl.bindTexture(gl.TEXTURE_2D, texArray[3]);
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
@@ -53,4 +56,9 @@ Truck.prototype.setDriverColor = function(){
 	setAmbient(0.2, 0.2, 0.2, 1.0);
 	setSpecular( 0.5, 0.5, 0.5, 1.0);
 	setShininess(100);
+}
+
+Truck.prototype.getAABB = function(){
+
+	return this.BoxAABB;
 }

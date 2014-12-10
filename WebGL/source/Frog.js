@@ -7,9 +7,15 @@ function Frog(position, initSpeed){
 
 	this.beingCompressed = false;
 	this.compressed = 1.0;
+
+	this.frogLifes = 3;
+
+	this.BoxSphere = new BoxSphere(this.position, 0.65);
+
 }
 
 Frog.prototype.draw = function (){
+	this.BoxSphere.setCenter(this.position);
 	// TODO: Implement
 	mvPushMatrix();
 	mat4.translate(mvMatrix, mvMatrix, this.position);
@@ -54,6 +60,10 @@ Frog.prototype.draw = function (){
 	mvPopMatrix();
 }
 
+Frog.prototype.update = function(){
+
+}
+
 Frog.prototype.setBodyColor = function(){
 
 	setDiffuse( 0.2, 0.5, 0.2, 1.0 );
@@ -81,4 +91,34 @@ Frog.prototype.setEyeColor = function(){
 Frog.prototype.getPosition = function(){
 
 	return this.position;
+}
+
+Frog.prototype.setPosition = function(pos){
+
+	this.position = pos;
+}
+
+Frog.prototype.isCompressed = function(){
+
+	return this.beingCompressed;
+}
+
+Frog.prototype.setCompressed = function(compressed){
+
+	this.beingCompressed = compressed;
+}
+
+Frog.prototype.setCompressedR = function(compressed){
+
+	this.compressed = compressed;
+}
+
+Frog.prototype.getCompressed = function(){
+
+	return this.compressed;
+}
+
+Frog.prototype.getSphere = function(){
+
+	return this.BoxSphere;
 }
