@@ -74,7 +74,7 @@ function setTexCount (v){
 
 
 var squareVertexPositionBuffer;
-var squareVertexColorBuffer;
+var squareNormalsBuffer;
 var squareVertexTexCoordBuffer;
 var squareVertexIndexBuffer;
 
@@ -137,31 +137,23 @@ function drawSquare(){
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-	
 	gl.bindBuffer(gl.ARRAY_BUFFER, squareTexCoordBuffer);
 	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, squareTexCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
-	
 	gl.bindBuffer(gl.ARRAY_BUFFER, squareNormalsBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, squareNormalsBuffer.itemSize, gl.FLOAT, false, 0, 0);
-	
+
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, squareVertexIndexBuffer);
-
-
-
-
 	setMatrixUniforms();
 	gl.drawElements(gl.TRIANGLES, squareVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 
 }
 
 var cubeVertexPositionBuffer;
-var cubeVertexColorBuffer;
+var cubeVertexNormalBuffer;
 var cubeVertexIndexBuffer;
 var cubeVertexTextureCoordBuffer;
 
 function drawCube(){
-	// TODO: Change to triangles + add normals
-	
     if(!drawCube.initialized) {
 		console.log("Cube was created!"); // it is actually beeing created...
 		drawCube.initialized = true;
@@ -204,6 +196,44 @@ function drawCube(){
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 		cubeVertexPositionBuffer.itemSize = 3;
 		cubeVertexPositionBuffer.numItems = 24;
+
+		cubeVertexNormalBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexNormalBuffer);
+        var vertexNormals = [
+            // Front face
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+            // Back face
+             0.0,  0.0, -1.0,
+             0.0,  0.0, -1.0,
+             0.0,  0.0, -1.0,
+             0.0,  0.0, -1.0,
+            // Top face
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+            // Bottom face
+             0.0, -1.0,  0.0,
+             0.0, -1.0,  0.0,
+             0.0, -1.0,  0.0,
+             0.0, -1.0,  0.0,
+            // Right face
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+            // Left face
+            -1.0,  0.0,  0.0,
+            -1.0,  0.0,  0.0,
+            -1.0,  0.0,  0.0,
+            -1.0,  0.0,  0.0
+        ];
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormals), gl.STATIC_DRAW);
+        cubeVertexNormalBuffer.itemSize = 3;
+        cubeVertexNormalBuffer.numItems = 24;
 		
 		cubeVertexTextureCoordBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
@@ -261,10 +291,12 @@ function drawCube(){
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexNormalBuffer);
+	gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, cubeVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
 	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
 
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
 	setMatrixUniforms();
 	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
@@ -365,13 +397,10 @@ function drawSphere(){
 	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, sphereVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
     gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexPositionBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, sphereVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
 	gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexNormalBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, sphereVertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-	
 
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphereVertexIndexBuffer);
-
 	setMatrixUniforms();
 	gl.drawElements(gl.TRIANGLES, sphereVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 

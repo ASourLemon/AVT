@@ -20,11 +20,8 @@ function setMatrixUniforms() {
 
 	var normalMatrix = mat3.create();
 	mat3.fromMat4(normalMatrix, mvMatrix);
-	mat3.invert(normalMatrix, normalMatrix);
-	mat3.transpose(normalMatrix, normalMatrix);
-
-	/*
-	Alternative or same?
+	//mat3.invert(normalMatrix, normalMatrix);
+	//mat3.transpose(normalMatrix, normalMatrix);
 
 	var det;
 	var invDet;
@@ -45,7 +42,6 @@ function setMatrixUniforms() {
 	mNormal3x3[6] = (normalMatrix[1] * normalMatrix[5] - normalMatrix[4] * normalMatrix[2]) * invDet;
 	mNormal3x3[7] = (normalMatrix[2] * normalMatrix[3] - normalMatrix[0] * normalMatrix[5]) * invDet;
 	mNormal3x3[8] = (normalMatrix[0] * normalMatrix[4] - normalMatrix[3] * normalMatrix[1]) * invDet;
-	*/
 
-	gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
+	gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, mNormal3x3);
 }
