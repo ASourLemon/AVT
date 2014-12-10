@@ -56,10 +56,10 @@ Game.prototype.init = function (){
 	this.gameObjects.push(new Lamp([8.0, 19.0, 2.0]));
 	this.gameObjects.push(new Lamp([24.0, 19.0, 2.0]));
 
-	var t1 = new Truck([-3.0, 4.25, 1.2], [0.3, 0, 0]);
-	var t2 = new Truck([-3.0, 7.25, 1.2], [0.3, 0, 0]);
-	var t3 = new Truck([37.0, 5.75, 1.2], [-0.3, 0, 0]);
-	var t4 = new Truck([37.0, 8.75, 1.2], [-0.3, 0, 0]); 
+	var t1 = new Truck([-3.0, 4.25, 0.5], [0.3, 0, 0]);
+	var t2 = new Truck([-3.0, 7.25, 0.5], [0.3, 0, 0]);
+	var t3 = new Truck([37.0, 5.75, 0.5], [-0.3, 0, 0]);
+	var t4 = new Truck([37.0, 8.75, 0.5], [-0.3, 0, 0]); 
 	
 	this.gameObjects.push(t1);
 	this.gameObjects.push(t2);
@@ -240,7 +240,6 @@ Game.prototype.ComputeCollisions = function (){
 		this.BoxAABBTemp = this.trucks[i].getAABB();
 		if(!this.frog.isCompressed() && this.testCircleAABB()){
 			this.frog.setCompressed(true);
-			console.log("COLLISION!!!");
 			//PARTICLES
 			break;
 		}
