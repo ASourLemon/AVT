@@ -10,8 +10,8 @@ function TopOrthoCamera(){
 }
 
 TopOrthoCamera.prototype.load = function() {
-	mat4.ortho(-16.0, 16.0, -10.5, 10.5, this.near, this.far, pMatrix);
-	mat4.lookAt(this.pos, this.at, this.up, mvMatrix);
+	mat4.ortho(pMatrix, -16.0, 16.0, -10.5, 10.5, this.near, this.far);
+	mat4.lookAt(mvMatrix, this.pos, this.at, this.up);
 }
 
 TopOrthoCamera.prototype.update = function() {}

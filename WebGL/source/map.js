@@ -13,7 +13,7 @@ function Map(){
 
 Map.prototype.draw = function(){
 	mvPushMatrix();
-	//mat4.rotate(mvMatrix, 2.0, [1.0, 0.0, 0.0]);
+	//mat4.rotate(mvMatrix, mvMatrix, 2.0, [1.0, 0.0, 0.0]);
 	//
 	//FLOOR
 	//
@@ -24,22 +24,22 @@ Map.prototype.draw = function(){
 
 	//BOTTOM
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [16.0, 1.75, 0.0]);
-	mat4.scale(mvMatrix, [32, 3.5, 1]);
+	mat4.translate(mvMatrix, mvMatrix, [16.0, 1.75, 0.0]);
+	mat4.scale(mvMatrix, mvMatrix, [32, 3.5, 1]);
 	drawSquare();
 	mvPopMatrix();
 
 	//MIDDLE
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 1.0, 0.0]);
-	mat4.scale(mvMatrix, [32, 2, 1]);
+	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 1.0, 0.0]);
+	mat4.scale(mvMatrix, mvMatrix, [32, 2, 1]);
 	drawSquare();
 	mvPopMatrix();
 
 	//TOP
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 2.0/*mid*/ + 6.0/*water*/ + 1.75, 0.0]);
-	mat4.scale(mvMatrix, [32, 3.5, 1]);
+	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 2.0/*mid*/ + 6.0/*water*/ + 1.75, 0.0]);
+	mat4.scale(mvMatrix, mvMatrix, [32, 3.5, 1]);
 	drawSquare();
 	mvPopMatrix();
 
@@ -51,8 +51,8 @@ Map.prototype.draw = function(){
 	this.setRoadColor();
 	
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [16.0, 3.5/*bot*/ + 3.0, 0.0]);
-	mat4.scale(mvMatrix, [32, 6, 1]);
+	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 3.0, 0.0]);
+	mat4.scale(mvMatrix, mvMatrix, [32, 6, 1]);
 	drawSquare();
 	mvPopMatrix();
 
@@ -64,8 +64,8 @@ Map.prototype.draw = function(){
 	this.setWaterColor();
 	
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 2.0/*mid*/ + 3.0, 0.0]);
-	mat4.scale(mvMatrix, [32, 6, 1]);
+	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 2.0/*mid*/ + 3.0, 0.0]);
+	mat4.scale(mvMatrix, mvMatrix, [32, 6, 1]);
 	drawSquare();
 	mvPopMatrix();
 

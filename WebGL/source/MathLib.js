@@ -3,8 +3,7 @@ var pMatrix = mat4.create();
 var mvMatrixStack = [];
 
 function mvPushMatrix() {
-	var copy = mat4.create();
-	mat4.set(mvMatrix, copy);
+	var copy = mat4.clone(mvMatrix, copy);
 	mvMatrixStack.push(copy);
 }
 
@@ -20,7 +19,8 @@ function setMatrixUniforms() {
 	gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 
 	var normalMatrix = mat3.create();
-	mat4.toInverseMat3(mvMatrix, normalMatrix);
-	mat3.transpose(normalMatrix);
+	mat3.fromMat4(normalMatrix, mvMatrix);
+	mat3.invert(normalMatrix, normalMatrix);
+	mat3.transpose(normalMatrix, normalMatrix);
 	gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
 }

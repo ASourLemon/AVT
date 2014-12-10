@@ -14,16 +14,15 @@ DynamicObject.prototype.update = function(time){
 		this.elapsed_ticks = 0;
 	}
 
+	// only move on X axis
 	this.position[0] += this.speed[0]*time;
-	this.position[1] += this.speed[1]*time;
-	this.position[2] += this.speed[2]*time;
 
-	var r = Math.random()*5;
+	var r = Math.random()*3;
 	if (this.position[0] <= LEFT_X_LIMIT) {
-		this.position[0] = RIGHT_X_LIMIT + r;
+		this.position[0] = RIGHT_X_LIMIT - r;
 	}
 	else if (this.position[0] >= RIGHT_X_LIMIT) {
-		this.position[0] = LEFT_X_LIMIT - r;
+		this.position[0] = LEFT_X_LIMIT + r;
 	}
 }
 
