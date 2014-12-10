@@ -102,6 +102,18 @@ Game.prototype.update = function (){
 		return;
 	}
 
+	if(this.falling){
+		var d = 0.12;
+		this.distFalling += d;
+		this.frog.position[2] = this.frog.position[2] - d;
+		if(this.distFalling > 2.0){
+			this.frogLifes--;
+			this.falling = false;
+			this.frog.position = [16.0, 1.0, 0.5];
+			this.distFalling = 0.0;
+		}
+	}
+
 	if(this.frog.isCompressed()){
 		if(this.frog.getCompressed() > 0.0001){
 			this.frog.setCompressedR(this.frog.getCompressed() - 0.04);
@@ -124,7 +136,6 @@ Game.prototype.update = function (){
 
 	this.activeCam.update();
 }
-
 
 Game.prototype.setCamera = function (num){
 	this.activeCam = this.cameras[num - 1];
@@ -216,6 +227,12 @@ Game.prototype.ComputeCollisions = function (){
 		}
 	}
 
+	var isOnRiver = (this.frog.position[1] >=11.50) && (this.frog.position[1] <=17.25);
+	if(isOnRiver && !this.beingCarried){
+		this.falling = true;
+		//Particles
+	}
+	
 
 	//Collision Frog vs Trucks
 	for(var i = 0; i < this.trucks.length; i++){
