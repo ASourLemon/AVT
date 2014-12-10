@@ -70,7 +70,7 @@ Game.prototype.init = function (){
 	this.trucks.push(t2);
 	this.trucks.push(t3);
 	this.trucks.push(t4);
-
+/*
 	var r1 = new RiverLog([17, 12.25, 0], [-0.3, 0, 0]);
 	var r2 = new RiverLog([17, 15.25, 0], [-0.3, 0, 0]);
 
@@ -78,7 +78,7 @@ Game.prototype.init = function (){
 	this.gameObjects.push(r2);
 
 	this.riverlogs.push(r1);
-	this.riverlogs.push(r2);
+	this.riverlogs.push(r2);*/
 
 	this.cameras[0] = new TopOrthoCamera();
 	this.cameras[1] = new TopPerspectiveCamera();

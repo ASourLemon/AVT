@@ -28,7 +28,7 @@
 
 		<!-- /////////////////////////////////////////VERTEX SHADER//////////////////////////////// -->
 		<script id="shader-vs" type="x-shader/x-vertex">
-			//const int MAX_POINT_LIGHTS = 6;
+			const int MAX_POINT_LIGHTS = 6;
 
 			attribute vec4 aVertexPosition;
 			attribute vec2 aTextureCoord;
@@ -39,12 +39,12 @@
 			uniform mat3 uNMatrix;
 
 			uniform vec4 spotLightPos;
-			//uniform vec4 pointLightPos;
+			uniform vec4 pointLightPos[MAX_POINT_LIGHTS];
 			uniform bool isDay;
 			uniform bool lampOn;
 
 			varying vec3 spotLightDir;
-			//varying vec4 pointLightDir[MAX_POINT_LIGHTS];
+			varying vec3 pointLightDir[MAX_POINT_LIGHTS];
 			
 			varying vec2 vTextureCoord;
 
@@ -52,9 +52,6 @@
 			varying	vec4 eye;
 
 			void main(void) {
-				int k = 0;
-
-
 				vec4 pos = uMVMatrix * aVertexPosition;
 				eye = vec4(-pos);
 				normal = normalize(uNMatrix * aVertexNormal);
@@ -66,14 +63,14 @@
 					vec4 pos = uMVMatrix * aVertexPosition;
 					spotLightDir = vec3(spotLightPos - pos);
 
-					/*
+					
 					if(lampOn){
 						//process pointLights
-						for(k = 0; k < MAX_POINT_LIGHTS; k++){
+						for(int k = 0; k < MAX_POINT_LIGHTS; k++){
 							pointLightDir[k] = vec3(pointLightPos[k] - pos);
 						}	
 					}
-					*/
+					
 				}
 				/////////////////////////////////////////////
 				
@@ -84,6 +81,7 @@
 	
 		<!-- /////////////////////////////////////////FRAGMENT SHADER//////////////////////////////// -->
 		<script id="shader-fs" type="x-shader/x-fragment">
+			const int MAX_POINT_LIGHTS = 6; //HC
 			precision mediump float;
 
 			struct Materials {
@@ -112,6 +110,7 @@
 			varying	vec4 eye;
 			varying vec2 vTextureCoord;
 
+			varying vec3 pointLightDir[MAX_POINT_LIGHTS];
 			varying vec3 spotLightDir;
 
 			
@@ -183,10 +182,9 @@
 							
 						intensity *= attenuation;						//FIXME: Maybe? This is a simple attenuation
 					//
-					
+					vec3 e = normalize(vec3(eye));
 					if (intensity > 0.0) {
-						vec3 eye = normalize(vec3(eye));
-						vec3 h = normalize(ld + eye);
+						vec3 h = normalize(ld + e);
 						float intSpec = max(dot(h,n), 0.0);
 						spec = material.specular * pow(intSpec, material.shininess);
 
@@ -199,26 +197,25 @@
 				return finalColor;
 			}
 
-			vec4 processPointLights() {/*
-				int k;*/
-				vec4 finalColor = vec4(0.0);/*
+			vec4 processPointLights() {
+				vec4 finalColor = vec4(0.0);
 				vec4 spec;
 				vec3 n;
 				vec3 l;
 				vec3 e;
 				float intensity;
 
-				for(k = 0; k < MAX_POINT_LIGHTS; k++){
+				for(int k = 0; k < MAX_POINT_LIGHTS; k++){
 					
-					float distance = length(DataIn.lightDir[index]);
+					float distance = length(pointLightDir[k]);
 					float a, b, c;		//attenuation = 1/(a + bd + cd2) 
 					a = 0.7;
-					b = 0;
+					b = 0.0;
 					c = 0.07;
 					float attenuation;
 
-					if(distance>10) {
-						attenuation = 0;
+					if(distance>10.0) {
+						attenuation = 0.0;
 					}else {
 						attenuation = (1.0 / 
 										  (a 
@@ -226,22 +223,21 @@
 										+ (c * distance * distance)));
 					}
 					spec = vec4(0.0);
-					n = normalize(DataIn.normal);
-					l = normalize(DataIn.lightDir[index]);
-					e = normalize(vec3(DataIn.eye));
+					n = normalize(normal);
+					l = normalize(pointLightDir[k]);
+					e = normalize(vec3(eye));
 					intensity = max(dot(n,l), 0.0);
 					intensity *=attenuation;
 					if (intensity > 0.0) {
 
 						vec3 h = normalize(l + e);
 						float intSpec = max(dot(h,n), 0.0);
-						spec = specular * pow(intSpec, shininess);
+						spec = material.specular * pow(intSpec, material.shininess);
 					}
 						
-					finalColor = finalColor + max(intensity * diffuse + spec, 0);
-					index++;
+					finalColor = finalColor + max(intensity * material.diffuse + material.specular, 0.0);
 				}
-*/
+
 				return finalColor;
 			}
 
@@ -367,6 +363,7 @@
 
 
 				shaderProgram.spotLightPos = gl.getUniformLocation(shaderProgram, "spotLightPos");
+				shaderProgram.pointLightPos = gl.getUniformLocation(shaderProgram, "pointLightPos");
 				shaderProgram.spotLightLookAt = gl.getUniformLocation(shaderProgram, "spotLightLookAt");
 				shaderProgram.spotCutOff = gl.getUniformLocation(shaderProgram, "spotCutOff");
 				shaderProgram.isDay = gl.getUniformLocation(shaderProgram, "isDay");
