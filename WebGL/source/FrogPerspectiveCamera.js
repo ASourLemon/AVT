@@ -2,7 +2,7 @@ function FrogPerspectiveCamera(){
 	this.fov = 70.0;
 	this.aspectRatio = gl.viewportWidth / gl.viewportHeight;
 	this.near = 0.1;
-	this.far = 30.1;
+	this.far = 40.1;
 
 	this.pos = [1.0 , 1.0, 0.5];
 	this.up = [0.0, 0.0, 1.0];

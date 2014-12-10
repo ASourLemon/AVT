@@ -5,7 +5,7 @@ function RiverLog(position, initSpeed){
 	this.initSpeed = vec3.clone(initSpeed);
 	this.speed = vec3.clone(initSpeed);
 
-	this.BoxAABB = new BoxAABB(this.position, 1.0, 0.35, 0.35);
+	this.BoxAABB = new BoxAABB(this.position, 2.5, 0.25, 0.25);
 }
 
 RiverLog.prototype.draw = function (){
@@ -21,8 +21,8 @@ RiverLog.prototype.draw = function (){
 	//body
 	this.setLogColor();
 	mvPushMatrix();
-	mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, 0.15]);
-	mat4.scale(mvMatrix, mvMatrix, [2.0, 0.75, 0.75]);
+	mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, 0.0]);
+	mat4.scale(mvMatrix, mvMatrix, [2.0, 0.5, 0.25]);
 	drawCube();
 	mvPopMatrix();
 
@@ -42,4 +42,9 @@ RiverLog.prototype.setLogColor = function(){
 RiverLog.prototype.getAABB = function(){
 
 	return this.BoxAABB;
+}
+
+RiverLog.prototype.getSpeed = function(){
+
+	return this.speed;
 }

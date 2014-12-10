@@ -14,6 +14,35 @@ function Map(){
 Map.prototype.draw = function(){
 	mvPushMatrix();
 	//mat4.rotate(mvMatrix, mvMatrix, 2.0, [1.0, 0.0, 0.0]);
+
+	//
+	//WATER
+	//
+	gl.clear(gl.STENCIL_BUFFER_BIT);
+	gl.enable(gl.STENCIL_TEST);
+	gl.stencilFunc(gl.ALWAYS, 1,0x01);
+	gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+	gl.colorMask(true,true, true, true);
+	gl.depthMask(false);
+	gl.clear(gl.STENCIL_BUFFER_BIT); 
+
+	gl.disable(gl.DEPTH_TEST);
+	gl.enable(gl.BLEND);
+	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+	gl.bindTexture(gl.TEXTURE_2D, texArray[1]);
+	gl.uniform1i(shaderProgram.samplerUniform, 0);
+	this.setWaterColor();
+	
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 2.0/*mid*/ + 3.0, -0.4]);
+	mat4.scale(mvMatrix, mvMatrix, [32, 6, 1]);
+	drawSquare();
+	mvPopMatrix();
+	gl.depthMask(true);
+	gl.disable(gl.STENCIL_TEST);
+	gl.disable(gl.BLEND);
+	gl.enable(gl.DEPTH_TEST);
 	//
 	//FLOOR
 	//
@@ -31,16 +60,16 @@ Map.prototype.draw = function(){
 
 	//MIDDLE
 	mvPushMatrix();
-	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 1.0, 0.0]);
-	mat4.scale(mvMatrix, mvMatrix, [32, 2, 1]);
-	drawSquare();
+	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 1.0, -0.25]);
+	mat4.scale(mvMatrix, mvMatrix, [16, 1.0, 0.25]);
+	drawCube();
 	mvPopMatrix();
 
 	//TOP
 	mvPushMatrix();
-	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 2.0/*mid*/ + 6.0/*water*/ + 1.75, 0.0]);
-	mat4.scale(mvMatrix, mvMatrix, [32, 3.5, 1]);
-	drawSquare();
+	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 2.0/*mid*/ + 6.0/*water*/ + 1.75, -0.25]);
+	mat4.scale(mvMatrix, mvMatrix, [16, 1.5, 0.25]);
+	drawCube();
 	mvPopMatrix();
 
 	//
@@ -56,18 +85,7 @@ Map.prototype.draw = function(){
 	drawSquare();
 	mvPopMatrix();
 
-	//
-	//WATER
-	//
-	gl.bindTexture(gl.TEXTURE_2D, texArray[1]);
-	gl.uniform1i(shaderProgram.samplerUniform, 0);
-	this.setWaterColor();
 	
-	mvPushMatrix();
-	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 2.0/*mid*/ + 3.0, 0.0]);
-	mat4.scale(mvMatrix, mvMatrix, [32, 6, 1]);
-	drawSquare();
-	mvPopMatrix();
 
 	mvPopMatrix();
 	gl.bindTexture(gl.TEXTURE_2D, null);

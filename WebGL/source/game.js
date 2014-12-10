@@ -29,13 +29,13 @@ Game.prototype.init = function (){
 	SetupMaterial();
 
 	this.map = new Map();
-	this.frog = new Frog([16.0, 1.0, 0.5], [10.0, 10.0, 10.0])
+	this.frog = new Frog([16.0, 1.0, 0.25], [10.0, 10.0, 10.0])
 
-	var turtle1 = new Turtle([37, 12.25, 0], [-0.3, 0, 0]);
-	var turtle2 = new Turtle([-3.0, 13.75, 0], [0.3, 0, 0]);
-	var turtle3 = new Turtle([-3.0, 13.75, 0], [0.3, 0, 0]);
-	var turtle4 = new Turtle([37, 15.25, 0], [-0.3, 0, 0]);
-	var turtle5 = new Turtle([-3.0, 16.75, 0], [0.3, 0, 0]);
+	var turtle1 = new Turtle([37, 12.25, -0.3], [-0.3, 0, 0]);
+	var turtle2 = new Turtle([-3.0, 13.75, -0.3], [0.3, 0, 0]);
+	var turtle3 = new Turtle([-3.0, 13.75, -0.3], [0.3, 0, 0]);
+	var turtle4 = new Turtle([37, 15.25, -0.3], [-0.3, 0, 0]);
+	var turtle5 = new Turtle([-3.0, 16.75, -0.3], [0.3, 0, 0]);
 	
 	this.gameObjects.push(turtle1);
 	this.gameObjects.push(turtle2);
@@ -70,15 +70,15 @@ Game.prototype.init = function (){
 	this.trucks.push(t2);
 	this.trucks.push(t3);
 	this.trucks.push(t4);
-/*
-	var r1 = new RiverLog([17, 12.25, 0], [-0.3, 0, 0]);
-	var r2 = new RiverLog([17, 15.25, 0], [-0.3, 0, 0]);
+
+	var r1 = new RiverLog([17, 12.25, -0.3], [-0.3, 0, 0]);
+	var r2 = new RiverLog([17, 15.25, -0.3], [-0.3, 0, 0]);
 
 	this.gameObjects.push(r1);
 	this.gameObjects.push(r2);
 
 	this.riverlogs.push(r1);
-	this.riverlogs.push(r2);*/
+	this.riverlogs.push(r2);
 
 	this.cameras[0] = new TopOrthoCamera();
 	this.cameras[1] = new TopPerspectiveCamera();
@@ -102,11 +102,23 @@ Game.prototype.update = function (){
 		return;
 	}
 
+	if(this.falling){
+		var d = 0.12;
+		this.distFalling += d;
+		this.frog.position[2] = this.frog.position[2] - d;
+		if(this.distFalling > 2.0){
+			this.frogLifes--;
+			this.falling = false;
+			this.frog.position = [16.0, 1.0, 0.25];
+			this.distFalling = 0.0;
+		}
+	}
+
 	if(this.frog.isCompressed()){
 		if(this.frog.getCompressed() > 0.0001){
 			this.frog.setCompressedR(this.frog.getCompressed() - 0.04);
 		} else{
-			this.frog.setPosition([16.0, 1.0, 0.5]);
+			this.frog.setPosition([16.0, 1.0, 0.25]);
 			this.frogLifes--;
 			this.frog.setCompressedR(1.0);
 			this.frog.setCompressed(false);
@@ -124,7 +136,6 @@ Game.prototype.update = function (){
 
 	this.activeCam.update();
 }
-
 
 Game.prototype.setCamera = function (num){
 	this.activeCam = this.cameras[num - 1];
@@ -216,6 +227,12 @@ Game.prototype.ComputeCollisions = function (){
 		}
 	}
 
+	var isOnRiver = (this.frog.position[1] >=11.50) && (this.frog.position[1] <=17.25);
+	if(isOnRiver && !this.beingCarried){
+		this.falling = true;
+		//Particles
+	}
+	
 
 	//Collision Frog vs Trucks
 	for(var i = 0; i < this.trucks.length; i++){
