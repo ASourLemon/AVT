@@ -1,7 +1,6 @@
 function FrogPerspectiveCamera(){
-	this.fov = 135.0;
+	this.fov = 70.0;
 	this.aspectRatio = gl.viewportWidth / gl.viewportHeight;
-	// FIXME: Change values below
 	this.near = 0.1;
 	this.far = 30.1;
 
@@ -16,7 +15,6 @@ FrogPerspectiveCamera.prototype.load = function() {
 }
 
 FrogPerspectiveCamera.prototype.update = function() {
-	// TODO: Implement
-	this.pos = [game.frog.position[0], game.frog.position[1]-1.0, game.frog.position[2]+1.0];
-	this.at = [game.frog.position[0], game.frog.position[1], game.frog.position[2]];
+	this.pos = [game.frog.position[0], game.frog.position[1]-2.0, game.frog.position[2]+2.0];
+	this.at = [game.frog.position[0], game.frog.position[1]+3.0, game.frog.position[2]];
 }
