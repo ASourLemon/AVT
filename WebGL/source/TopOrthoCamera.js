@@ -2,7 +2,7 @@ function TopOrthoCamera(){
 	this.fov = 45.0;
 	this.aspectRatio = gl.viewportWidth / gl.viewportHeight;
 	this.near = 0.1;
-	this.far = 30.1;
+	this.far = 40.1;
 
 	this.pos = [16.0 , 10.5, 30.0];
 	this.up = [0.0, 1.0, 0.0];

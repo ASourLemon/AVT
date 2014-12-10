@@ -21,8 +21,8 @@ RiverLog.prototype.draw = function (){
 	//body
 	this.setLogColor();
 	mvPushMatrix();
-	mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -0.25]);
-	mat4.scale(mvMatrix, mvMatrix, [2.0, 0.5, 0.5]);
+	mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, 0.0]);
+	mat4.scale(mvMatrix, mvMatrix, [2.0, 0.5, 0.25]);
 	drawCube();
 	mvPopMatrix();
 
@@ -42,4 +42,9 @@ RiverLog.prototype.setLogColor = function(){
 RiverLog.prototype.getAABB = function(){
 
 	return this.BoxAABB;
+}
+
+RiverLog.prototype.getSpeed = function(){
+
+	return this.speed;
 }

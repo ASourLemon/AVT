@@ -29,13 +29,13 @@ Game.prototype.init = function (){
 	SetupMaterial();
 
 	this.map = new Map();
-	this.frog = new Frog([16.0, 1.0, 0.5], [10.0, 10.0, 10.0])
+	this.frog = new Frog([16.0, 1.0, 0.25], [10.0, 10.0, 10.0])
 
-	var turtle1 = new Turtle([37, 12.25, 0], [-0.3, 0, 0]);
-	var turtle2 = new Turtle([-3.0, 13.75, 0], [0.3, 0, 0]);
-	var turtle3 = new Turtle([-3.0, 13.75, 0], [0.3, 0, 0]);
-	var turtle4 = new Turtle([37, 15.25, 0], [-0.3, 0, 0]);
-	var turtle5 = new Turtle([-3.0, 16.75, 0], [0.3, 0, 0]);
+	var turtle1 = new Turtle([37, 12.25, -0.3], [-0.3, 0, 0]);
+	var turtle2 = new Turtle([-3.0, 13.75, -0.3], [0.3, 0, 0]);
+	var turtle3 = new Turtle([-3.0, 13.75, -0.3], [0.3, 0, 0]);
+	var turtle4 = new Turtle([37, 15.25, -0.3], [-0.3, 0, 0]);
+	var turtle5 = new Turtle([-3.0, 16.75, -0.3], [0.3, 0, 0]);
 	
 	this.gameObjects.push(turtle1);
 	this.gameObjects.push(turtle2);
@@ -71,8 +71,8 @@ Game.prototype.init = function (){
 	this.trucks.push(t3);
 	this.trucks.push(t4);
 
-	var r1 = new RiverLog([17, 12.25, 0], [-0.3, 0, 0]);
-	var r2 = new RiverLog([17, 15.25, 0], [-0.3, 0, 0]);
+	var r1 = new RiverLog([17, 12.25, -0.3], [-0.3, 0, 0]);
+	var r2 = new RiverLog([17, 15.25, -0.3], [-0.3, 0, 0]);
 
 	this.gameObjects.push(r1);
 	this.gameObjects.push(r2);
@@ -109,7 +109,7 @@ Game.prototype.update = function (){
 		if(this.distFalling > 2.0){
 			this.frogLifes--;
 			this.falling = false;
-			this.frog.position = [16.0, 1.0, 0.5];
+			this.frog.position = [16.0, 1.0, 0.25];
 			this.distFalling = 0.0;
 		}
 	}
@@ -118,7 +118,7 @@ Game.prototype.update = function (){
 		if(this.frog.getCompressed() > 0.0001){
 			this.frog.setCompressedR(this.frog.getCompressed() - 0.04);
 		} else{
-			this.frog.setPosition([16.0, 1.0, 0.5]);
+			this.frog.setPosition([16.0, 1.0, 0.25]);
 			this.frogLifes--;
 			this.frog.setCompressedR(1.0);
 			this.frog.setCompressed(false);
