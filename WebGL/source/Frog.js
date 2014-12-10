@@ -13,8 +13,7 @@ Frog.prototype.draw = function (){
 	// TODO: Implement
 	mvPushMatrix();
 	mat4.translate(mvMatrix, mvMatrix, this.position);
-
-	mat4.scale(mvMatrix, mvMatrix, [0.85, 0.85, 0.85 * this.compressed]);
+	mat4.scale(mvMatrix, mvMatrix, [0.65, 0.65, 0.65 * this.compressed]);
 
 	gl.bindTexture(gl.TEXTURE_2D, texArray[3]);
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
@@ -29,8 +28,8 @@ Frog.prototype.draw = function (){
 	//HEAD
 	this.setHeadColor();
 	mvPushMatrix();
-	mat4.translate(mvMatrix, mvMatrix, [0.0, 0.5, 1.6]);
-	mat4.scale(mvMatrix, mvMatrix, [0.8, 1.0, 0.8]);
+	mat4.translate(mvMatrix, mvMatrix, [0.0, 0.25, 0.4]);
+	mat4.scale(mvMatrix, mvMatrix, [0.75, 0.75, 0.8]);
 	drawSphere();
 	mvPopMatrix();
 
@@ -40,15 +39,15 @@ Frog.prototype.draw = function (){
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
 
 	mvPushMatrix();
-	mat4.translate(mvMatrix, mvMatrix, [0.25, 0.75, 2.6]);
-	mat4.scale(mvMatrix, mvMatrix, [0.35, 0.35, 1.0]);
+	mat4.translate(mvMatrix, mvMatrix, [0.20, 0.45, 0.6]);
+	mat4.scale(mvMatrix, mvMatrix, [0.25, 0.25, 0.30]);
 	drawSphere();
 	mvPopMatrix();
 
 	//EYE 2
 	mvPushMatrix();
-	mat4.translate(mvMatrix, mvMatrix, [-0.25, 0.75, 2.6]);
-	mat4.scale(mvMatrix, mvMatrix, [0.35, 0.35, 1.0]);
+	mat4.translate(mvMatrix, mvMatrix, [-0.20, 0.45, 0.6]);
+	mat4.scale(mvMatrix, mvMatrix, [0.25, 0.25, 0.30]);
 	drawSphere();
 	mvPopMatrix();
 
@@ -77,4 +76,9 @@ Frog.prototype.setEyeColor = function(){
 	setAmbient(0.6, 0.6, 0.6, 1.0);
 	setSpecular(0.4, 0.4, 0.4, 1.0);
 	setShininess(100);
+}
+
+Frog.prototype.getPosition = function(){
+
+	return this.position;
 }
