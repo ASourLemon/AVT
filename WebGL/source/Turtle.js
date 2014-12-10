@@ -17,31 +17,31 @@ Turtle.prototype.draw = function (){
 	//body
 	mvPushMatrix();
 	mat4.translate(mvMatrix, [0.0, 0.0, 0.15]);
-	mat4.scale(mvMatrix, [1.0*0.8, 1.0*0.8, 0.3*0.8]);
+	mat4.scale(mvMatrix, [1.1*0.8, 1.1*0.8, 0.4*0.8]);
 	drawSphere();
 	mvPopMatrix();
 	
 	//legs
 	mvPushMatrix();	
 	mat4.rotate(mvMatrix, 45.0, [0.0, 0.0, 1.0]);	
-	mat4.scale(mvMatrix, [1.2*0.9, 0.2*0.9, 0.1*0.9]);
+	mat4.scale(mvMatrix, [1.3*0.9, 0.3*0.9, 0.2*0.9]);
 	drawSphere();
 	mvPopMatrix();
 	
 	mvPushMatrix();	
 	mat4.rotate(mvMatrix, -45.0, [0.0, 0.0, 1.0]);
-	mat4.scale(mvMatrix, [1.2*0.9, 0.2*0.9, 0.1*0.9]);
+	mat4.scale(mvMatrix, [1.3*0.9, 0.3*0.9, 0.2*0.9]);
 	drawSphere();
 	mvPopMatrix();
 	
 	//head
 	mvPushMatrix();	
 	if(this.speed[0] < 0){
-		mat4.translate(mvMatrix, [-0.6, 0.0, 0.0]);	
+		mat4.translate(mvMatrix, [-0.4, 0.0, 0.0]);	
 	}else if(this.speed[0] > 0){
-		mat4.translate(mvMatrix, [0.6, 0.0, 0.0]);
+		mat4.translate(mvMatrix, [0.4, 0.0, 0.0]);
 	}
-	mat4.scale(mvMatrix, [1.0*0.3, 1.4*0.3, 0.4*0.3]);
+	mat4.scale(mvMatrix, [1.1*0.3, 1.5*0.3, 0.5*0.3]);
 	drawSphere();
 	mvPopMatrix();
 	

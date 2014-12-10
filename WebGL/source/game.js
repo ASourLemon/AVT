@@ -22,14 +22,14 @@ Game.prototype.init = function (){
 
 	this.map = new Map();
 	this.frog = new Frog([1.0, 1.0, 0.5], [3.0, 3.0, 3.0])
-	this.gameObjects.push(new Turtle([10, 12, 3], [-1, 0, 0]));
-	this.gameObjects.push(new Turtle([10, 14, 3], [1, 0, 0]));
+	this.gameObjects.push(new Turtle([10, 12, 0], [-1, 0, 0]));
+	this.gameObjects.push(new Turtle([10, 14, 0], [1, 0, 0]));
 	//this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
 	//this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
 
 	this.cameras[0] = new TopOrthoCamera();
 	this.cameras[1] = new TopPerspectiveCamera();
-	//this.cameras[2] = new FrogPerspectiveCamera();
+	this.cameras[2] = new FrogPerspectiveCamera();
 
 	this.activeCam = this.cameras[1];
 }
@@ -47,6 +47,7 @@ Game.prototype.update = function (){
 	for(var i = 0 ; i < this.gameObjects.length ; i++) {
 		this.gameObjects[i].update(0.1); // FIXME: Magic number
 	}
+	this.activeCam.update();
 }
 
 Game.prototype.setCamera = function (num){

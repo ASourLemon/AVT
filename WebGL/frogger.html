@@ -115,7 +115,7 @@
 				}
 				//vec4 color =  max(intensity *  diffuse, ambient);
 				//colorOut = texture(texUnit, DataIn.texCoord) * color + spec;
-				finalColor = finalColor + max(intensity *  material.diffuse + spec, 0.0);
+				finalColor = finalColor + max(1.0 *  material.diffuse + spec, 0.0);
 			
 			
 				return finalColor;
@@ -295,9 +295,12 @@
 				if (currentlyPressedKeys[50]) {
 					game.setCamera(2);
 				}
-				//2
+				//3
 				if (currentlyPressedKeys[51]) {
-					game.setCamera(2);
+					game.setCamera(3);
+					// //var pos = vec3.create(game.frog.getPosition());
+					// var postemp = [game.frog.position[0], game.frog.position[1], game.frog.position[2]];
+					// game.activeCamera.update(postemp);
 				}
 				//w
 				if (currentlyPressedKeys[87]) {
