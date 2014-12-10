@@ -5,11 +5,23 @@ function Truck(position, initSpeed){
 	this.initSpeed = vec3.clone(initSpeed);
 	this.speed = vec3.clone(initSpeed);
 
-	this.BoxAABB = new BoxAABB(this.position, 5.5, 0.6, 0.6);
+	//this.BoxAABB = new BoxAABB(this.position, 5.5, 0.6, 0.6);
+
+	if(this.speed[0] < 0){
+		this.position = [this.position[0]-1.5, this.position[1], this.position[2]];
+		this.BoxAABB = new BoxAABB(this.position, 5.5, 0.6, 0.6);	
+	}else if(this.speed[0] > 0){
+		this.BoxAABB = new BoxAABB(this.position, 5.5, 0.6, 0.6);
+	}
 }
 
 Truck.prototype.draw = function (){
-	this.BoxAABB.setCenter(this.position);
+	if(this.speed[0] < 0){
+		this.BoxAABB.setCenter([this.position[0]-1.5, this.position[1], this.position[2]]);	
+	}else if(this.speed[0] > 0){
+		this.BoxAABB.setCenter(this.position);
+	}
+	//this.BoxAABB.setCenter(this.position);
 	// TODO: Implement
 	gl.bindTexture(gl.TEXTURE_2D, texArray[3]);
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
