@@ -1,5 +1,6 @@
 var mvMatrix = mat4.create();
 var pMatrix = mat4.create();
+var viewMatrix = mat4.create();
 var mvMatrixStack = [];
 
 function mvPushMatrix() {

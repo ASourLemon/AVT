@@ -1,4 +1,3 @@
-- Ciclo de jogo
 - Cilindros (troncos, rodas, postes)
 - Lens Flare
 - HUD
@@ -14,8 +13,9 @@ LEAST IMPORTANT
 
 
 ONGOING (Joao)
------->>>>>>> Luzes (pontuais, spotlight)
+------>>>>>>> Luzes (pontuais)
 
 
 ONGOING (Miguel)
 - Colisoes
+- Ciclo de jogo

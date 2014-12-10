@@ -12,6 +12,9 @@ function FrogPerspectiveCamera(){
 FrogPerspectiveCamera.prototype.load = function() {
 	mat4.perspective(pMatrix, this.fov, this.aspectRatio, this.near, this.far);
 	mat4.lookAt(mvMatrix, this.pos, this.at, this.up);
+	// kinda hacky :s
+	mat4.identity(viewMatrix);
+	mat4.lookAt(viewMatrix, this.pos, this.at, this.up);
 }
 
 FrogPerspectiveCamera.prototype.update = function() {

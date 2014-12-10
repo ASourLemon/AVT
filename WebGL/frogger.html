@@ -43,7 +43,7 @@
 			uniform bool isDay;
 			uniform bool lampOn;
 
-			varying vec4 spotLightDir;
+			varying vec3 spotLightDir;
 			//varying vec4 pointLightDir[MAX_POINT_LIGHTS];
 			
 			varying vec2 vTextureCoord;
@@ -63,7 +63,7 @@
 				if(!isDay){
 		
 					//process spotLights
-					vec4 pos = uMVMatrix * position;
+					vec4 pos = uMVMatrix * aVertexPosition;
 					spotLightDir = vec3(spotLightPos - pos);
 
 					/*
@@ -112,7 +112,7 @@
 			varying	vec4 eye;
 			varying vec2 vTextureCoord;
 
-			varying vec4 spotLightDir;
+			varying vec3 spotLightDir;
 
 			
 			vec4 processDirLights(){
@@ -175,7 +175,7 @@
 					//if(distance > 10.0)
 						float a, b, c;		//attenuation = 1/(a + bd + cd2) 
 						a = 0.7;
-						b = 0;
+						b = 0.0;
 						c = 0.07;
 						float attenuation = (1.0 / (a 
 												+ (b * distance) 
@@ -188,13 +188,13 @@
 						vec3 eye = normalize(vec3(eye));
 						vec3 h = normalize(ld + eye);
 						float intSpec = max(dot(h,n), 0.0);
-						spec = mat.specular * pow(intSpec, mat.shininess);
+						spec = material.specular * pow(intSpec, material.shininess);
 
 					}
 
 				}
 
-				finalColor = finalColor + max(intensity * mat.diffuse + mat.specular, 0);	
+				finalColor = finalColor + max(intensity * material.diffuse + material.specular, 0.0);	
 				
 				return finalColor;
 			}
@@ -267,7 +267,8 @@
 
 					}
 				}	
-				colorOut = max(colorOut, mat.ambient*0.5);	
+				colorOut = max(colorOut, material.ambient*0.5);
+				colorOut.a = 1.0; // FIXME
 				colorOut *= texel;
 
 				gl_FragColor = colorOut;
@@ -473,14 +474,23 @@
 					game.frog.position[1] -= (game.frog.speed[1] * elapsed2) / 1000.0
 					}
 				}
-				//l
+				//L
 				if (currentlyPressedKeys[76]) {
+					if(l.lampOn){
+						l.lampOn = false;
+					} else {
+						l.lampOn = true;
+					}
+					currentlyPressedKeys[76] = false;
+				}
+				//N
+				if (currentlyPressedKeys[78]) {
 					if(l.isDay){
 						l.isDay = false;
 					} else {
 						l.isDay = true;
 					}
-					currentlyPressedKeys[76] = false;
+					currentlyPressedKeys[78] = false;
 				}
 			
 			}
@@ -510,7 +520,7 @@
 				mat4.identity(mvMatrix);
 				mat4.identity(pMatrix);
 				l.init();
-				game.draw()
+				game.draw();
 			}
 
 			
