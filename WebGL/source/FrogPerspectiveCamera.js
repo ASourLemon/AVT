@@ -1,5 +1,5 @@
 function FrogPerspectiveCamera(){
-	this.fov = 125.0;
+	this.fov = 135.0;
 	this.aspectRatio = gl.viewportWidth / gl.viewportHeight;
 	// FIXME: Change values below
 	this.near = 0.1;

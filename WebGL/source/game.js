@@ -24,6 +24,13 @@ Game.prototype.init = function (){
 	this.frog = new Frog([1.0, 1.0, 0.5], [3.0, 3.0, 3.0])
 	this.gameObjects.push(new Turtle([10, 12, 0], [-1, 0, 0]));
 	this.gameObjects.push(new Turtle([10, 14, 0], [1, 0, 0]));
+	this.gameObjects.push(new Turtle([10, 14, 0], [1, 0, 0]));
+	this.gameObjects.push(new Lamp([8.0, 2.0, 2.0]));
+	this.gameObjects.push(new Lamp([24.0, 2.0, 2.0]));
+	this.gameObjects.push(new Lamp([8.0, 10.5, 2.0]));
+	this.gameObjects.push(new Lamp([24.0, 10.5, 2.0]));
+	this.gameObjects.push(new Lamp([8.0, 19.0, 2.0]));
+	this.gameObjects.push(new Lamp([24.0, 19.0, 2.0]));
 	//this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
 	//this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
 
@@ -31,7 +38,7 @@ Game.prototype.init = function (){
 	this.cameras[1] = new TopPerspectiveCamera();
 	this.cameras[2] = new FrogPerspectiveCamera();
 
-	this.activeCam = this.cameras[1];
+	this.activeCam = this.cameras[0];
 }
 
 Game.prototype.draw = function (){

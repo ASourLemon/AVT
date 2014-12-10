@@ -14,7 +14,7 @@ Frog.prototype.draw = function (){
 	mvPushMatrix();
 	mat4.translate(mvMatrix, this.position);
 
-	mat4.scale(mvMatrix, [0.85, 0.85, 0.85 * this.compressed]);
+	mat4.scale(mvMatrix, [0.65, 0.65, 0.65 * this.compressed]);
 
 	gl.bindTexture(gl.TEXTURE_2D, texArray[3]);
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
