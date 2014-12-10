@@ -5,7 +5,7 @@ function Truck(position, initSpeed){
 	this.initSpeed = vec3.clone(initSpeed);
 	this.speed = vec3.clone(initSpeed);
 
-	this.BoxAABB = new BoxAABB(this.position, 1.5, 0.25, 0.25);
+	this.BoxAABB = new BoxAABB(this.position, 5.5, 0.6, 0.6);
 }
 
 Truck.prototype.draw = function (){

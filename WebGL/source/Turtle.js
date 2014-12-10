@@ -4,9 +4,13 @@ function Turtle(position, initSpeed){
 	this.position = vec3.clone(position);
 	this.initSpeed = vec3.clone(initSpeed);
 	this.speed = vec3.clone(initSpeed);
+
+	this.BoxAABB = new BoxAABB(this.position, 0.45, 0.25, 0.1);
 }
 
 Turtle.prototype.draw = function (){
+	this.BoxAABB.setCenter(this.position);
+
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texArray[3]);
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
@@ -75,4 +79,14 @@ Turtle.prototype.setHeadColor = function(){
 	setAmbient(0.2, 0.6, 0.2, 1.0);
 	setSpecular( 0.8, 0.8, 0.8, 1.0);
 	setShininess(10);
+}
+
+Turtle.prototype.getSpeed = function(){
+
+	return this.speed;
+}
+
+Turtle.prototype.getAABB = function(){
+
+	return this.BoxAABB;
 }

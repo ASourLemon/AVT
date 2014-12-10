@@ -250,6 +250,7 @@
 	  	<script src="source/BoxAABB.js"></script>
 	  	<script src="source/Truck.js"></script>
 	  	<script src="source/Turtle.js"></script>
+	  	<script src="source/Riverlog.js"></script>
 	  	<script src="source/Lamp.js"></script>
 	  	<script src="source/Tree.js"></script>
 	  	<script src="source/Grass.js"></script>
@@ -292,34 +293,42 @@
 				}
 				//w
 				if (currentlyPressedKeys[87]) {
-					var timeNow = new Date().getTime();
-					if (lastTime != 0) {
-					var elapsed2 = timeNow - lastTime;
-					game.frog.position[1] += (game.frog.speed[1] * elapsed2) / 1000.0
+					if(!game.frog.isCompressed()){
+						var timeNow = new Date().getTime();
+						if (lastTime != 0) {
+							var elapsed2 = timeNow - lastTime;
+							game.frog.position[1] += (game.frog.speed[1] * elapsed2) / 1000.0
+						}
 					}
 				}
 				//a
 				if (currentlyPressedKeys[65]) {
-					var timeNow = new Date().getTime();
-					if (lastTime != 0) {
-					var elapsed2 = timeNow - lastTime;
-					game.frog.position[0] -= (game.frog.speed[0] * elapsed2) / 1000.0
+					if(!game.frog.isCompressed()){
+						var timeNow = new Date().getTime();
+						if (lastTime != 0) {
+							var elapsed2 = timeNow - lastTime;
+							game.frog.position[0] -= (game.frog.speed[0] * elapsed2) / 1000.0
+						}
 					}
 				}
 				//d
 				if (currentlyPressedKeys[68]) {
-					var timeNow = new Date().getTime();
-					if (lastTime != 0) {
-					var elapsed2 = timeNow - lastTime;
-					game.frog.position[0] += (game.frog.speed[0] * elapsed2) / 1000.0
+					if(!game.frog.isCompressed()){
+						var timeNow = new Date().getTime();
+						if (lastTime != 0) {
+							var elapsed2 = timeNow - lastTime;
+							game.frog.position[0] += (game.frog.speed[0] * elapsed2) / 1000.0
+						}
 					}
 				}
 				//s
 				if (currentlyPressedKeys[83]) {
-					var timeNow = new Date().getTime();
-					if (lastTime != 0) {
-					var elapsed2 = timeNow - lastTime;
-					game.frog.position[1] -= (game.frog.speed[1] * elapsed2) / 1000.0
+					if(!game.frog.isCompressed()){
+						var timeNow = new Date().getTime();
+						if (lastTime != 0) {
+							var elapsed2 = timeNow - lastTime;
+							game.frog.position[1] -= (game.frog.speed[1] * elapsed2) / 1000.0
+						}
 					}
 				}
 				//l
