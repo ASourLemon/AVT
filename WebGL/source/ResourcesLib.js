@@ -51,25 +51,25 @@ function SetupMaterial(){
 }
 
 function setDiffuse (r, g, b, a){
-	gl.uniform4f(uMaterials.diffuse, r, g, b, a)
+	gl.uniform4f(uMaterials.diffuse, r, g, b, a);
 }
 
 function setAmbient (r, g, b, a){
-	gl.uniform4f(uMaterials.ambient, r, g, b, a)
+	gl.uniform4f(uMaterials.ambient, r, g, b, a);
 }
 
 function setSpecular (r, g, b, a){
-	gl.uniform4f(uMaterials.specular, r, g, b, a)
+	gl.uniform4f(uMaterials.specular, r, g, b, a);
 }
 
 function setEmissive (r, g, b, a){
-	gl.uniform4f(uMaterials.emissive, r, g, b, a)
+	gl.uniform4f(uMaterials.emissive, r, g, b, a);
 }
 function setShininess (v){
-	gl.uniform1f(uMaterials.emissive, v)
+	gl.uniform1f(uMaterials.emissive, v);
 }
 function setTexCount (v){
-	gl.uniform1i(uMaterials.emissive, v)
+	gl.uniform1i(uMaterials.emissive, v);
 }
 
 
@@ -111,16 +111,13 @@ function drawSquare(){
 		squareTexCoordBuffer.itemSize = 2;
 		squareTexCoordBuffer.numItems = 2;
 
-		
-		// TODO: Normals
-
 		squareNormalsBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, squareNormalsBuffer);
 		normals = [
-			-1.0, 0.0, -1.0,
-			-1.0, 0.0, -1.0,
-			1.0, 0.0, -1.0,
-			1.0, 0.0, -1.0
+			0.0, 0.0, 1.0,
+			0.0, 0.0, 1.0,
+			0.0, 0.0, 1.0,
+			0.0, 0.0, 1.0
 		];
 
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
