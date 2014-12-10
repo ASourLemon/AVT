@@ -1,13 +1,13 @@
 Lamp.prototype = new StaticObject();
 
 function Lamp(position){
-	this.position = vec3.create(position);
+	this.position = vec3.clone(position);
 }
 
 Lamp.prototype.draw = function (){
 	// TODO: Implement
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [this.position[0], this.position[1], this.position[2]]);
+	mat4.translate(mvMatrix, mvMatrix, [this.position[0], this.position[1], this.position[2]]);
 	
 	gl.bindTexture(gl.TEXTURE_2D, texArray[3]);
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
@@ -15,16 +15,16 @@ Lamp.prototype.draw = function (){
 	//Body
 	this.setBodyColor();
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [0.0, 0.0, -1.0]);
-	mat4.scale(mvMatrix, [0.25, 0.25, 1.5]);
+	mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -1.0]);
+	mat4.scale(mvMatrix, mvMatrix, [0.25, 0.25, 1.5]);
 	drawCube();
 	mvPopMatrix();
 
 	//Lamp
 	this.setLampColor();
 	mvPushMatrix();
-	mat4.translate(mvMatrix, [0.0, 0.0, 0.70]);
-	mat4.scale(mvMatrix, [0.65, 0.65, 0.65]);
+	mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, 0.70]);
+	mat4.scale(mvMatrix, mvMatrix, [0.65, 0.65, 0.65]);
 	drawSphere();
 	mvPopMatrix();
 
