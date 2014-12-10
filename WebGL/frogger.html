@@ -112,7 +112,7 @@
 					spec = material.specular * pow(intSpec, material.shininess);
 				}
 
-				finalColor = finalColor + max(intensity *  material.diffuse + spec, material.ambient);
+				finalColor = finalColor + max(intensity *  material.diffuse + spec, 0.0);
 				finalColor.a = 1.0;
 
 				return finalColor;
