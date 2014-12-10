@@ -28,15 +28,23 @@
 
 		<!-- /////////////////////////////////////////VERTEX SHADER//////////////////////////////// -->
 		<script id="shader-vs" type="x-shader/x-vertex">
-			
+			//const int MAX_POINT_LIGHTS = 6;
+
 			attribute vec4 aVertexPosition;
-			//attribute vec4 aVertexColor;
 			attribute vec2 aTextureCoord;
 			attribute vec3 aVertexNormal;
 
 			uniform mat4 uMVMatrix;
 			uniform mat4 uPMatrix;
 			uniform mat3 uNMatrix;
+
+			uniform vec4 spotLightPos;
+			//uniform vec4 pointLightPos;
+			uniform bool isDay;
+			uniform bool lampOn;
+
+			varying vec4 spotLightDir;
+			//varying vec4 pointLightDir[MAX_POINT_LIGHTS];
 			
 			varying vec2 vTextureCoord;
 
@@ -44,11 +52,30 @@
 			varying	vec4 eye;
 
 			void main(void) {
+				int k = 0;
+
+
 				vec4 pos = uMVMatrix * aVertexPosition;
 				eye = vec4(-pos);
 				normal = normalize(uNMatrix * aVertexNormal);
 
-				
+				/////////////////////////////////////////// new from cpp
+				if(!isDay){
+		
+					//process spotLights
+					vec4 pos = uMVMatrix * position;
+					spotLightDir = vec3(spotLightPos - pos);
+
+					/*
+					if(lampOn){
+						//process pointLights
+						for(k = 0; k < MAX_POINT_LIGHTS; k++){
+							pointLightDir[k] = vec3(pointLightPos[k] - pos);
+						}	
+					}
+					*/
+				}
+				/////////////////////////////////////////////
 				
 				vTextureCoord = aTextureCoord;
 				gl_Position = uPMatrix * uMVMatrix * aVertexPosition;	
@@ -70,6 +97,13 @@
 			
 			uniform Materials material;
 
+			//uniform vec4 spotLightPos;
+			//uniform vec4 pointLightPos;
+			uniform bool isDay;
+			uniform bool lampOn;
+			uniform vec4 spotLightLookAt;
+			uniform float spotCutOff;
+
 			uniform sampler2D uSampler;
 			uniform bool uUseLighting;
 			uniform vec3 uLightingDirection;
@@ -77,6 +111,8 @@
 			varying	vec3 normal;
 			varying	vec4 eye;
 			varying vec2 vTextureCoord;
+
+			varying vec4 spotLightDir;
 
 			
 			vec4 processDirLights(){
@@ -118,15 +154,123 @@
 				return finalColor;
 			}
 
+			vec4 processSpotLights() {
+				vec4 finalColor =  vec4(0.0);
 
+				float intensity;
+				vec4 spec;
+				vec3 ld, sd;
+				
+				intensity = 0.0;
+				spec = vec4(0.0);
+				ld = normalize(spotLightDir);
+				sd = normalize(vec3(-spotLightLookAt));	
+
+				// inside the cone?
+				if (dot(sd,ld) > spotCutOff) {
+					float distance = length(spotLightLookAt);
+					vec3 n = normalize(normal);
+					
+					intensity = max(dot(n,ld), 0.0);
+					//if(distance > 10.0)
+						float a, b, c;		//attenuation = 1/(a + bd + cd2) 
+						a = 0.7;
+						b = 0;
+						c = 0.07;
+						float attenuation = (1.0 / (a 
+												+ (b * distance) 
+												+ (c * distance * distance)));
+							
+						intensity *= attenuation;						//FIXME: Maybe? This is a simple attenuation
+					//
+					
+					if (intensity > 0.0) {
+						vec3 eye = normalize(vec3(eye));
+						vec3 h = normalize(ld + eye);
+						float intSpec = max(dot(h,n), 0.0);
+						spec = mat.specular * pow(intSpec, mat.shininess);
+
+					}
+
+				}
+
+				finalColor = finalColor + max(intensity * mat.diffuse + mat.specular, 0);	
+				
+				return finalColor;
+			}
+
+			vec4 processPointLights() {/*
+				int k;*/
+				vec4 finalColor = vec4(0.0);/*
+				vec4 spec;
+				vec3 n;
+				vec3 l;
+				vec3 e;
+				float intensity;
+
+				for(k = 0; k < MAX_POINT_LIGHTS; k++){
+					
+					float distance = length(DataIn.lightDir[index]);
+					float a, b, c;		//attenuation = 1/(a + bd + cd2) 
+					a = 0.7;
+					b = 0;
+					c = 0.07;
+					float attenuation;
+
+					if(distance>10) {
+						attenuation = 0;
+					}else {
+						attenuation = (1.0 / 
+										  (a 
+										+ (b * distance) 
+										+ (c * distance * distance)));
+					}
+					spec = vec4(0.0);
+					n = normalize(DataIn.normal);
+					l = normalize(DataIn.lightDir[index]);
+					e = normalize(vec3(DataIn.eye));
+					intensity = max(dot(n,l), 0.0);
+					intensity *=attenuation;
+					if (intensity > 0.0) {
+
+						vec3 h = normalize(l + e);
+						float intSpec = max(dot(h,n), 0.0);
+						spec = specular * pow(intSpec, shininess);
+					}
+						
+					finalColor = finalColor + max(intensity * diffuse + spec, 0);
+					index++;
+				}
+*/
+				return finalColor;
+			}
 
 
 			void main(void) {
 			
-				vec4 Color;
+				vec4 colorOut;
+				vec4 texel = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 
-				Color = processDirLights();
-				gl_FragColor = Color * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+				if(texel.a == 0.0){
+					discard;
+				}
+				
+				if(isDay){
+					
+					colorOut = processDirLights();
+
+				}else {		
+						
+					colorOut = processSpotLights();	
+					if(lampOn){
+						colorOut += processPointLights();
+
+					}
+				}	
+				colorOut = max(colorOut, mat.ambient*0.5);	
+				colorOut *= texel;
+
+				gl_FragColor = colorOut;
 			}
 		</script>
 
@@ -219,6 +363,13 @@
 				shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
 				shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightingDirection");
 				shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
+
+
+				shaderProgram.spotLightPos = gl.getUniformLocation(shaderProgram, "spotLightPos");
+				shaderProgram.spotLightLookAt = gl.getUniformLocation(shaderProgram, "spotLightLookAt");
+				shaderProgram.spotCutOff = gl.getUniformLocation(shaderProgram, "spotCutOff");
+				shaderProgram.isDay = gl.getUniformLocation(shaderProgram, "isDay");
+				shaderProgram.lampOn = gl.getUniformLocation(shaderProgram, "lampOn");
 			}
 
 			function handleLoadedTexture(image, texture) {
