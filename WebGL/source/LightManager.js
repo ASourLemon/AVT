@@ -11,6 +11,7 @@ LightManager.prototype.init = function(){
 		gl.uniform3f(shaderProgram.ambientColorUniform, 1.0, 0.0, 0.0);
 
 		var lightingDirection = vec3.clone([1.0, 1.0, -1.0]);
+		vec3.normalize(lightingDirection, lightingDirection);
 
 	    // var adjustedLD = vec3.create();
 	    // vec3.normalize(lightingDirection, adjustedLD);

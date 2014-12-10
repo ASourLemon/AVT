@@ -15,6 +15,6 @@ FrogPerspectiveCamera.prototype.load = function() {
 }
 
 FrogPerspectiveCamera.prototype.update = function() {
-	this.pos = [game.frog.position[0], game.frog.position[1]-2.0, game.frog.position[2]+2.0];
+	this.pos = [game.frog.position[0], game.frog.position[1]-4.0, game.frog.position[2]+3.0];
 	this.at = [game.frog.position[0], game.frog.position[1]+3.0, game.frog.position[2]];
 }

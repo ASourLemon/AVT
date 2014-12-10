@@ -37,38 +37,21 @@
 			uniform mat4 uMVMatrix;
 			uniform mat4 uPMatrix;
 			uniform mat3 uNMatrix;
-
-			uniform vec3 uAmbientColor;
-			uniform vec3 uDirectionalColor;
-			uniform bool uUseLighting;
 			
-			//varying vec4 vColor;
 			varying vec2 vTextureCoord;
-			varying vec3 vLightWeighting;
 
-			//varying Data {
 			varying	vec3 normal;
 			varying	vec4 eye;
-			//	vec3 lightDir[1];
-			//} DataOut;
 
 			void main(void) {
 				vec4 pos = uMVMatrix * aVertexPosition;
 				eye = vec4(-pos);
-				normal = normalize(aVertexNormal);
+				normal = normalize(uNMatrix * aVertexNormal);
 
 				
-				//vColor = aVertexColor;
+				
 				vTextureCoord = aTextureCoord;
-				// if (!uUseLighting) {
-				//     vLightWeighting = vec3(1.0, 1.0, 1.0);
-				// } else {
-				//     vec3 transformedNormal = uNMatrix * aVertexNormal;
-				//     float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
-				//     vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
-				// }
-				//vLightWeighting = uDirectionalColor;
-					gl_Position = uPMatrix * uMVMatrix * aVertexPosition;	
+				gl_Position = uPMatrix * uMVMatrix * aVertexPosition;	
 			}
 		</script>
 	
@@ -85,19 +68,16 @@
 				int texCount;
 			};
 			
-			//varying Data {
-			varying	vec3 normal;
-			varying	vec4 eye;
-			//	vec3 lightDir[1];
-			//} DataIn;
-
 			uniform Materials material;
-			//varying vec4 vColor;
-			varying vec2 vTextureCoord;
+
 			uniform sampler2D uSampler;
-			varying vec3 vLightWeighting;
 			uniform bool uUseLighting;
 			uniform vec3 uLightingDirection;
+			
+			varying	vec3 normal;
+			varying	vec4 eye;
+			varying vec2 vTextureCoord;
+
 			
 			vec4 processDirLights(){
 
@@ -108,31 +88,29 @@
 				//if(vec3(1.0, 1.0, -1.0) == uLightingDirection)
 				//	finalColor = vec4(0.0, 0.0, 0.0, 1.0);
 
-				//vec3 n = normalize(normal);
-				//if(dot(n, -uLightingDirection) <= 0.0) {
-				//	finalColor = vec4(0.0, 0.0, 0.0, 1.0);
-				//}
+				/*
+				vec3 n = normalize(normal);
+				if(dot(n, uLightingDirection) < 0.0) {
+					finalColor = vec4(1.0, 0.0, 0.0, 1.0);
+				} else if (dot(n, uLightingDirection) >= 0.0) {
+					finalColor = vec4(0.0, 1.0, 0.0, 1.0);
+				} else {
+					finalColor = vec4(0.0, 0.0, 1.0, 1.0);
+				}
+				*/
 
-				
-				// set the specular term to black
 				vec4 spec = vec4(0.0);
 				
-				// normalize both input vectors
 				vec3 n = normalize(normal);
 				vec3 e = normalize(vec3(eye));
 
-				float intensity = max(dot(n, -uLightingDirection), 0.0);
+				float intensity = max(dot(n, uLightingDirection), 0.0);
 
-				// if the vertex is lit compute the specular color
 				if (intensity > 0.0) {
-					// compute the half vector
 					vec3 h = normalize( uLightingDirection + e);	
-					// compute the specular term into spec
 					float intSpec = max(dot(h,n), 0.0);
 					spec = material.specular * pow(intSpec, material.shininess);
 				}
-				//vec4 color =  max(intensity *  diffuse, ambient);
-				//colorOut = texture(texUnit, DataIn.texCoord) * color + spec;
 
 				finalColor = finalColor + max(intensity *  material.diffuse + spec, material.ambient);
 				finalColor.a = 1.0;
@@ -145,19 +123,8 @@
 
 			void main(void) {
 			
-			//gl_FragColor = material.diffuse + (material.ambient * 0.5) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-			// vec4 textureColor = material.diffuse + (material.ambient * 0.5) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-			// gl_FragColor = vec4(textureColor * vLightWeighting, textureColor.a);
+				vec4 Color;
 
-			// vec4 textureColor = material.diffuse + (material.ambient * 0.5) * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-			// gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
-			vec4 Color;
-
-				// if(!uUseLighting){
-				// 	Color = processDirLights();
-				// }
-				
-				//Color = max(Color, material.ambient * 0.5);
 				Color = processDirLights();
 				gl_FragColor = Color * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 			}
@@ -239,13 +206,13 @@
 				shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
 				gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
 
-				// shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-				// gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+
 				shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
 				gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 
 				shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
 				shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+				shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
 				shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
 				
 				shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
