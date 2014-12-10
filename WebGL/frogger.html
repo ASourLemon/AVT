@@ -66,7 +66,7 @@
 					
 					if(lampOn){
 						//process pointLights
-						for(int k = 0; k < MAX_POINT_LIGHTS; k++){
+						for(int k = 0; k < MAX_POINT_LIGHTS; k+=4){
 							pointLightDir[k] = vec3(pointLightPos[k] - pos);
 						}	
 					}
@@ -205,7 +205,7 @@
 				vec3 e;
 				float intensity;
 
-				for(int k = 0; k < MAX_POINT_LIGHTS; k++){
+				for(int k = 0; k < MAX_POINT_LIGHTS; k+=3){
 					
 					float distance = length(pointLightDir[k]);
 					float a, b, c;		//attenuation = 1/(a + bd + cd2) 
@@ -214,7 +214,7 @@
 					c = 0.07;
 					float attenuation;
 
-					if(distance>10.0) {
+					if(distance>=0.0) {
 						attenuation = 0.0;
 					}else {
 						attenuation = (1.0 / 
@@ -262,9 +262,9 @@
 						colorOut += processPointLights();
 
 					}
-				}	
+				}
+				colorOut.a = material.diffuse.a; // FIXME
 				colorOut = max(colorOut, material.ambient*0.5);
-				colorOut.a = 1.0; // FIXME
 				colorOut *= texel;
 
 				gl_FragColor = colorOut;
