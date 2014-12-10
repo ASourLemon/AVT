@@ -21,18 +21,26 @@ Game.prototype.init = function (){
 	SetupMaterial();
 
 	this.map = new Map();
-	this.frog = new Frog([1.0, 1.0, 0.5], [3.0, 3.0, 3.0])
-	this.gameObjects.push(new Turtle([10, 12, 0], [-1, 0, 0]));
-	this.gameObjects.push(new Turtle([10, 14, 0], [1, 0, 0]));
-	this.gameObjects.push(new Turtle([10, 14, 0], [1, 0, 0]));
+	this.frog = new Frog([16.0, 1.0, 0.5], [10.0, 10.0, 10.0])
+	
+	this.gameObjects.push(new Turtle([37, 12.25, 0], [-1, 0, 0]));
+	this.gameObjects.push(new Turtle([-3.0, 13.75, 0], [1, 0, 0]));
+	this.gameObjects.push(new Turtle([-3.0, 13.75, 0], [1, 0, 0]));
+
+	this.gameObjects.push(new Turtle([37, 15.25, 0], [-1, 0, 0]));
+	this.gameObjects.push(new Turtle([-3.0, 16.75, 0], [1, 0, 0]));
+	
 	this.gameObjects.push(new Lamp([8.0, 2.0, 2.0]));
 	this.gameObjects.push(new Lamp([24.0, 2.0, 2.0]));
 	this.gameObjects.push(new Lamp([8.0, 10.5, 2.0]));
 	this.gameObjects.push(new Lamp([24.0, 10.5, 2.0]));
 	this.gameObjects.push(new Lamp([8.0, 19.0, 2.0]));
 	this.gameObjects.push(new Lamp([24.0, 19.0, 2.0]));
-	//this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
-	//this.gameObjects.push(new Truck([0, 0, 0], [0, 0, 0]));
+	
+	this.gameObjects.push(new Truck([-3.0, 4.25, 1.2], [1, 0, 0]));
+	this.gameObjects.push(new Truck([-3.0, 7.25, 1.2], [1, 0, 0]));
+	this.gameObjects.push(new Truck([37.0, 5.75, 1.2], [-1, 0, 0]));
+	this.gameObjects.push(new Truck([37.0, 8.75, 1.2], [-1, 0, 0]));
 
 	this.cameras[0] = new TopOrthoCamera();
 	this.cameras[1] = new TopPerspectiveCamera();
