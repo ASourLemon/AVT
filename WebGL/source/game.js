@@ -94,6 +94,7 @@ Game.prototype.draw = function (){
 	for(var i = 0 ; i < this.gameObjects.length ; i++) {
 		this.gameObjects[i].draw();
 	}
+	this.map.draw();
 }
 
 Game.prototype.update = function (){

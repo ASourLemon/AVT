@@ -5,7 +5,6 @@ function Lamp(position){
 }
 
 Lamp.prototype.draw = function (){
-	// TODO: Implement
 	mvPushMatrix();
 	mat4.translate(mvMatrix, mvMatrix, [this.position[0], this.position[1], this.position[2]]);
 

@@ -26,7 +26,7 @@ Map.prototype.draw = function(){
 	gl.depthMask(false);
 	gl.clear(gl.STENCIL_BUFFER_BIT); 
 
-	gl.disable(gl.DEPTH_TEST);
+	//gl.disable(gl.DEPTH_TEST);
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
@@ -42,7 +42,7 @@ Map.prototype.draw = function(){
 	gl.depthMask(true);
 	gl.disable(gl.STENCIL_TEST);
 	gl.disable(gl.BLEND);
-	gl.enable(gl.DEPTH_TEST);
+	//gl.enable(gl.DEPTH_TEST);
 	//
 	//FLOOR
 	//
@@ -105,7 +105,7 @@ Map.prototype.setGrassColor = function(){
 
 Map.prototype.setWaterColor = function(){
 
-	setDiffuse(0.4, 0.6, 0.4, .7 );
+	setDiffuse(0.4, 0.6, 0.4, .1 );
 	setAmbient(0.08, 0.12, 0.08, .7);
 	setSpecular(0.0, 0.0, 0.1, .7 );
 	setShininess(10);
