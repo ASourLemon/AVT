@@ -202,13 +202,8 @@ Game.prototype.ComputeCollisions = function (){
 		this.BoxAABBTemp = this.riverlogs[i].getAABB();
 		if(this.testCircleAABB()){
 			this.beingCarried = true;
-			var d = this.riverlogs[i].getSpeed() ;
-			var px = this.frog.position[0];
-			var py = this.frog.position[1];
-			var pz = this.frog.position[2];
-			//p = [p[0] + d[0], p[1] + d[1], p[2] + d[2]];
-			this.frog.position = [px + d[0], py+ d[1], pz+ d[2]];
-
+			this.frog.position[0] += this.riverlogs[i].speed[0] * 0.1; //FIXME magic number
+			this.falling = false;
 		}
 	}
 
@@ -218,12 +213,8 @@ Game.prototype.ComputeCollisions = function (){
 		this.BoxAABBTemp = this.turtles[i].getAABB();
 		if(this.testCircleAABB()){
 			this.beingCarried = true;
-			var d = this.turtles[i].getSpeed() ;
-			var px = this.frog.position[0];
-			var py = this.frog.position[1];
-			var pz = this.frog.position[2];
-			//p = [p[0] + d[0], p[1] + d[1], p[2] + d[2]];
-			this.frog.position = [px + d[0], py+ d[1], pz+ d[2]];
+			this.frog.position[0] += this.turtles[i].speed[0] * 0.1; //FIXME magic number
+			this.falling = false;
 
 		}
 	}

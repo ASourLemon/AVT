@@ -506,17 +506,6 @@
 			//var d = 0;
 			var lastTime = 0;
 			
-			function animate() {
-			    
-			    if (lastTime != 0) {
-			    	var elapsed = timeNow - lastTime;
-
-				    rotate += (0.5 * elapsed) / 1000.0;
-			    }
-			    //console.log(timeNow-lastTime);
-			    
-			}
-			
 			function drawScene() {
 				// TODO: Durante o resize, o vieport deverá fazer resize mantendo o aspect ratio...
 				//gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
