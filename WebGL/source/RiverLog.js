@@ -5,7 +5,7 @@ function RiverLog(position, initSpeed){
 	this.initSpeed = vec3.clone(initSpeed);
 	this.speed = vec3.clone(initSpeed);
 
-	this.BoxAABB = new BoxAABB(this.position, 2.5, 0.25, 0.25);
+	this.BoxAABB = new BoxAABB(this.position, 2.75, 0.4, 0.25);
 }
 
 RiverLog.prototype.draw = function (){
@@ -33,8 +33,8 @@ RiverLog.prototype.draw = function (){
 
 RiverLog.prototype.setLogColor = function(){
 
-	setDiffuse(0.40, 0.21, 0.19, 1.0 );
-	setAmbient(0.35, 0.16, 0.14, 1.0);
+	setDiffuse(1.0, 0.5, 0.2, 1.0 );
+	setAmbient(0.9, 0.2, 0.2, 1.0);
 	setSpecular(0.6, 0.6, 0.6, 1.0);
 	setShininess(100);
 }

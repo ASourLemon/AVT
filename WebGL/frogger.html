@@ -113,6 +113,9 @@
 			varying vec3 pointLightDir[MAX_POINT_LIGHTS];
 			varying vec3 spotLightDir;
 
+			uniform bool tex_moving;
+			uniform float time;
+
 			
 			vec4 processDirLights(){
 
@@ -245,7 +248,17 @@
 			void main(void) {
 			
 				vec4 colorOut;
-				vec4 texel = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+				vec4 texel;
+				
+
+				if(tex_moving){
+					texel = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t + sin(vTextureCoord.s * 60.0 + time * 2.0) / 30.0));
+				}else{
+					texel = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+				}
+
+
+				//vec2(tex_coord.x + time/10, tex_coord.y + sin(tex_coord.x * 60.0 + time * 2.0) / 30.0))
 
 				if(texel.a == 0.0){
 					discard;
@@ -368,6 +381,8 @@
 				shaderProgram.spotCutOff = gl.getUniformLocation(shaderProgram, "spotCutOff");
 				shaderProgram.isDay = gl.getUniformLocation(shaderProgram, "isDay");
 				shaderProgram.lampOn = gl.getUniformLocation(shaderProgram, "lampOn");
+				shaderProgram.Time = gl.getUniformLocation(shaderProgram, "time");
+				shaderProgram.WaterMoving = gl.getUniformLocation(shaderProgram, "tex_moving");
 			}
 
 			function handleLoadedTexture(image, texture) {
@@ -514,6 +529,17 @@
 				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 				mat4.identity(mvMatrix);
 				mat4.identity(pMatrix);
+
+				shaderProgram.Time = gl.getUniformLocation(shaderProgram, "time");
+				var time = new Date().getTime() / 10000.0;
+				//var time = Math.random() *4.0;
+				var elapsed3 = time - lastTime;
+				gl.uniform1f(shaderProgram.Time, elapsed3);
+				//shaderProgram.setUniform("time", elapsed3);
+
+				// var moving = false;
+				// gl.uniform1i(shaderProgram.WaterMoving, moving);
+
 				l.init();
 				game.draw();
 			}
@@ -527,6 +553,7 @@
    				drawScene();
    				var timeNow = new Date().getTime();
 			   	lastTime = timeNow;
+			   
 			}
 
 			
@@ -543,6 +570,7 @@
 				initTexture(2, "textures/road.gif");
 				initTexture(3, "textures/lightwood.gif");
 				initTexture(4, "textures/eye.gif");
+				initTexture(5, "textures/stone.gif");
 				
 				
 				game.init();

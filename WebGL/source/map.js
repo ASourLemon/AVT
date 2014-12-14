@@ -18,6 +18,9 @@ Map.prototype.draw = function(){
 	//
 	//WATER
 	//
+	var moving = true;
+	gl.uniform1i(shaderProgram.WaterMoving, moving);
+
 	gl.clear(gl.STENCIL_BUFFER_BIT);
 	gl.enable(gl.STENCIL_TEST);
 	gl.stencilFunc(gl.ALWAYS, 1,0x01);
@@ -36,13 +39,32 @@ Map.prototype.draw = function(){
 	
 	mvPushMatrix();
 	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 2.0/*mid*/ + 3.0, -0.4]);
-	mat4.scale(mvMatrix, mvMatrix, [32, 6, 1]);
+	mat4.scale(mvMatrix, mvMatrix, [38, 6, 1]);
 	drawSquare();
 	mvPopMatrix();
+
+	//WATERFALLS
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [-2.0, 14.5, 5.5]);
+	mat4.rotate(mvMatrix, mvMatrix, 1.57, [0.0, 1.0, 0.0]);
+	mat4.scale(mvMatrix, mvMatrix, [12, 6, 1]);
+	drawSquare();
+	mvPopMatrix();
+
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [34.0, 14.5, 5.5]);
+	mat4.rotate(mvMatrix, mvMatrix, 1.57, [0.0, 1.0, 0.0]);
+	mat4.scale(mvMatrix, mvMatrix, [12, 6, 1]);
+	drawSquare();
+	mvPopMatrix();
+
 	gl.depthMask(true);
 	gl.disable(gl.STENCIL_TEST);
 	gl.disable(gl.BLEND);
 	//gl.enable(gl.DEPTH_TEST);
+	moving = false;
+	gl.uniform1i(shaderProgram.WaterMoving, moving);
+	
 	//
 	//FLOOR
 	//
@@ -53,8 +75,8 @@ Map.prototype.draw = function(){
 
 	//BOTTOM
 	mvPushMatrix();
-	mat4.translate(mvMatrix, mvMatrix, [16.0, 1.75, 0.0]);
-	mat4.scale(mvMatrix, mvMatrix, [32, 3.5, 1]);
+	mat4.translate(mvMatrix, mvMatrix, [16.0, 0.0, 0.0]);
+	mat4.scale(mvMatrix, mvMatrix, [32, 7.0, 1]);
 	drawSquare();
 	mvPopMatrix();
 
@@ -67,8 +89,8 @@ Map.prototype.draw = function(){
 
 	//TOP
 	mvPushMatrix();
-	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 6.0/*road*/ + 2.0/*mid*/ + 6.0/*water*/ + 1.75, -0.25]);
-	mat4.scale(mvMatrix, mvMatrix, [16, 1.5, 0.25]);
+	mat4.translate(mvMatrix, mvMatrix, [16.0, 21.0, -0.25]);
+	mat4.scale(mvMatrix, mvMatrix, [16, 3.5, 0.25]);
 	drawCube();
 	mvPopMatrix();
 
@@ -81,10 +103,79 @@ Map.prototype.draw = function(){
 	
 	mvPushMatrix();
 	mat4.translate(mvMatrix, mvMatrix, [16.0, 3.5/*bot*/ + 3.0, 0.0]);
-	mat4.scale(mvMatrix, mvMatrix, [32, 6, 1]);
+	mat4.scale(mvMatrix, mvMatrix, [38, 6, 1]);
 	drawSquare();
 	mvPopMatrix();
 
+	//
+	//WALLS
+	//
+	gl.bindTexture(gl.TEXTURE_2D, texArray[5]);
+	gl.uniform1i(shaderProgram.samplerUniform, 0);
+	this.setWallColor();
+	
+	//BOTTOM, SIDES FIRST
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [-1.0, 0.0, 5.5]);
+	mat4.scale(mvMatrix, mvMatrix, [1.0, 3.5, 6.0]);
+	drawCube();
+	mvPopMatrix();
+
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [33.0, 0.0, 5.5]);
+	mat4.scale(mvMatrix, mvMatrix, [1.0, 3.5, 6.0]);
+	drawCube();
+	mvPopMatrix();
+
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [16.0, -4.0, 5.5]);
+	mat4.scale(mvMatrix, mvMatrix, [16.0, 0.5, 6.0]);
+	drawCube();
+	mvPopMatrix();
+
+	//MIDDLE, ROAD FIRST
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [-1.0, 6.5, 7.0]);
+	mat4.scale(mvMatrix, mvMatrix, [1.0, 3.0, 4.5]);
+	drawCube();
+	mvPopMatrix();
+
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [33.0, 6.5, 7.0]);
+	mat4.scale(mvMatrix, mvMatrix, [1.0, 3.0, 4.5]);
+	drawCube();
+	mvPopMatrix();
+
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [-1.0, 10.5, 5.5]);
+	mat4.scale(mvMatrix, mvMatrix, [1.0, 1.0, 6.0]);
+	drawCube();
+	mvPopMatrix();
+
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [33.0, 10.5, 5.5]);
+	mat4.scale(mvMatrix, mvMatrix, [1.0, 1.0, 6.0]);
+	drawCube();
+	mvPopMatrix();
+
+	//TOP, SIDES FIRST
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [-1.0, 21.0, 5.5]);
+	mat4.scale(mvMatrix, mvMatrix, [1.0, 3.5, 6.0]);
+	drawCube();
+	mvPopMatrix();
+
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [33.0, 21.0, 5.5]);
+	mat4.scale(mvMatrix, mvMatrix, [1.0, 3.5, 6.0]);
+	drawCube();
+	mvPopMatrix();
+
+	mvPushMatrix();
+	mat4.translate(mvMatrix, mvMatrix, [16.0, 24.0, 5.5]);
+	mat4.scale(mvMatrix, mvMatrix, [16.0, 0.5, 6.0]);
+	drawCube();
+	mvPopMatrix();
 	
 
 	mvPopMatrix();
@@ -127,8 +218,13 @@ Map.prototype.setRoadColor = function(){
 	setShininess(1);
 }
 
+Map.prototype.setWallColor = function(){
 
-
+	setDiffuse(0.6, 0.6, 0.6, 1.0);
+	setAmbient(0.3, 0.3, 0.3, 1.0);
+	setSpecular(0.0, 0.0, 0.0, 1.0);
+	setShininess(1);
+}
 
 
 

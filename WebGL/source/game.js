@@ -99,6 +99,7 @@ Game.prototype.draw = function (){
 
 Game.prototype.update = function (){
 
+
 	if (this.frog.frogLifes == 0) {
 		return;
 	}
