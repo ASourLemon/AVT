@@ -22,6 +22,8 @@ function Game(){
 
 	this.beingCarried = false;
 
+	this.tresd = 0;
+
 	lastTime = new Date().getTime();
 }
 
@@ -84,7 +86,17 @@ Game.prototype.init = function (){
 	this.cameras[1] = new TopPerspectiveCamera();
 	this.cameras[2] = new FrogPerspectiveCamera();
 
-	this.activeCam = this.cameras[0];
+	//this.cameras[3] = new FrogPerspectiveCamera();
+	//this.cameras[3].aspectratio = (gl.viewportWidth / 2) / gl.viewportHeight;
+
+	// this.cameras[4] = new FrogPerspectiveCamera();
+	// this.cameras[4].aspectratio = (gl.viewportWidth / 2) / gl.viewportHeight;
+
+	if(Support == true){
+		this.activeCam = this.cameras[2];
+	} else {
+		this.activeCam = this.cameras[0];
+	}
 }
 
 Game.prototype.draw = function (){
