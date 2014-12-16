@@ -66,10 +66,10 @@ function setEmissive (r, g, b, a){
 	gl.uniform4f(uMaterials.emissive, r, g, b, a);
 }
 function setShininess (v){
-	gl.uniform1f(uMaterials.emissive, v);
+	gl.uniform1f(uMaterials.shininess, v);
 }
 function setTexCount (v){
-	gl.uniform1i(uMaterials.emissive, v);
+	gl.uniform1i(uMaterials.texCount, v);
 }
 
 
