@@ -195,7 +195,7 @@
 
 				}
 
-				finalColor = finalColor + max(intensity * material.diffuse + material.specular, 0.0);	
+				finalColor = finalColor + max(intensity * material.diffuse + spec, 0.0);	
 				
 				return finalColor;
 			}
