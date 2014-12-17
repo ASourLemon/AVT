@@ -1,6 +1,6 @@
 function LightManager(){
 
-	this.isDay = false;
+	this.isDay = true;
 	this.lampOn = false;
 
 }

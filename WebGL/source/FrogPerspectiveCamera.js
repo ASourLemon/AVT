@@ -8,44 +8,38 @@ function FrogPerspectiveCamera(){
 	this.far = 40.1;
 
 	this.pos = [1.0, 1.0, 0.5];
-	this.up = [0.0, 3.0, 6.5];
+	this.up = [0.0, 0.0, 1.0];
 	this.at = [0.0, 2.0, 0.0];
 }
 
 FrogPerspectiveCamera.prototype.load = function() {
-    ////////////// Rotate over yy axis ///////////////
-	var mat_gamma = mat4.create();
-	var up_vec3 = vec3.clone(this.up);
-	var up_vec4;
+	var trans_pos;
+	var trans_up;
+	var trans_at;
 
-	mat4.rotate(mat_gamma, mat_gamma, gamma ? gamma*Math.PI/180 : 0, [0.0, 1.0, 0.0]);
-	mat4.rotate(mat_gamma, mat_gamma, beta ? beta*Math.PI/180 : 0, [1.0, 0.0, 0.0]);
-	up_vec4 = vec4.fromValues(up_vec3[0], up_vec3[1], up_vec3[2], 0.0);
-	vec4.transformMat4(up_vec4, up_vec4, mat_gamma);
-	up_vec3 = vec3.fromValues(up_vec4[0], up_vec4[1], up_vec4[2]);
-	///////////////////////////////////////////////////
-
-
-	////////////// Rotate over zz axis //////////////
-	var mat_alpha = mat4.create();
-	var at_vec3 = vec3.create();
-	var at_vec4;
-
-	mat4.rotate(mat_alpha, mat_alpha, beta ? beta*Math.PI/180 : 0, [1.0, 0.0, 0.0]);
-	mat4.rotate(mat_alpha, mat_alpha, alpha ? alpha*Math.PI/180 : 0, [0.0, 0.0, 1.0]);
-	vec3.sub(at_vec3, this.at, this.pos);
-	at_vec4 = vec4.fromValues(at_vec3[0], at_vec3[1], at_vec3[2], 0.0);
-	vec4.transformMat4(at_vec4, at_vec4, mat_alpha);
-	at_vec3 = vec3.fromValues(at_vec4[0], at_vec4[1], at_vec4[2]);
-	vec3.add(at_vec3, at_vec3, this.pos);
-    //////////////////////////////////////////////////
-
+	if(alpha != null) {
+	    var rMat = mat3.clone(getRotationMatrix(alpha, beta < 0 ? 90 : (90-beta), gamma));
+	    trans_pos = vec3.clone(this.pos);
+	    trans_up = vec3.clone(this.up);
+	    trans_at = vec3.clone(this.at);
+	    vec3.sub(trans_pos, trans_pos, game.frog.position);
+	    vec3.sub(trans_at, trans_at, game.frog.position);
+	    vec3.transformMat3(trans_pos, trans_pos, rMat);
+	    vec3.transformMat3(trans_up, trans_up, rMat);
+	    vec3.transformMat3(trans_at, trans_at, rMat);
+	    vec3.add(trans_pos, trans_pos, game.frog.position);
+	    vec3.add(trans_at, trans_at, game.frog.position);
+	} else {
+		trans_pos = this.pos;
+		trans_up = this.up;
+		trans_at = this.at;
+	}
 
 	mat4.perspective(pMatrix, this.fov, this.aspectRatio, this.near, this.far);
-	mat4.lookAt(mvMatrix, this.pos, at_vec3, up_vec3);
+	mat4.lookAt(mvMatrix, trans_pos, trans_at, trans_up);
 	// kinda hacky :s
 	mat4.identity(viewMatrix);
-	mat4.lookAt(viewMatrix, this.pos, at_vec3, up_vec3);
+	mat4.lookAt(viewMatrix, trans_pos, trans_at, trans_up);
 
 }
 
@@ -82,6 +76,45 @@ FrogPerspectiveCamera.prototype.handleOrientationEvent = function(e) {
 	gamma = prev_gamma;
 
     //////// FOR DEBUG ///////
-    //var text = gamma.toString();
-    //document.body.innerHTML = text;
+    // var text = "alpha: " + alpha.toString() + "\n" + "beta: " + beta.toString() + "gama: " + gamma.toString();
+    // document.body.innerHTML = text;
+};
+
+var degtorad = Math.PI / 180; // Degree-to-Radian conversion
+
+function getRotationMatrix( alpha, beta, gamma ) {
+
+  var _x = beta  ? beta  * degtorad : 0; // beta value
+  var _y = gamma ? gamma * degtorad : 0; // gamma value
+  var _z = alpha ? alpha * degtorad : 0; // alpha value
+
+  var cX = Math.cos( _x );
+  var cY = Math.cos( _y );
+  var cZ = Math.cos( _z );
+  var sX = Math.sin( _x );
+  var sY = Math.sin( _y );
+  var sZ = Math.sin( _z );
+
+  //
+  // ZXY rotation matrix construction.
+  //
+
+  var m11 = cZ * cY - sZ * sX * sY;
+  var m12 = - cX * sZ;
+  var m13 = cY * sZ * sX + cZ * sY;
+
+  var m21 = cY * sZ + cZ * sX * sY;
+  var m22 = cZ * cX;
+  var m23 = sZ * sY - cZ * cY * sX;
+
+  var m31 = - cX * sY;
+  var m32 = sX;
+  var m33 = cX * cY;
+
+  return [
+    m11,    m12,    m13,
+    m21,    m22,    m23,
+    m31,    m32,    m33
+  ];
+
 };
