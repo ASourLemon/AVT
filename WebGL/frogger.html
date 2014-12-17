@@ -264,7 +264,7 @@
 
 				//vec2(tex_coord.x + time/10, tex_coord.y + sin(tex_coord.x * 60.0 + time * 2.0) / 30.0))
 
-				if(texel.a == 0.0){
+				if(texel.a <= 0.1){
 					discard;
 				}
 				
@@ -605,6 +605,7 @@
 				initTexture(3, "textures/lightwood.gif");
 				initTexture(4, "textures/eye.gif");
 				initTexture(5, "textures/stone.gif");
+				initTexture(6, "textures/tree.gif");
 				
 				
 				game.init();
