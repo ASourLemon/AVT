@@ -17,6 +17,8 @@ function Game(){
 	this.riverlogs = [];
 	this.activeCam = null;
 
+	this.points = 0;
+
 	this.SphereTemp = null;
 	this.BoxAABBTemp = null;
 
@@ -132,7 +134,7 @@ Game.prototype.update = function (){
 		if(this.frog.getCompressed() > 0.0001){
 			this.frog.setCompressedR(this.frog.getCompressed() - 0.04);
 		} else{
-			this.frog.setPosition([16.0, 1.0, 0.25]);
+			this.frog.position = [16.0, 1.0, 0.25];
 			this.frogLifes--;
 			this.frog.setCompressedR(1.0);
 			this.frog.setCompressed(false);
@@ -147,7 +149,6 @@ Game.prototype.update = function (){
 	}
 
 	this.ComputeCollisions();
-
 	this.activeCam.update();
 }
 
@@ -207,6 +208,12 @@ Game.prototype.testCircleAABB = function (){
 
 Game.prototype.ComputeCollisions = function (){
 
+
+	var wonPoint = 22.0;
+	if (this.frog.position[1] > wonPoint) {
+		this.frog.position = [16.0, 1.0, 0.25];
+		this.points += 1;
+	}
 
 	this.beingCarried = false;
 	//Collision Frog vs Riverlogs

@@ -443,7 +443,7 @@
 
 			var position = 0.0;
 			var speed = 0.5;
-			var Support = true;
+			var Support = false;
 			function handleKeys() {
 				//1
 				if (currentlyPressedKeys[49]) {
@@ -463,26 +463,31 @@
 				//w
 				if (currentlyPressedKeys[87]) {
 					if(!game.frog.isCompressed()){
-						var timeNow = new Date().getTime();
-						if (lastTime != 0) {
-							var elapsed2 = timeNow - lastTime;
-							game.frog.position[1] += (game.frog.speed[1] * elapsed2) / 1000.0
+						if(game.frog.position[1] < 23){
+							var timeNow = new Date().getTime();
+							if (lastTime != 0) {
+								var elapsed2 = timeNow - lastTime;
+								game.frog.position[1] += (game.frog.speed[1] * elapsed2) / 1000.0
+							}
 						}
 					}
 				}
 				//a
 				if (currentlyPressedKeys[65]) {
 					if(!game.frog.isCompressed()){
-						var timeNow = new Date().getTime();
-						if (lastTime != 0) {
-							var elapsed2 = timeNow - lastTime;
-							game.frog.position[0] -= (game.frog.speed[0] * elapsed2) / 1000.0
+						if(game.frog.position[0] > 0.5){
+							var timeNow = new Date().getTime();
+							if (lastTime != 0) {
+								var elapsed2 = timeNow - lastTime;
+								game.frog.position[0] -= (game.frog.speed[0] * elapsed2) / 1000.0
+							}
 						}
 					}
 				}
 				//d
 				if (currentlyPressedKeys[68]) {
 					if(!game.frog.isCompressed()){
+						if(game.frog.position[0] < 31.5){
 						var timeNow = new Date().getTime();
 						if (lastTime != 0) {
 							var elapsed2 = timeNow - lastTime;
@@ -490,15 +495,18 @@
 						}
 					}
 				}
+				}
 				//s
 				if (currentlyPressedKeys[83]) {
 					if(!game.frog.isCompressed()){
+						if(game.frog.position[1] > -3.0){
 						var timeNow = new Date().getTime();
 						if (lastTime != 0) {
 							var elapsed2 = timeNow - lastTime;
 							game.frog.position[1] -= (game.frog.speed[1] * elapsed2) / 1000.0
 						}
 					}
+				}
 				}
 				//L
 				if (currentlyPressedKeys[76]) {
