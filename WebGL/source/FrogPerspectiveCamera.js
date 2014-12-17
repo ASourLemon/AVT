@@ -118,3 +118,8 @@ function getRotationMatrix( alpha, beta, gamma ) {
   ];
 
 };
+
+FrogPerspectiveCamera.prototype.update3d = function(s) {
+	this.pos = [game.frog.position[0]+s, game.frog.position[1]-3.5, game.frog.position[2]+3.0];
+	this.at = [game.frog.position[0], game.frog.position[1]+3.0, game.frog.position[2]];
+}
