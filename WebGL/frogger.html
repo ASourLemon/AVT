@@ -443,7 +443,7 @@
 
 			var position = 0.0;
 			var speed = 0.5;
-			var Support = true;
+			var Support = false;
 			function handleKeys() {
 				//1
 				if (currentlyPressedKeys[49]) {
@@ -557,13 +557,13 @@
 				if(Support){
 					gl.enable(gl.SCISSOR_TEST); 
 					gl.viewport(0, 0, gl.viewportWidth / 2, gl.viewportHeight);
-					gl.scissor(0,0,gl.viewportWidth / 2, gl.viewportHeight);
+					gl.scissor(0, 0, gl.viewportWidth / 2, gl.viewportHeight);
 
 					game.activeCam.pos[0] -= 0.5;
 					game.activeCam.at[0] -= 0.5;
 					game.draw();
 					gl.viewport(gl.viewportWidth / 2, 0, gl.viewportWidth / 2, gl.viewportHeight);
-					gl.scissor(gl.viewportWidth / 2,0,gl.viewportWidth / 2, gl.viewportHeight);
+					gl.scissor(gl.viewportWidth / 2, 0, gl.viewportWidth / 2, gl.viewportHeight);
 					game.activeCam.pos[0] += 1.0;
 					game.activeCam.at[0] += 1.0;
 					game.draw();
@@ -574,12 +574,17 @@
 			}
 
 			
-
+			var android = true;
 			function Update() {
    				requestAnimFrame(Update);
    				handleKeys();
    				game.update();
    				drawScene();
+   				if(android){
+   					if(game.points != 1){
+   						game.automovement();
+   					}
+   				}
    				var timeNow = new Date().getTime();
 			   	lastTime = timeNow;
 			   

@@ -254,3 +254,65 @@ Game.prototype.ComputeCollisions = function (){
 
 
 }
+
+//Funcao bastarda
+Game.prototype.automovement = function (){
+
+	var temp;
+	var middlefloor;
+	var riverlog_1;
+	var turtle_1;
+	var riverlog_2;
+	var turtle_2;
+
+
+	if(this.frog.position[1] > 13.75 && this.frog.position[1] < 14.25)
+		turtle_1 = true;
+	else
+		turtle_1 = false;
+
+	if(this.frog.position[1] > 10.0 && this.frog.position[1] < 11.0)
+		middlefloor = true;
+	else
+		middlefloor = false;
+
+	if(this.frog.position[1] > 12.0 && this.frog.position[1] < 12.5)
+		riverlog_1 = true;
+	else
+		riverlog_1 = false;
+
+	if(this.frog.position[1] > 14.55 && this.frog.position[1] < 15.35)
+		riverlog_2 = true;
+	else
+		riverlog_2 = false;
+
+	if(this.frog.position[1] > 16.15 && this.frog.position[1] < 16.85)
+		turtle_2 = true;
+	else
+		turtle_2 = false;
+
+	
+
+	if(this.frog.position[0] > 14.0 && middlefloor){
+		currentlyPressedKeys[65] = true
+	} else if(!middlefloor){
+		currentlyPressedKeys[65] = false;
+	}
+
+	//console.log(this.frog.position[0]);
+	// if(!middlefloor && this.frog.position[1] < 13.75){
+	// 	currentlyPressedKeys[87] = true;
+	// }
+
+	if(this.frog.position[0] > 7.5 && riverlog_1){
+		currentlyPressedKeys[87] = false;
+	}else if(turtle_1 && this.frog.position[0] < 26.5 && this.frog.position[0] > 7.5){
+		currentlyPressedKeys[87] = false;
+	}else if(riverlog_2 && this.frog.position[0] < 26.5 && this.frog.position[0] > 7.0){
+		currentlyPressedKeys[87] = false;
+	} else if(turtle_2 && this.frog.position[0] > 8.75){
+		currentlyPressedKeys[87] = false;
+	} else{
+		currentlyPressedKeys[87] = true;
+	}
+}
