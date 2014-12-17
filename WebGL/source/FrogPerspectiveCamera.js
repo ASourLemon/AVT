@@ -53,31 +53,11 @@ FrogPerspectiveCamera.prototype.update = function() {
 }
 
 // Create an event handler function for processing the device orientation event
-var hoe_index = 0;
-var alpha_vec = [];
-var beta_vec = [];
-var gamma_vec = [];
 FrogPerspectiveCamera.prototype.handleOrientationEvent = function(e) {
-	if(hoe_index == 0) {
-		alpha = 0;
-		beta = 0;
-		gamma = 0;
-		for(var i = 0 ; i < 20 ; i++) {
-			alpha += alpha_vec[i];
-			beta += beta_vec[i];
-			gamma += gamma_vec[i];
-		}
-		alpha /= 20;
-		beta /= 20;
-		gamma /= 20;
-	}
+    alpha = e.alpha;
+    beta = e.beta;
+    gamma = e.gamma;
 
-    alpha_vec[hoe_index] = e.alpha;
-    beta_vec[hoe_index] = e.beta;
-    gamma_vec[hoe_index] = e.gamma;
-
-    hoe_index++;
-    hoe_index = hoe_index % 20;
     //////// FOR DEBUG ///////
     //var text = gamma.toString();
     //document.body.innerHTML = text;
