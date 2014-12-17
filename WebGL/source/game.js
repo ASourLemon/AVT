@@ -33,7 +33,9 @@ Game.prototype.init = function (){
 	SetupMaterial();
 
 	this.map = new Map();
-	this.frog = new Frog([16.0, 1.0, 0.25], [10.0, 10.0, 10.0])
+	this.frog = new Frog([16.0, 1.0, 0.25], [10.0, 10.0, 10.0]);
+	
+	this.hud = new Hud();
 
 	var turtle1 = new Turtle([37, 12.25, -0.3], [-0.3, 0, 0]);
 	var turtle2 = new Turtle([-3.0, 13.75, -0.3], [0.3, 0, 0]);
@@ -104,6 +106,7 @@ Game.prototype.draw = function (){
 		this.gameObjects[i].draw();
 	}
 	this.map.draw();
+	this.hud.drawText(0,0, "123", 50);
 }
 
 Game.prototype.update = function (){

@@ -2,6 +2,7 @@ var mvMatrix = mat4.create();
 var pMatrix = mat4.create();
 var viewMatrix = mat4.create();
 var mvMatrixStack = [];
+var pMatrixStack = [];
 
 function mvPushMatrix() {
 	var copy = mat4.clone(mvMatrix, copy);
@@ -13,6 +14,18 @@ function mvPopMatrix() {
 		throw "Invalid popMatrix!";
 	}
 	mvMatrix = mvMatrixStack.pop();
+}
+
+function pPushMatrix() {
+	var copy = mat4.clone(pMatrix, copy);
+	pMatrixStack.push(copy);
+}
+
+function pPopMatrix() {
+	if (pMatrixStack.length == 0) {
+		throw "Invalid popMatrix!";
+	}
+	pMatrix = pMatrixStack.pop();
 }
 
 function setMatrixUniforms() {

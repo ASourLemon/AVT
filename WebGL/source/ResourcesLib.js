@@ -148,6 +148,76 @@ function drawSquare(){
 
 }
 
+
+var charVertexPositionBuffer;
+var charNormalsBuffer;
+var charVertexTexCoordBuffer;
+var charVertexIndexBuffer;
+
+function drawChar(textureCoords){
+
+	if(!drawChar.initialized) {
+		console.log("Square was created!"); // it is actually beeing created...
+		drawChar.initialized = true;
+	
+		charVertexPositionBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, charVertexPositionBuffer);
+		vertices = [
+			-0.5, -0.5, 0.0, 1.0,
+			-0.5, 0.5, 0.0, 1.0,
+			0.5, 0.5, 0.0, 1.0,
+			0.5, -0.5, 0.0, 1.0
+			
+		];
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+		charVertexPositionBuffer.itemSize = 4;
+		charVertexPositionBuffer.numItems = 4;
+
+		charTexCoordBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, charTexCoordBuffer);
+
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
+		charTexCoordBuffer.itemSize = 2;
+		charTexCoordBuffer.numItems = 2;
+
+		charNormalsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, charNormalsBuffer);
+		normals = [
+			0.0, 0.0, 1.0,
+			0.0, 0.0, 1.0,
+			0.0, 0.0, 1.0,
+			0.0, 0.0, 1.0
+		];
+
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+		charNormalsBuffer.itemSize = 3;
+		charNormalsBuffer.numItems = 4;
+
+		charVertexIndexBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, charVertexIndexBuffer);
+		var charVertexIndices = [
+			0, 1, 2, 0, 2, 3, // Front face
+		];
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(charVertexIndices), gl.STATIC_DRAW);
+		charVertexIndexBuffer.itemSize = 1;
+		charVertexIndexBuffer.numItems = 6;
+
+	} // initialization ended
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, charVertexPositionBuffer);
+	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, charVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, charTexCoordBuffer);
+	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, charTexCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, charNormalsBuffer);
+	gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, charNormalsBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, charVertexIndexBuffer);
+	setMatrixUniforms();
+	gl.drawElements(gl.TRIANGLES, charVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+
+}
+
+
 var cubeVertexPositionBuffer;
 var cubeVertexNormalBuffer;
 var cubeVertexIndexBuffer;
