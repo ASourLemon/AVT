@@ -60,6 +60,9 @@ Game.prototype.init = function (){
 	this.gameObjects.push(new Lamp([8.0, 19.0, 2.0]));
 	this.gameObjects.push(new Lamp([24.0, 19.0, 2.0]));
 
+	this.gameObjects.push(new Tree([4.0, 9.5, 0.0]));
+	this.gameObjects.push(new Tree([28.0, 9.5, 0.0]));
+
 	var t1 = new Truck([-3.0, 4.25, 0.5], [0.3, 0, 0]);
 	var t2 = new Truck([-3.0, 7.25, 0.5], [0.3, 0, 0]);
 	var t3 = new Truck([37.0, 5.75, 0.5], [-0.3, 0, 0]);
