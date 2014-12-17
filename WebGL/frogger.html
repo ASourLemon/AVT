@@ -547,11 +547,17 @@
 
 				l.init();
 				if(Support){
+					gl.enable(gl.SCISSOR_TEST); 
 					gl.viewport(0, 0, gl.viewportWidth / 2, gl.viewportHeight);
+					gl.scissor(0,0,gl.viewportWidth / 2, gl.viewportHeight);
+
 					game.activeCam.pos[0] += 0.5;
+					game.activeCam.at[0] += 0.5;
 					game.draw();
 					gl.viewport(gl.viewportWidth / 2, 0, gl.viewportWidth / 2, gl.viewportHeight);
+					gl.scissor(gl.viewportWidth / 2,0,gl.viewportWidth / 2, gl.viewportHeight);
 					game.activeCam.pos[0] -= 1.0;
+					game.activeCam.at[0] -= 1.0;
 					game.draw();
 				} else{
 					gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
