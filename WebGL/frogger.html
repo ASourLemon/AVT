@@ -264,7 +264,7 @@
 
 				//vec2(tex_coord.x + time/10, tex_coord.y + sin(tex_coord.x * 60.0 + time * 2.0) / 30.0))
 
-				if(texel.a <= 0.1){
+				if(texel.a == 0.0){
 					discard;
 				}
 				
@@ -443,7 +443,7 @@
 
 			var position = 0.0;
 			var speed = 0.5;
-			var Support = false;
+			var Support = true;
 			function handleKeys() {
 				//1
 				if (currentlyPressedKeys[49]) {
@@ -558,14 +558,14 @@
 					gl.enable(gl.SCISSOR_TEST); 
 					gl.viewport(0, 0, gl.viewportWidth / 2, gl.viewportHeight);
 					gl.scissor(0, 0, gl.viewportWidth / 2, gl.viewportHeight);
-
-					game.activeCam.pos[0] -= 0.5;
-					game.activeCam.at[0] -= 0.5;
+					//var separation = 1.0 / gl.viewportWidth;
+					game.activeCam.pos[0] -= 0.5 ;
+					game.activeCam.at[0] -= 0.5 ;
 					game.draw();
 					gl.viewport(gl.viewportWidth / 2, 0, gl.viewportWidth / 2, gl.viewportHeight);
 					gl.scissor(gl.viewportWidth / 2, 0, gl.viewportWidth / 2, gl.viewportHeight);
-					game.activeCam.pos[0] += 1.0;
-					game.activeCam.at[0] += 1.0;
+					game.activeCam.pos[0] += 1.0 ;
+					game.activeCam.at[0] += 1.0 ;
 					game.draw();
 				} else{
 					gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
@@ -605,7 +605,6 @@
 				initTexture(3, "textures/lightwood.gif");
 				initTexture(4, "textures/eye.gif");
 				initTexture(5, "textures/stone.gif");
-				initTexture(6, "textures/tree.gif");
 				
 				
 				game.init();

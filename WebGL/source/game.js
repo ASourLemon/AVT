@@ -60,9 +60,6 @@ Game.prototype.init = function (){
 	this.gameObjects.push(new Lamp([8.0, 19.0, 2.0]));
 	this.gameObjects.push(new Lamp([24.0, 19.0, 2.0]));
 
-	this.gameObjects.push(new Tree([4.0, 9.5, 0.0]));
-	this.gameObjects.push(new Tree([28.0, 9.5, 0.0]));
-
 	var t1 = new Truck([-3.0, 4.25, 0.5], [0.3, 0, 0]);
 	var t2 = new Truck([-3.0, 7.25, 0.5], [0.3, 0, 0]);
 	var t3 = new Truck([37.0, 5.75, 0.5], [-0.3, 0, 0]);
@@ -279,12 +276,12 @@ Game.prototype.automovement = function (){
 	else
 		middlefloor = false;
 
-	if(this.frog.position[1] > 12.0 && this.frog.position[1] < 12.5)
+	if(this.frog.position[1] > 12.0 && this.frog.position[1] < 12.65)
 		riverlog_1 = true;
 	else
 		riverlog_1 = false;
 
-	if(this.frog.position[1] > 14.55 && this.frog.position[1] < 15.35)
+	if(this.frog.position[1] > 14.35 && this.frog.position[1] < 15.75)
 		riverlog_2 = true;
 	else
 		riverlog_2 = false;
@@ -307,13 +304,13 @@ Game.prototype.automovement = function (){
 	// 	currentlyPressedKeys[87] = true;
 	// }
 
-	if(this.frog.position[0] > 7.5 && riverlog_1){
+	if(this.frog.position[0] > 8.0 && riverlog_1){
 		currentlyPressedKeys[87] = false;
 	}else if(turtle_1 && this.frog.position[0] < 26.5 && this.frog.position[0] > 7.5){
 		currentlyPressedKeys[87] = false;
-	}else if(riverlog_2 && this.frog.position[0] < 26.5 && this.frog.position[0] > 7.0){
+	}else if(riverlog_2 && this.frog.position[0] < 26.5 && this.frog.position[0] > 8.0){
 		currentlyPressedKeys[87] = false;
-	} else if(turtle_2 && this.frog.position[0] > 8.75){
+	} else if(turtle_2 && this.frog.position[0] > 10.0){
 		currentlyPressedKeys[87] = false;
 	} else{
 		currentlyPressedKeys[87] = true;
