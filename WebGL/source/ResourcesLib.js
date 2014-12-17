@@ -173,13 +173,6 @@ function drawChar(textureCoords){
 		charVertexPositionBuffer.itemSize = 4;
 		charVertexPositionBuffer.numItems = 4;
 
-		charTexCoordBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, charTexCoordBuffer);
-
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
-		charTexCoordBuffer.itemSize = 2;
-		charTexCoordBuffer.numItems = 2;
-
 		charNormalsBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, charNormalsBuffer);
 		normals = [
@@ -203,7 +196,15 @@ function drawChar(textureCoords){
 		charVertexIndexBuffer.numItems = 6;
 
 	} // initialization ended
-	
+	charTexCoordBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, charTexCoordBuffer);
+
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
+	charTexCoordBuffer.itemSize = 2;
+	charTexCoordBuffer.numItems = 2;
+
+
+
 	gl.bindBuffer(gl.ARRAY_BUFFER, charVertexPositionBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, charVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	gl.bindBuffer(gl.ARRAY_BUFFER, charTexCoordBuffer);

@@ -15,30 +15,28 @@ Hud.prototype.drawText = function(x, y, text, fontSize) {
 	
 	mat4.translate(mvMatrix, mvMatrix, [x+fontSize/2, y+fontSize/2, 0.0]);
 	
+	gl.disable(gl.DEPTH_TEST);
+ 	gl.bindTexture(gl.TEXTURE_2D, texArray[6]);
+	var oneOverSixteen = (1.0 / 16.0);
+	var ratio = gl.viewportWidth / gl.viewportHeight;
+
+
 	textureCoords = [
 		0.0, 0.0,
 		0.0, 1.0,
 		1.0, 1.0,
 		1.0, 0.0
 	];
-	
-	gl.disable(gl.DEPTH_TEST);
- 	gl.bindTexture(gl.TEXTURE_2D, texArray[6]);
-	var oneOverSixteen = (1.0 / 16.0);
-	var ratio = gl.viewportWidth / gl.viewportHeight;
-	
-	if(ratio>1.0){
-	  mat4.scale(mvMatrix, mvMatrix, [fontSize*ratio*0.75, fontSize, 1.0]);
-	}else {
-	  mat4.scale(mvMatrix, mvMatrix, [fontSize*0.75, fontSize*ratio, 1.0]);
-	}
-	
-	for(var i = 0; i < 3; ++i){ 
-	  ch = text.charCodeAt(i);
+
+	for(var i = 0; i < text.length; ++i){ 
+
+	  ch = text[i];
+	  ch = ch.charCodeAt(0);
+	  console.log(ch);
 	  xPos = (ch % 16) * oneOverSixteen;
 	  yPos = (ch / 16) * oneOverSixteen;
 	  
-	  yPos = (oneOverSixteen * 15) - yPos;
+	  yPos = (oneOverSixteen * 16) - yPos - oneOverSixteen;
 	  
 	  textureCoords[2] = xPos;
 	  textureCoords[3] = 1.0 - yPos - oneOverSixteen;
@@ -51,8 +49,20 @@ Hud.prototype.drawText = function(x, y, text, fontSize) {
 
 	  textureCoords[0] = xPos;
 	  textureCoords[1] = 1.0 - yPos - 0.001;
+
+
+	  mvPushMatrix();
+	  if(ratio>1.0){
+	    mat4.scale(mvMatrix, mvMatrix, [fontSize*ratio*0.75, fontSize, 1.0]);
+	  }else {
+	    mat4.scale(mvMatrix, mvMatrix, [fontSize*0.75, fontSize*ratio, 1.0]);
+	  }
+
 	  drawChar(textureCoords);
-	  mat4.translate(mvMatrix, mvMatrix, [fontSize*0.75 *i, fontSize, 0.0]);
+	  mvPopMatrix();
+
+	  mat4.translate(mvMatrix, mvMatrix, [fontSize * 1.2, 0.0, 0.0]);
+
 	}
 	
 	

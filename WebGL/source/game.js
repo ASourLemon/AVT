@@ -106,7 +106,7 @@ Game.prototype.draw = function (){
 		this.gameObjects[i].draw();
 	}
 	this.map.draw();
-	this.hud.drawText(0,0, "123", 50);
+	this.hud.drawText(0,0, "Lifes:" + this.frog.frogLifes, 50);
 }
 
 Game.prototype.update = function (){
