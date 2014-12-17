@@ -84,7 +84,11 @@ Game.prototype.init = function (){
 	this.cameras[1] = new TopPerspectiveCamera();
 	this.cameras[2] = new FrogPerspectiveCamera();
 
-	this.activeCam = this.cameras[0];
+	this.activeCam = this.cameras[2];
+
+	// Listen for changes to the device orientation using the gyroscope and fire the event 
+	// handler accordingly
+	window.addEventListener('deviceorientation', game.activeCam.handleOrientationEvent, true);
 }
 
 Game.prototype.draw = function (){
